@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sasha Milshtein | Interactive Resume</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg-soft: #121936;
+      --panel: rgba(18, 25, 54, 0.76);
+      --panel-strong: rgba(20, 28, 61, 0.92);
+      --line: rgba(255,255,255,0.1);
+      --text: #eef2ff;
+      --muted: #b8c0ea;
+      --accent: #8b5cf6;
+      --accent-2: #22d3ee;
+      --accent-3: #fb7185;
+      --good: #34d399;
+      --shadow: 0 20px 60px rgba(0,0,0,0.35);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --maxw: 1200px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background:
+        radial-gradient(circle at top left, rgba(139,92,246,0.25), transparent 30%),
+        radial-gradient(circle at top right, rgba(34,211,238,0.18), transparent 28%),
+        radial-gradient(circle at 20% 80%, rgba(251,113,133,0.12), transparent 22%),
+        linear-gradient(180deg, #090d1b 0%, #0b1020 100%);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100%;
+      scroll-behavior: smooth;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: radial-gradient(circle at center, black, transparent 80%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      width: min(calc(100% - 32px), var(--maxw));
+      margin: 16px auto 60px;
+    }
+
+    .glass {
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 16px;
+      border-radius: 20px;
+      padding: 12px 16px;
+      position: sticky;
+      top: 10px;
+      z-index: 30;
+      overflow: visible;
+    }
+
+    .hero::after {
+      display: none;
+    }
+
+    .hero-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.02em;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.2rem, 2vw, 1.8rem);
+      line-height: 1;
+      letter-spacing: -0.04em;
+      white-space: nowrap;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #ffffff 20%, #b9b8ff 45%, #7ee7f8 85%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .summary {
+      max-width: 62ch;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .hero-actions {
+      display: none;
+    }
+
+    .btn {
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .btn:hover, .btn:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.1);
+      outline: none;
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, rgba(139,92,246,0.95), rgba(34,211,238,0.82));
+      color: white;
+      border: none;
+    }
+
+    .hero-card {
+      display: none;
+    }
+
+    
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .stat {
+      border-radius: 16px;
+      padding: 12px;
+      background: rgba(7, 12, 30, 0.5);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .stat .k {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 3px;
+    }
+
+    .stat .l {
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.35;
+    }
+
+    .meta-list {
+      display: grid;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .meta-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .meta-item:last-child { border-bottom: 0; padding-bottom: 0; }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+      margin-top: 16px;
+      align-items: start;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 86px;
+      border-radius: var(--radius-xl);
+      padding: 18px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .nav-title,
+    .section-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #a5b0e6;
+      margin: 0 0 12px;
+    }
+
+    .nav-links {
+      display: grid;
+      gap: 8px;
+    }
+
+    .nav-link {
+      appearance: none;
+      -webkit-appearance: none;
+      padding: 12px 14px;
+      border-radius: 14px;
+      color: var(--muted);
+      border: 1px solid transparent;
+      transition: background 150ms ease, color 150ms ease, border-color 150ms ease, transform 150ms ease;
+      font-weight: 600;
+      cursor: pointer;
+      background: transparent;
+      text-align: left;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--text);
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.08);
+      transform: translateX(2px);
+    }
+
+    .skills-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #dde5ff;
+      font-size: 0.84rem;
+    }
+
+    .main {
+      display: grid;
+      gap: 24px;
+    }
+
+    .section {
+      border-radius: var(--radius-xl);
+      padding: 22px;
+      scroll-margin-top: 12px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 60ch;
+      line-height: 1.6;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 14px;
+    }
+
+    .card {
+      border-radius: 22px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      overflow: hidden;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.055);
+    }
+
+    .card-head {
+      padding: 18px 20px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: start;
+      cursor: pointer;
+    }
+
+    .card h3 {
+      margin: 0 0 6px;
+      font-size: 1.08rem;
+      letter-spacing: -0.02em;
+    }
+
+    .role-meta {
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 0.93rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(139,92,246,0.12);
+      border: 1px solid rgba(139,92,246,0.25);
+      color: #ddd3ff;
+      white-space: nowrap;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .card-body {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 220ms ease;
+    }
+
+    .card.open .card-body {
+      grid-template-rows: 1fr;
+    }
+
+    .card-body-inner {
+      overflow: hidden;
+      padding: 0 20px;
+    }
+
+    .card.open .card-body-inner {
+      padding-bottom: 18px;
+    }
+
+    .bullet-list {
+      margin: 0;
+      padding: 0 0 0 18px;
+      color: #e7ebff;
+      line-height: 1.7;
+    }
+
+    .bullet-list li + li { margin-top: 8px; }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .filter-btn {
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      color: var(--muted);
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 150ms ease;
+    }
+
+    .filter-btn.active,
+    .filter-btn:hover {
+      color: var(--text);
+      background: rgba(255,255,255,0.09);
+      border-color: rgba(255,255,255,0.16);
+    }
+
+    .highlights {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .highlight-card {
+      padding: 18px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
+      border: 1px solid rgba(255,255,255,0.08);
+      min-height: 170px;
+    }
+
+    .highlight-card strong {
+      display: inline-block;
+      font-size: 1.6rem;
+      letter-spacing: -0.04em;
+      margin-bottom: 8px;
+    }
+
+    .highlight-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .edu-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 16px;
+    }
+
+    .edu-card, .mini-panel {
+      padding: 20px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .edu-card h3, .mini-panel h3 {
+      margin: 0 0 8px;
+      font-size: 1.05rem;
+    }
+
+    .edu-card p, .mini-panel p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .course-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .course-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      color: #ebefff;
+    }
+
+    .course-item span:last-child {
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .contact-card {
+      display: block;
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .contact-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.055);
+    }
+
+    .contact-card .label {
+      color: #aab4e8;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+
+    .contact-card .value {
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+
+    .footer-note {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 500ms ease, transform 500ms ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .hidden-card {
+      display: none;
+    }
+
+    @media (max-width: 980px) {
+      .layout,
+      .edu-grid,
+      .contact-grid,
+      .highlights {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: relative;
+        top: 0;
+      }
+
+      .hero {
+        padding: 10px 12px;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .hero-left {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .page {
+        width: min(calc(100% - 18px), var(--maxw));
+        margin-top: 10px;
+      }
+
+      .hero,
+      .section,
+      .sidebar {
+        border-radius: 18px;
+        padding: 12px;
+      }
+
+      .card-head {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero glass" id="top">
+      <div class="hero-left">
+        <div class="eyebrow">Marketing • Events • CRM • Content</div>
+        <h1><span class="gradient-text">Sasha</span> Milshtein</h1>
+      </div>
+
+      </header>
+
+    <div class="layout">
+      <aside class="sidebar glass reveal">
+        <div>
+          <h2 class="nav-title">Navigate</h2>
+          <div class="nav-links">
+            <button class="nav-link active" type="button" data-scroll-target="experience">Experience</button>
+            <button class="nav-link" type="button" data-scroll-target="impact">Highlights</button>
+            <button class="nav-link" type="button" data-scroll-target="leadership">Leadership</button>
+            <button class="nav-link" type="button" data-scroll-target="education">Education</button>
+            <button class="nav-link" type="button" data-scroll-target="contact">Contact</button>
+          </div>
+        </div>
+
+        <div>
+          <h2 class="section-title">Strengths</h2>
+          <div class="skills-cloud">
+            <span class="chip">Campaign Management</span>
+            <span class="chip">Event Planning</span>
+            <span class="chip">CRM Workflows</span>
+            <span class="chip">Content Creation</span>
+            <span class="chip">Market Research</span>
+            <span class="chip">Salesforce</span>
+            <span class="chip">Airtable</span>
+            <span class="chip">Mailchimp</span>
+            <span class="chip">Google Suite</span>
+            <span class="chip">Microsoft Office</span>
+            <span class="chip">Tableau</span>
+            <span class="chip">Apollo</span>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main">
+        <section class="section glass reveal" id="experience">
+          <div class="section-head">
+            <div>
+              <h2 class="section-title">Experience</h2>
+              
+            </div>
+          </div>
+
+          <div class="filters" aria-label="Experience filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="marketing">Marketing</button>
+            <button class="filter-btn" data-filter="events">Events</button>
+            <button class="filter-btn" data-filter="ops">Operations</button>
+          </div>
+
+          <div class="timeline">
+            <article class="card open" data-category="marketing ops">
+              <div class="card-head" tabindex="0" role="button" aria-expanded="true">
+                <div>
+                  <h3>Corporate Engagement Consultant — Per Scholas</h3>
+                  <div class="role-meta">
+                    <span>Jan 2026 – Present</span>
+                    <span>•</span>
+                    <span>Contract</span>
+                  </div>
+                </div>
+                <div class="badge">CRM + Partnerships</div>
+              </div>
+              <div class="card-body">
+                <div class="card-body-inner">
+                  <ul class="bullet-list">
+                    <li>Built and refined Salesforce and Airtable workflows that improved outreach targeting and gave the team clearer visibility into the corporate partnership pipeline.</li>
+                    <li>Designed targeted outreach efforts and strategic engagement events, connecting data to the bigger story behind which prospects to prioritize and why.</li>
+                    <li>Managed logistics and communications for virtual corporate events, keeping multi-stakeholder coordination smooth and attendee experience polished.</li>
+                  </ul>
+                </div>
+              </div>
+            </article>
+
+            <article class="card" data-category="marketing ops">
+              <div class="card-head" tabindex="0" role="button" aria-expanded="false">
+                <div>
+                  <h3>Event and Business Development Intern — Per Scholas</h3>
+                  <div class="role-meta">
+                    <span>Jun 2025 – Jan 2026</span>
+                    <span>•</span>
+                    <span>San Diego, CA</span>
+                  </div>
+                </div>
+                <div class="badge">Research + CRM</div>
+              </div>
+              <div class="card-body">
+                <div class="card-body-inner">
+                  <ul class="bullet-list">
+                    <li>Maintained CRM records with accuracy and consistency, supporting sales and development workflows that depended on clean, current information.</li>
+                    <li>Conducted market research and assembled reports that helped inform team decisions around outreach opportunities and relationship development.</li>
+                  </ul>
+                </div>
+              </div>
+            </article>
+
+            <article class="card" data-category="marketing">
+              <div class="card-head" tabindex="0" role="button" aria-expanded="false">
+                <div>
+                  <h3>Marketing Strategy Associate — Sukin Kot LLC</h3>
+                  <div class="role-meta">
+                    <span>Jul 2024 – Jun 2025</span>
+                    <span>•</span>
+                    <span>Freelance</span>
+                  </div>
+                </div>
+                <div class="badge">Content + Growth</div>
+              </div>
+              <div class="card-body">
+                <div class="card-body-inner">
+                  <ul class="bullet-list">
+                    <li>Designed targeted social campaigns that increased engagement by 50% and contributed to a 10% lift in book sales within four months.</li>
+                    <li>Owned end-to-end content creation and campaign management, from concept and visuals to copywriting and performance review.</li>
+                    <li>Used audience segmentation and campaign analytics to identify what was actually moving attention and what needed adjustment.</li>
+                  </ul>
+                </div>
+              </div>
+            </article>
+
+            <article class="card" data-category="events ops">
+              <div class="card-head" tabindex="0" role="button" aria-expanded="false">
+                <div>
+                  <h3>Production Director, Summer Camp — Berkeley Playhouse</h3>
+                  <div class="role-meta">
+                    <span>Jun 2021 – Jul 2024</span>
+                    <span>•</span>
+                    <span>Berkeley, CA</span>
+                  </div>
+                </div>
+                <div class="badge">Leadership + Live Production</div>
+              </div>
+              <div class="card-body">
+                <div class="card-body-inner">
+                  <ul class="bullet-list">
+                    <li>Led large-scale live productions for 5–15 performers, managing schedules, teams, and moving parts under tight deadlines.</li>
+                    <li>Earned two promotions for reliability, leadership, and the ability to keep programs running smoothly in fast-paced settings.</li>
+                    <li>Built practical experience in team coordination, communication, and execution pressure that translates directly to event and operations work.</li>
+                  </ul>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section glass reveal" id="impact">
+          <div class="section-head">
+            <div>
+              <h2 class="section-title">Selected Highlights</h2>
+              
+            </div>
+          </div>
+
+          <div class="highlights">
+            <div class="highlight-card">
+              <strong>50%</strong>
+              <p>Increase in engagement from targeted social campaigns shaped by segmentation and performance analysis.</p>
+            </div>
+            <div class="highlight-card">
+              <strong>100</strong>
+              <p>Chapter members coordinated during a 9-month recruitment campaign involving cross-functional planning and communication standards.</p>
+            </div>
+            <div class="highlight-card">
+              <strong>5★</strong>
+              <p>Student feedback earned while mentoring first-year students through academic and social transition at USD.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section glass reveal" id="leadership">
+          <div class="section-head">
+            <div>
+              <h2 class="section-title">Leadership & Engagement</h2>
+              
+            </div>
+          </div>
+
+          <div class="timeline">
+            <article class="card open">
+              <div class="card-head" tabindex="0" role="button" aria-expanded="true">
+                <div>
+                  <h3>Vice President of Operations — American Marketing Association</h3>
+                  <div class="role-meta">
+                    <span>May 2025 – Present</span>
+                  </div>
+                </div>
+                <div class="badge">Operations</div>
+              </div>
+              <div class="card-body">
+                <div class="card-body-inner">
+                  <ul class="bullet-list">
+                    <li>Spearheaded event logistics including venue bookings, speaker coordination, catering, and funding approvals.</li>
+                    <li>Managed digital infrastructure across Google Drive and the AMA calendar, helping streamline onboarding, planning, and member engagement.</li>
+                  </ul>
+                </div>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card-head" tabindex="0" role="button" aria-expanded="false">
+                <div>
+                  <h3>Vice President of Membership — Kappa Alpha Theta</h3>
+                  <div class="role-meta">
+                    <span>Dec 2024 – Current</span>
+                  </div>
+                </div>
+                <div class="badge">Campaign Leadership</div>
+              </div>
+              <div class="card-body">
+                <div class="card-body-inner">
+                  <ul class="bullet-list">
+                    <li>Directed a 9-month recruitment campaign with a $5K budget and coordination across 100 members.</li>
+                    <li>Partnered with campus Panhellenic representatives and the national organization to manage compliance, timing, and execution details.</li>
+                    <li>Designed and led training that helped produce the largest new-member class on campus: 50 women.</li>
+                  </ul>
+                </div>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card-head" tabindex="0" role="button" aria-expanded="false">
+                <div>
+                  <h3>Alcala Club Associate — USD Alcala Club</h3>
+                  <div class="role-meta">
+                    <span>Feb 2023 – Present</span>
+                  </div>
+                </div>
+                <div class="badge">Representation</div>
+              </div>
+              <div class="card-body">
+                <div class="card-body-inner">
+                  <ul class="bullet-list">
+                    <li>Represented USD at events and served as a liaison between the president’s office and campus visitors, including VIPs, alumni, and community members.</li>
+                    <li>Supported fundraising, graduation, and alumni gatherings with a polished, guest-centered presence.</li>
+                  </ul>
+                </div>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card-head" tabindex="0" role="button" aria-expanded="false">
+                <div>
+                  <h3>Scholastic Assistant — USD Leadership</h3>
+                  <div class="role-meta">
+                    <span>Aug 2023 – May 2024</span>
+                  </div>
+                </div>
+                <div class="badge">Mentorship</div>
+              </div>
+              <div class="card-body">
+                <div class="card-body-inner">
+                  <ul class="bullet-list">
+                    <li>Mentored first-year students through academic and social transition, acting as a bridge between students and faculty advisors.</li>
+                    <li>Received 5-star student feedback and encouraged mentees to pursue leadership roles of their own.</li>
+                  </ul>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section glass reveal" id="education">
+          <div class="section-head">
+            <div>
+              <h2 class="section-title">Education</h2>
+              
+            </div>
+          </div>
+
+          <div class="edu-grid">
+            <div class="edu-card">
+              <h3>University of San Diego — Knauss School of Business</h3>
+              <p>
+                Bachelor of Business Administration in Marketing and Psychology, graduating May 2026. GPA 3.6. Dean’s List. USD Alcala Scholarship recipient. Honors Program participant with interdisciplinary coursework and an original scholarship project requirement.
+              </p>
+
+              <div class="course-list">
+                <div class="course-item"><span>Marketing Strategy</span><span>A-</span></div>
+                <div class="course-item"><span>Advertising Campaigns</span><span>A</span></div>
+                <div class="course-item"><span>Public Relations</span><span>B+</span></div>
+                <div class="course-item"><span>Consumer Behavior</span><span>A</span></div>
+                <div class="course-item"><span>Marketing Research</span><span>B+</span></div>
+                <div class="course-item"><span>Fashion Marketing</span><span>A-</span></div>
+              </div>
+            </div>
+
+            <div class="mini-panel">
+              <h3>Additional</h3>
+              <p>
+                Summer Business Program student at the University of Cambridge, UK. Lead Volunteer for Ukraine Humanitarian Relief. Certifications include Microsoft Excel Certification and GenAI for Marketing Professional by AMA.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section glass reveal" id="contact">
+          <div class="section-head">
+            <div>
+              <h2 class="section-title">Contact</h2>
+              
+            </div>
+          </div>
+
+          <div class="contact-grid">
+            <a class="contact-card" href="mailto:smilshtein@sandiego.edu">
+              <div class="label">Email</div>
+              <div class="value">smilshtein@sandiego.edu</div>
+            </a>
+            <a class="contact-card" href="tel:+19259499398">
+              <div class="label">Phone</div>
+              <div class="value">925-949-9398</div>
+            </a>
+            <a class="contact-card" href="https://www.linkedin.com/in/alexandra-milshtein" target="_blank" rel="noopener noreferrer">
+              <div class="label">LinkedIn</div>
+              <div class="value">alexandra-milshtein</div>
+            </a>
+          </div>
+
+          
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => observer.observe(el));
+
+    document.querySelectorAll('.card-head').forEach(head => {
+      const toggleCard = () => {
+        const card = head.closest('.card');
+        const isOpen = card.classList.toggle('open');
+        head.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      };
+
+      head.addEventListener('click', toggleCard);
+      head.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleCard();
+        }
+      });
+    });
+
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('#experience .card');
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const value = btn.dataset.filter;
+
+        cards.forEach(card => {
+          const category = card.dataset.category || '';
+          const show = value === 'all' || category.includes(value);
+          card.classList.toggle('hidden-card', !show);
+        });
+      });
+    });
+
+    const scrollButtons = document.querySelectorAll('[data-scroll-target]');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = Array.from(document.querySelectorAll('main .section'));
+
+    scrollButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const targetId = button.getAttribute('data-scroll-target');
+        const target = document.getElementById(targetId);
+        if (!target) return;
+
+        const header = document.querySelector('.hero');
+        const headerOffset = header ? header.offsetHeight + 22 : 10;
+        const y = target.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      });
+    });
+
+    const setActiveNav = () => {
+      let current = sections[0] ? sections[0].id : '';
+      const trigger = window.scrollY + 180;
+
+      sections.forEach(section => {
+        if (section.offsetTop <= trigger) current = section.id;
+      });
+
+      navLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('data-scroll-target') === current);
+      });
+    };
+
+    window.addEventListener('scroll', setActiveNav, { passive: true });
+    setActiveNav();
+  </script>
+</body>
+</html>
