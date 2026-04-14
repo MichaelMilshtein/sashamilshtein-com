@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef, useCallback, CSSProperties } from "react";
 import { useResumeData } from "@/hooks/useResumeData";
 import { useEditMode } from "@/hooks/useEditMode";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { EditableText } from "@/components/EditableText";
+import MobileResume from "@/pages/MobileResume";
 import sashaHeadshot from "@/assets/sasha-headshot.jpeg";
 import { Mail, Phone, Linkedin } from "lucide-react";
 
@@ -161,6 +163,7 @@ function CardSection({
 export default function Resume() {
   const { data, updateField, updateNested } = useResumeData();
   const { isEditing, enterEdit, exitEdit } = useEditMode();
+  const isMobile = useIsMobile();
 
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
   const [activeSection, setActiveSection] = useState("summary");
@@ -191,6 +194,10 @@ export default function Resume() {
     handler();
     return () => window.removeEventListener("scroll", handler);
   }, []);
+
+  if (isMobile) {
+    return <MobileResume data={data} />;
+  }
 
   const glass = {
     backdropFilter: "blur(18px)",
