@@ -279,7 +279,10 @@ export default function Resume() {
       >
         <div style={{ display: "flex", alignItems: "center", gap: "14px", minWidth: 0, flex: 1, overflow: "hidden" }}>
           <div
+            role="button"
+            tabIndex={0}
             onClick={enterEdit}
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") enterEdit(); }}
             title="Click to edit"
             className="headshot-edit"
             style={{
