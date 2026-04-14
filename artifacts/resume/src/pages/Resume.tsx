@@ -212,9 +212,8 @@ export default function Resume() {
     display: "inline-flex",
     alignItems: "center",
     justifyContent: "center",
-    width: "32px",
-    height: "32px",
-    borderRadius: "50%",
+    height: "30px",
+    borderRadius: "8px",
     background: "rgba(255,255,255,0.06)",
     border: "1px solid rgba(255,255,255,0.1)",
     color: "#b8c0ea",
@@ -264,6 +263,7 @@ export default function Resume() {
       {/* Header */}
       <header
         ref={(el) => { headerRef.current = el; }}
+        className="resume-header"
         style={{
           ...glass,
           display: "flex",
@@ -278,15 +278,23 @@ export default function Resume() {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "14px", minWidth: 0, flex: 1, overflow: "hidden" }}>
-          <div style={{
-            width: "48px",
-            height: "48px",
-            borderRadius: "50%",
-            overflow: "hidden",
-            border: "2px solid rgba(139,92,246,0.5)",
-            boxShadow: "0 0 0 3px rgba(139,92,246,0.15)",
-            flexShrink: 0,
-          }}>
+          <div
+            onClick={enterEdit}
+            title="Click to edit"
+            style={{
+              width: "48px",
+              height: "48px",
+              borderRadius: "50%",
+              overflow: "hidden",
+              border: "2px solid rgba(139,92,246,0.5)",
+              boxShadow: "0 0 0 3px rgba(139,92,246,0.15)",
+              flexShrink: 0,
+              cursor: "pointer",
+              transition: "box-shadow 200ms ease",
+            }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.boxShadow = "0 0 0 4px rgba(139,92,246,0.45)"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.boxShadow = "0 0 0 3px rgba(139,92,246,0.15)"; }}
+          >
             <img src={sashaHeadshot} alt="Sasha Milshtein" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }} />
           </div>
           <h1 style={{ margin: 0, fontSize: "clamp(1.2rem, 2vw, 1.8rem)", lineHeight: 1, letterSpacing: "-0.04em", whiteSpace: "nowrap" }}>
@@ -316,41 +324,20 @@ export default function Resume() {
         </div>
 
         {/* Contact icon pills */}
-        <div className="contact-pills" style={{ display: "flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
-          <a href={`mailto:${data.email}`} style={{ ...contactPill, width: "auto", padding: "0 10px", gap: "8px" }} title={data.email}>
-            <Mail size={14} />
-            <span className="contact-label" style={{ fontSize: "0.8rem", fontWeight: 500 }}>Email</span>
+        <div className="contact-pills" style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "8px", flexShrink: 0 }}>
+          <a href={`mailto:${data.email}`} style={{ ...contactPill, padding: "0 10px", gap: "7px" }} title={data.email}>
+            <Mail size={13} />
+            <span style={{ fontSize: "0.78rem", fontWeight: 500 }}>{data.email}</span>
           </a>
-          <span style={{ ...contactPill, width: "auto", padding: "0 10px", gap: "8px" }} title={data.phone}>
-            <Phone size={14} />
-            <span className="contact-label" style={{ fontSize: "0.8rem", fontWeight: 500 }}>{data.phone}</span>
+          <span style={{ ...contactPill, padding: "0 10px", gap: "7px" }} title={data.phone}>
+            <Phone size={13} />
+            <span style={{ fontSize: "0.78rem", fontWeight: 500 }}>{data.phone}</span>
           </span>
-          <a href={`https://www.linkedin.com/in/${data.linkedin}`} target="_blank" rel="noopener noreferrer" style={{ ...contactPill, width: "auto", padding: "0 10px", gap: "8px" }} title={`linkedin.com/in/${data.linkedin}`}>
-            <Linkedin size={14} />
-            <span className="contact-label" style={{ fontSize: "0.8rem", fontWeight: 500 }}>LinkedIn</span>
+          <a href={`https://www.linkedin.com/in/${data.linkedin}`} target="_blank" rel="noopener noreferrer" style={{ ...contactPill, padding: "0 10px", gap: "7px" }}>
+            <Linkedin size={13} />
+            <span style={{ fontSize: "0.78rem", fontWeight: 500 }}>linkedin.com/in/{data.linkedin}</span>
           </a>
         </div>
-
-        {!isEditing && (
-          <button
-            onClick={enterEdit}
-            style={{
-              padding: "7px 14px",
-              borderRadius: "999px",
-              border: "1px solid rgba(255,255,255,0.08)",
-              background: "rgba(255,255,255,0.04)",
-              color: "#b8c0ea",
-              fontSize: "11px",
-              fontWeight: 600,
-              cursor: "pointer",
-              letterSpacing: "0.05em",
-              fontFamily: "inherit",
-              whiteSpace: "nowrap",
-            }}
-          >
-            Edit
-          </button>
-        )}
       </header>
 
       {/* Horizontal sticky nav bar */}

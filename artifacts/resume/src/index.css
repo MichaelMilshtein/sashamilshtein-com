@@ -73,15 +73,13 @@ a {
     display: none !important;
   }
 
-  .contact-label {
-    display: none !important;
+  .resume-header {
+    flex-wrap: wrap !important;
   }
 
-  .contact-pills a,
-  .contact-pills span {
-    width: 32px !important;
-    padding: 0 !important;
-    justify-content: center !important;
+  .contact-pills {
+    width: 100% !important;
+    margin-top: 6px !important;
   }
 
   /* filter buttons: single scrollable row */
