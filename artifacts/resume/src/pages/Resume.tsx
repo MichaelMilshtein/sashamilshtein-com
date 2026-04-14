@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, CSSProperties } from "react";
 import { useResumeData } from "@/hooks/useResumeData";
 import { useEditMode } from "@/hooks/useEditMode";
 import { EditableText } from "@/components/EditableText";
@@ -40,6 +40,7 @@ function CardSection({
   showLocation?: boolean;
 }) {
   const [open, setOpen] = useState(!!defaultOpen);
+  const [hovered, setHovered] = useState(false);
 
   const bodyVisible = open || isEditing;
 
@@ -47,31 +48,51 @@ function CardSection({
     <article
       style={{
         borderRadius: "22px",
-        background: open ? "rgba(255,255,255,0.055)" : "rgba(255,255,255,0.04)",
-        border: open ? "1px solid rgba(255,255,255,0.16)" : "1px solid rgba(255,255,255,0.08)",
+        background: open ? "rgba(255,255,255,0.055)" : hovered ? "rgba(255,255,255,0.045)" : "rgba(255,255,255,0.03)",
+        border: open ? "1px solid rgba(139,92,246,0.3)" : hovered ? "1px solid rgba(255,255,255,0.14)" : "1px solid rgba(255,255,255,0.07)",
         overflow: "hidden",
         transition: "border-color 180ms ease, background 180ms ease",
       }}
     >
       <div
         onClick={() => { if (!isEditing) setOpen((p) => !p); }}
+        onMouseEnter={() => { if (!isEditing) setHovered(true); }}
+        onMouseLeave={() => setHovered(false)}
         style={{
           padding: "18px 20px",
           display: "grid",
           gridTemplateColumns: "1fr auto",
           gap: "12px",
-          alignItems: "start",
+          alignItems: "center",
           cursor: isEditing ? "default" : "pointer",
           userSelect: isEditing ? "text" : "none",
         }}
       >
         <div>
-          <h3 style={{ margin: "0 0 6px", fontSize: "1.08rem", letterSpacing: "-0.02em", color: "#eef2ff" }}>
+          <h3 style={{ margin: "0 0 6px", fontSize: "1.08rem", letterSpacing: "-0.02em", color: "#eef2ff", display: "flex", alignItems: "center", gap: "8px" }}>
+            <span
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "20px",
+                height: "20px",
+                flexShrink: 0,
+                opacity: isEditing ? 0 : 1,
+                transition: "transform 220ms ease, opacity 150ms",
+                transform: open ? "rotate(90deg)" : "rotate(0deg)",
+                color: open ? "#a78bfa" : "#6b7280",
+              }}
+            >
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M4 2L8 6L4 10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </span>
             <EditableText value={item.title} onChange={onUpdateTitle} isEditing={isEditing} />
             {" — "}
             <EditableText value={item.org} onChange={onUpdateOrg} isEditing={isEditing} />
           </h3>
-          <div style={{ color: "#b8c0ea", display: "flex", flexWrap: "wrap", gap: "10px", fontSize: "0.93rem" }}>
+          <div style={{ color: "#b8c0ea", display: "flex", flexWrap: "wrap", gap: "10px", fontSize: "0.93rem", paddingLeft: isEditing ? "0" : "28px" }}>
             <EditableText value={item.dateRange} onChange={onUpdateDate} isEditing={isEditing} />
             {showLocation && item.location && (
               <>
@@ -89,15 +110,16 @@ function CardSection({
           style={{
             display: "inline-flex",
             alignItems: "center",
-            padding: "8px 12px",
-            borderRadius: "999px",
-            background: "rgba(139,92,246,0.12)",
-            border: "1px solid rgba(139,92,246,0.25)",
-            color: "#ddd3ff",
+            padding: "6px 12px",
+            borderRadius: "8px",
+            background: "rgba(139,92,246,0.15)",
+            border: "1px solid rgba(139,92,246,0.3)",
+            color: "#c4b5fd",
             whiteSpace: "nowrap",
-            fontSize: "0.82rem",
-            fontWeight: 700,
+            fontSize: "0.78rem",
+            fontWeight: 600,
             flexShrink: 0,
+            letterSpacing: "0.02em",
           }}
         >
           <EditableText value={item.badge} onChange={onUpdateBadge} isEditing={isEditing} />
@@ -171,7 +193,7 @@ export default function Resume() {
     background: "rgba(18, 25, 54, 0.76)",
     border: "1px solid rgba(255,255,255,0.1)",
     boxShadow: "0 20px 60px rgba(0,0,0,0.35)",
-  } as React.CSSProperties;
+  } as CSSProperties;
 
   const navItems = [
     { id: "experience", label: "Experience" },
@@ -335,30 +357,54 @@ export default function Resume() {
             <h2 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "#a5b0e6", margin: "0 0 12px" }}>
               Navigate
             </h2>
-            <div style={{ display: "grid", gap: "8px" }}>
-              {navItems.map((nav) => (
-                <button
-                  key={nav.id}
-                  onClick={() => scrollTo(nav.id)}
-                  style={{
-                    appearance: "none",
-                    padding: "12px 14px",
-                    borderRadius: "14px",
-                    color: activeSection === nav.id ? "#eef2ff" : "#b8c0ea",
-                    border: activeSection === nav.id ? "1px solid rgba(255,255,255,0.08)" : "1px solid transparent",
-                    background: activeSection === nav.id ? "rgba(255,255,255,0.06)" : "transparent",
-                    fontWeight: 600,
-                    cursor: "pointer",
-                    textAlign: "left",
-                    fontFamily: "inherit",
-                    fontSize: "0.95rem",
-                    transform: activeSection === nav.id ? "translateX(2px)" : "none",
-                    transition: "all 150ms ease",
-                  }}
-                >
-                  {nav.label}
-                </button>
-              ))}
+            <div style={{ display: "grid", gap: "6px" }}>
+              {navItems.map((nav) => {
+                const isActive = activeSection === nav.id;
+                return (
+                  <button
+                    key={nav.id}
+                    onClick={() => scrollTo(nav.id)}
+                    style={{
+                      appearance: "none",
+                      padding: "10px 14px",
+                      borderRadius: "12px",
+                      color: isActive ? "#c4b5fd" : "#b8c0ea",
+                      border: isActive
+                        ? "1px solid rgba(139,92,246,0.45)"
+                        : "1px solid rgba(255,255,255,0.09)",
+                      background: isActive
+                        ? "rgba(139,92,246,0.12)"
+                        : "rgba(255,255,255,0.03)",
+                      fontWeight: isActive ? 700 : 500,
+                      cursor: "pointer",
+                      textAlign: "left",
+                      fontFamily: "inherit",
+                      fontSize: "0.92rem",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                      transition: "all 150ms ease",
+                      boxShadow: isActive ? "inset 3px 0 0 rgba(139,92,246,0.7)" : "none",
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isActive) {
+                        (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.06)";
+                        (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.15)";
+                        (e.currentTarget as HTMLElement).style.color = "#eef2ff";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isActive) {
+                        (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.03)";
+                        (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.09)";
+                        (e.currentTarget as HTMLElement).style.color = "#b8c0ea";
+                      }
+                    }}
+                  >
+                    {nav.label}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -366,17 +412,19 @@ export default function Resume() {
             <h2 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "#a5b0e6", margin: "0 0 12px" }}>
               Strengths
             </h2>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "7px" }}>
               {data.skills.map((skill, i) => (
                 <span
                   key={i}
                   style={{
-                    padding: "8px 10px",
-                    borderRadius: "999px",
-                    background: "rgba(255,255,255,0.06)",
-                    border: "1px solid rgba(255,255,255,0.08)",
-                    color: "#dde5ff",
-                    fontSize: "0.84rem",
+                    padding: "5px 10px",
+                    borderRadius: "6px",
+                    background: "rgba(255,255,255,0.04)",
+                    border: "none",
+                    color: "#9aa3c9",
+                    fontSize: "0.81rem",
+                    fontWeight: 400,
+                    letterSpacing: "0.01em",
                   }}
                 >
                   {skill}
@@ -398,27 +446,50 @@ export default function Resume() {
             <h2 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "#a5b0e6", margin: "0 0 16px" }}>
               Experience
             </h2>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginBottom: "16px" }}>
-              {(["all", "marketing", "events", "ops"] as FilterType[]).map((f) => (
-                <button
-                  key={f}
-                  onClick={() => setActiveFilter(f)}
-                  style={{
-                    padding: "10px 14px",
-                    borderRadius: "999px",
-                    border: activeFilter === f ? "1px solid rgba(255,255,255,0.16)" : "1px solid rgba(255,255,255,0.08)",
-                    background: activeFilter === f ? "rgba(255,255,255,0.09)" : "rgba(255,255,255,0.04)",
-                    color: activeFilter === f ? "#eef2ff" : "#b8c0ea",
-                    cursor: "pointer",
-                    fontWeight: 600,
-                    fontSize: "0.9rem",
-                    fontFamily: "inherit",
-                    transition: "all 150ms ease",
-                  }}
-                >
-                  {f === "ops" ? "Operations" : f === "all" ? "All" : f.charAt(0).toUpperCase() + f.slice(1)}
-                </button>
-              ))}
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "16px" }}>
+              {(["all", "marketing", "events", "ops"] as FilterType[]).map((f) => {
+                const isActive = activeFilter === f;
+                const label = f === "ops" ? "Operations" : f === "all" ? "All" : f.charAt(0).toUpperCase() + f.slice(1);
+                return (
+                  <button
+                    key={f}
+                    onClick={() => setActiveFilter(f)}
+                    style={{
+                      padding: "8px 16px",
+                      borderRadius: "10px",
+                      border: isActive
+                        ? "1px solid rgba(139,92,246,0.5)"
+                        : "1px solid rgba(255,255,255,0.1)",
+                      background: isActive
+                        ? "rgba(139,92,246,0.18)"
+                        : "rgba(255,255,255,0.04)",
+                      color: isActive ? "#c4b5fd" : "#9aa3c9",
+                      cursor: "pointer",
+                      fontWeight: isActive ? 700 : 500,
+                      fontSize: "0.87rem",
+                      fontFamily: "inherit",
+                      transition: "all 150ms ease",
+                      letterSpacing: "0.01em",
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isActive) {
+                        (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.08)";
+                        (e.currentTarget as HTMLElement).style.color = "#eef2ff";
+                        (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.18)";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isActive) {
+                        (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.04)";
+                        (e.currentTarget as HTMLElement).style.color = "#9aa3c9";
+                        (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.1)";
+                      }
+                    }}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
             </div>
             <div style={{ display: "grid", gap: "14px" }}>
               {data.experience.map((exp, i) => {
