@@ -548,9 +548,8 @@ export default function Resume() {
                 if (!show) return null;
                 return (
                   <CardSection
-                    key={exp.id}
-                    defaultOpen={i === 0}
-                    forceOpen={activeFilter === "all" || undefined}
+                    key={`${exp.id}-${activeFilter}`}
+                    defaultOpen={activeFilter === "all" || i === 0}
                     item={{ ...exp, org: exp.company }}
                     isEditing={isEditing}
                     onUpdateTitle={(v) =>
