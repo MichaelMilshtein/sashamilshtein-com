@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback, CSSProperties } from "react";
 import { useResumeData } from "@/hooks/useResumeData";
 import { useEditMode } from "@/hooks/useEditMode";
 import { EditableText } from "@/components/EditableText";
+import sashaHeadshot from "@/assets/sasha-headshot.jpeg";
 
 type FilterType = "all" | "marketing" | "events" | "ops";
 
@@ -261,6 +262,17 @@ export default function Resume() {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "14px", minWidth: 0, flex: 1 }}>
+          <div style={{
+            width: "48px",
+            height: "48px",
+            borderRadius: "50%",
+            overflow: "hidden",
+            border: "2px solid rgba(139,92,246,0.5)",
+            boxShadow: "0 0 0 3px rgba(139,92,246,0.15)",
+            flexShrink: 0,
+          }}>
+            <img src={sashaHeadshot} alt="Sasha Milshtein" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }} />
+          </div>
           <h1 style={{ margin: 0, fontSize: "clamp(1.2rem, 2vw, 1.8rem)", lineHeight: 1, letterSpacing: "-0.04em", whiteSpace: "nowrap" }}>
             <span
               style={{

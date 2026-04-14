@@ -1,4 +1,4 @@
-import sashaPhoto from "../../../sasha-photo.png";
+import sashaPhoto from "../../../sasha-headshot.jpeg";
 
 const glass = {
   backdropFilter: "blur(18px)",
