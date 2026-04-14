@@ -19,6 +19,7 @@ function CardSection({
   item,
   isEditing,
   defaultOpen,
+  forceOpen,
   onUpdateTitle,
   onUpdateOrg,
   onUpdateDate,
@@ -30,6 +31,7 @@ function CardSection({
   item: CardItem;
   isEditing: boolean;
   defaultOpen?: boolean;
+  forceOpen?: boolean;
   onUpdateTitle: (v: string) => void;
   onUpdateOrg: (v: string) => void;
   onUpdateDate: (v: string) => void;
@@ -41,7 +43,7 @@ function CardSection({
   const [open, setOpen] = useState(!!defaultOpen);
   const [hovered, setHovered] = useState(false);
 
-  const bodyVisible = open || isEditing;
+  const bodyVisible = forceOpen || open || isEditing;
 
   return (
     <article
@@ -173,12 +175,13 @@ export default function Resume() {
   }, []);
 
   useEffect(() => {
+    const navIds = new Set(navItems.map((n) => n.id));
     const sections = Object.entries(sectionRefs.current);
     const handler = () => {
       const trigger = window.scrollY + 180;
       let current = "experience";
       sections.forEach(([id, el]) => {
-        if (el && el.offsetTop <= trigger) current = id;
+        if (navIds.has(id) && el && el.offsetTop <= trigger) current = id;
       });
       setActiveSection(current);
     };
@@ -196,7 +199,6 @@ export default function Resume() {
   } as CSSProperties;
 
   const navItems = [
-    { id: "summary", label: "Summary" },
     { id: "experience", label: "Experience" },
     { id: "impact", label: "Highlights" },
     { id: "leadership", label: "Leadership" },
@@ -462,7 +464,7 @@ export default function Resume() {
             <h2 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "#a5b0e6", margin: "0 0 16px" }}>
               Experience
             </h2>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "16px" }}>
+            <div className="filter-row" style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "16px" }}>
               {(["all", "marketing", "events", "ops"] as FilterType[]).map((f) => {
                 const isActive = activeFilter === f;
                 const label = f === "ops" ? "Operations" : f === "all" ? "All" : f.charAt(0).toUpperCase() + f.slice(1);
@@ -515,6 +517,7 @@ export default function Resume() {
                   <CardSection
                     key={exp.id}
                     defaultOpen={i === 0}
+                    forceOpen={activeFilter === "all" || undefined}
                     item={{ ...exp, org: exp.company }}
                     isEditing={isEditing}
                     onUpdateTitle={(v) =>
@@ -675,7 +678,7 @@ export default function Resume() {
             </div>
 
             {/* Coursework + Additional in a two-column row */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
+            <div className="edu-sub-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
               <div
                 style={{
                   padding: "16px 18px",

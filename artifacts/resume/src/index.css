@@ -45,23 +45,49 @@ a {
   border-bottom-color: rgba(139,92,246,0.4) !important;
 }
 
+/* ── Tablet ── */
 @media (max-width: 980px) {
   .resume-layout {
     grid-template-columns: 1fr !important;
   }
-
   .edu-grid {
     grid-template-columns: 1fr !important;
   }
-
   .contact-grid {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: 1fr 1fr !important;
   }
-}
-
-@media (max-width: 680px) {
   .resume-layout > aside {
     position: relative !important;
     top: 0 !important;
+  }
+}
+
+/* ── Phone ── */
+@media (max-width: 620px) {
+  /* hide sidebar — nav and strengths aren't useful on a small scroll */
+  .resume-layout > aside {
+    display: none !important;
+  }
+
+  /* filter buttons: single scrollable row */
+  .filter-row {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+  }
+  .filter-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* contact: single column */
+  .contact-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* education sub-panels: single column */
+  .edu-sub-grid {
+    grid-template-columns: 1fr !important;
   }
 }
