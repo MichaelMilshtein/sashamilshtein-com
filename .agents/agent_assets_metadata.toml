@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "9OZuYYdM2o3KOWDdzdVTd"
+uri = "file://artifacts/resume/dist/resume-hostinger.zip"
+type = "unspecified"
+title = "resume-hostinger.zip (215 KB)"
