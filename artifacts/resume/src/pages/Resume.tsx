@@ -317,14 +317,17 @@ export default function Resume() {
 
         {/* Contact icon pills */}
         <div style={{ display: "flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
-          <a href={`mailto:${data.email}`} style={contactPill} title={data.email}>
+          <a href={`mailto:${data.email}`} style={{ ...contactPill, width: "auto", padding: "0 10px", gap: "8px" }} title={data.email}>
             <Mail size={14} />
+            <span style={{ fontSize: "0.8rem", fontWeight: 500 }}>Email</span>
           </a>
-          <span style={contactPill} title={data.phone}>
+          <span style={{ ...contactPill, width: "auto", padding: "0 10px", gap: "8px" }} title={data.phone}>
             <Phone size={14} />
+            <span style={{ fontSize: "0.8rem", fontWeight: 500 }}>{data.phone}</span>
           </span>
-          <a href={`https://www.linkedin.com/in/${data.linkedin}`} target="_blank" rel="noopener noreferrer" style={contactPill} title={`linkedin.com/in/${data.linkedin}`}>
+          <a href={`https://www.linkedin.com/in/${data.linkedin}`} target="_blank" rel="noopener noreferrer" style={{ ...contactPill, width: "auto", padding: "0 10px", gap: "8px" }} title={`linkedin.com/in/${data.linkedin}`}>
             <Linkedin size={14} />
+            <span style={{ fontSize: "0.8rem", fontWeight: 500 }}>LinkedIn</span>
           </a>
         </div>
 
@@ -722,7 +725,7 @@ export default function Resume() {
               }}
             >
               <p style={{ margin: "0 0 10px", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#6b7280" }}>
-                Additional
+                <span style={{ fontSize: "0.85rem", letterSpacing: "0.12em", color: "#a5b0e6", fontWeight: 600 }}>Additional</span>
               </p>
               {isEditing ? (
                 <p style={{ margin: 0, color: "#c8d0f0", lineHeight: 1.65, fontSize: "0.88rem" }}>

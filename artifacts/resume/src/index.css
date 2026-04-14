@@ -69,6 +69,10 @@ a {
     display: none !important;
   }
 
+  .resume-layout > nav {
+    display: none !important;
+  }
+
   /* filter buttons: single scrollable row */
   .filter-row {
     flex-wrap: nowrap !important;
