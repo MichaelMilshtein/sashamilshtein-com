@@ -7,7 +7,7 @@ import MobileResume from "@/pages/MobileResume";
 import sashaHeadshot from "@/assets/sasha-headshot.jpeg";
 import { Mail, Phone, Linkedin } from "lucide-react";
 
-type FilterType = "all!" | "marketing" | "events" | "ops";
+type FilterType = "all!" | "marketing!" | "events!" | "ops!";
 
 interface CardItem {
   id: string;
@@ -226,6 +226,13 @@ export default function Resume() {
 
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
   const headerRef = useRef<HTMLElement | null>(null);
+  const navItems = [
+    { id: "summary", label: "Summary" },
+    { id: "experience", label: "Experience" },
+    { id: "impact", label: "Highlights" },
+    { id: "leadership", label: "Leadership" },
+    { id: "education", label: "Education" },
+  ];
 
   const scrollTo = useCallback((id: string) => {
     const target = sectionRefs.current[id];
@@ -263,14 +270,6 @@ export default function Resume() {
     border: "1px solid rgba(255,255,255,0.1)",
     boxShadow: "0 20px 60px rgba(0,0,0,0.35)",
   } as CSSProperties;
-
-  const navItems = [
-    { id: "summary", label: "Summary" },
-    { id: "experience", label: "Experience" },
-    { id: "impact", label: "Highlights" },
-    { id: "leadership", label: "Leadership" },
-    { id: "education", label: "Education" },
-  ];
 
   const contactPill: CSSProperties = {
     display: "inline-flex",
@@ -694,62 +693,62 @@ export default function Resume() {
                 marginBottom: "16px",
               }}
             >
-              {(["all :)", "marketing!", "events!", "ops!"] as FilterType[]).map(
-                (f) => {
-                  const isActive = activeFilter === f;
-                  const label =
-                    f === "ops"
-                      ? "Operations"
-                      : f === "all"
-                        ? "All"
-                        : f.charAt(0).toUpperCase() + f.slice(1);
-                  return (
-                    <button
-                      key={f}
-                      onClick={() => setActiveFilter(f)}
-                      style={{
-                        padding: "8px 16px",
-                        borderRadius: "10px",
-                        border: isActive
-                          ? "1px solid rgba(139,92,246,0.5)"
-                          : "1px solid rgba(255,255,255,0.1)",
-                        background: isActive
-                          ? "rgba(139,92,246,0.18)"
-                          : "rgba(255,255,255,0.04)",
-                        color: isActive ? "#c4b5fd" : "#9aa3c9",
-                        cursor: "pointer",
-                        fontWeight: isActive ? 700 : 500,
-                        fontSize: "0.87rem",
-                        fontFamily: "inherit",
-                        transition: "all 150ms ease",
-                        letterSpacing: "0.01em",
-                      }}
-                      onMouseEnter={(e) => {
-                        if (!isActive) {
-                          (e.currentTarget as HTMLElement).style.background =
-                            "rgba(255,255,255,0.08)";
-                          (e.currentTarget as HTMLElement).style.color =
-                            "#eef2ff";
-                          (e.currentTarget as HTMLElement).style.borderColor =
-                            "rgba(255,255,255,0.18)";
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        if (!isActive) {
-                          (e.currentTarget as HTMLElement).style.background =
-                            "rgba(255,255,255,0.04)";
-                          (e.currentTarget as HTMLElement).style.color =
-                            "#9aa3c9";
-                          (e.currentTarget as HTMLElement).style.borderColor =
-                            "rgba(255,255,255,0.1)";
-                        }
-                      }}
-                    >
-                      {label}
-                    </button>
-                  );
-                },
-              )}
+              {(
+                ["all :)", "marketing!", "events!", "ops!"] as FilterType[]
+              ).map((f) => {
+                const isActive = activeFilter === f;
+                const label =
+                  f === "ops"
+                    ? "Operations"
+                    : f === "all"
+                      ? "All"
+                      : f.charAt(0).toUpperCase() + f.slice(1);
+                return (
+                  <button
+                    key={f}
+                    onClick={() => setActiveFilter(f)}
+                    style={{
+                      padding: "8px 16px",
+                      borderRadius: "10px",
+                      border: isActive
+                        ? "1px solid rgba(139,92,246,0.5)"
+                        : "1px solid rgba(255,255,255,0.1)",
+                      background: isActive
+                        ? "rgba(139,92,246,0.18)"
+                        : "rgba(255,255,255,0.04)",
+                      color: isActive ? "#c4b5fd" : "#9aa3c9",
+                      cursor: "pointer",
+                      fontWeight: isActive ? 700 : 500,
+                      fontSize: "0.87rem",
+                      fontFamily: "inherit",
+                      transition: "all 150ms ease",
+                      letterSpacing: "0.01em",
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isActive) {
+                        (e.currentTarget as HTMLElement).style.background =
+                          "rgba(255,255,255,0.08)";
+                        (e.currentTarget as HTMLElement).style.color =
+                          "#eef2ff";
+                        (e.currentTarget as HTMLElement).style.borderColor =
+                          "rgba(255,255,255,0.18)";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isActive) {
+                        (e.currentTarget as HTMLElement).style.background =
+                          "rgba(255,255,255,0.04)";
+                        (e.currentTarget as HTMLElement).style.color =
+                          "#9aa3c9";
+                        (e.currentTarget as HTMLElement).style.borderColor =
+                          "rgba(255,255,255,0.1)";
+                      }
+                    }}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
             </div>
             <div style={{ display: "grid", gap: "14px" }}>
               {data.experience.map((exp, i) => {
