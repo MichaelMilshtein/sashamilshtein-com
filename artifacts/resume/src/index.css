@@ -36,6 +36,14 @@ a {
   text-decoration: none;
 }
 
+.headshot-edit {
+  box-shadow: 0 0 0 3px rgba(139,92,246,0.15);
+  transition: box-shadow 200ms ease;
+}
+.headshot-edit:hover {
+  box-shadow: 0 0 0 5px rgba(139,92,246,0.45);
+}
+
 [contenteditable]:focus {
   outline: none;
   border-bottom-color: rgba(139,92,246,0.9) !important;

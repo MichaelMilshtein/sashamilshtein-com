@@ -281,19 +281,16 @@ export default function Resume() {
           <div
             onClick={enterEdit}
             title="Click to edit"
+            className="headshot-edit"
             style={{
               width: "48px",
               height: "48px",
               borderRadius: "50%",
               overflow: "hidden",
               border: "2px solid rgba(139,92,246,0.5)",
-              boxShadow: "0 0 0 3px rgba(139,92,246,0.15)",
               flexShrink: 0,
               cursor: "pointer",
-              transition: "box-shadow 200ms ease",
             }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.boxShadow = "0 0 0 4px rgba(139,92,246,0.45)"; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.boxShadow = "0 0 0 3px rgba(139,92,246,0.15)"; }}
           >
             <img src={sashaHeadshot} alt="Sasha Milshtein" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }} />
           </div>
