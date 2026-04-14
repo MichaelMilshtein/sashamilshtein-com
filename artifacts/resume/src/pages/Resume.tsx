@@ -7,7 +7,7 @@ import MobileResume from "@/pages/MobileResume";
 import sashaHeadshot from "@/assets/sasha-headshot.jpeg";
 import { Mail, Phone, Linkedin } from "lucide-react";
 
-type FilterType = "all" | "marketing" | "events" | "ops";
+type FilterType = "all!" | "marketing" | "events" | "ops";
 
 interface CardItem {
   id: string;
@@ -53,15 +53,27 @@ function CardSection({
     <article
       style={{
         borderRadius: "22px",
-        background: open ? "rgba(255,255,255,0.055)" : hovered ? "rgba(255,255,255,0.045)" : "rgba(255,255,255,0.03)",
-        border: open ? "1px solid rgba(139,92,246,0.3)" : hovered ? "1px solid rgba(255,255,255,0.14)" : "1px solid rgba(255,255,255,0.07)",
+        background: open
+          ? "rgba(255,255,255,0.055)"
+          : hovered
+            ? "rgba(255,255,255,0.045)"
+            : "rgba(255,255,255,0.03)",
+        border: open
+          ? "1px solid rgba(139,92,246,0.3)"
+          : hovered
+            ? "1px solid rgba(255,255,255,0.14)"
+            : "1px solid rgba(255,255,255,0.07)",
         overflow: "hidden",
         transition: "border-color 180ms ease, background 180ms ease",
       }}
     >
       <div
-        onClick={() => { if (!isEditing) setOpen((p) => !p); }}
-        onMouseEnter={() => { if (!isEditing) setHovered(true); }}
+        onClick={() => {
+          if (!isEditing) setOpen((p) => !p);
+        }}
+        onMouseEnter={() => {
+          if (!isEditing) setHovered(true);
+        }}
         onMouseLeave={() => setHovered(false)}
         style={{
           padding: "18px 20px",
@@ -74,13 +86,40 @@ function CardSection({
         }}
       >
         <div>
-          <h3 style={{ margin: "0 0 6px", fontSize: "1.08rem", letterSpacing: "-0.02em", color: "#eef2ff" }}>
-            <EditableText value={item.title} onChange={onUpdateTitle} isEditing={isEditing} />
+          <h3
+            style={{
+              margin: "0 0 6px",
+              fontSize: "1.08rem",
+              letterSpacing: "-0.02em",
+              color: "#eef2ff",
+            }}
+          >
+            <EditableText
+              value={item.title}
+              onChange={onUpdateTitle}
+              isEditing={isEditing}
+            />
             {" — "}
-            <EditableText value={item.org} onChange={onUpdateOrg} isEditing={isEditing} />
+            <EditableText
+              value={item.org}
+              onChange={onUpdateOrg}
+              isEditing={isEditing}
+            />
           </h3>
-          <div style={{ color: "#b8c0ea", display: "flex", flexWrap: "wrap", gap: "10px", fontSize: "0.93rem" }}>
-            <EditableText value={item.dateRange} onChange={onUpdateDate} isEditing={isEditing} />
+          <div
+            style={{
+              color: "#b8c0ea",
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "10px",
+              fontSize: "0.93rem",
+            }}
+          >
+            <EditableText
+              value={item.dateRange}
+              onChange={onUpdateDate}
+              isEditing={isEditing}
+            />
             {showLocation && item.location && (
               <>
                 <span>•</span>
@@ -109,7 +148,11 @@ function CardSection({
             letterSpacing: "0.02em",
           }}
         >
-          <EditableText value={item.badge} onChange={onUpdateBadge} isEditing={isEditing} />
+          <EditableText
+            value={item.badge}
+            onChange={onUpdateBadge}
+            isEditing={isEditing}
+          />
         </div>
         {!isEditing && (
           <span
@@ -126,7 +169,13 @@ function CardSection({
             }}
           >
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path d="M4 2L8 6L4 10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+              <path
+                d="M4 2L8 6L4 10"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </span>
         )}
@@ -141,7 +190,14 @@ function CardSection({
       >
         <div style={{ overflow: "hidden" }}>
           <div style={{ padding: bodyVisible ? "0 20px 18px" : "0 20px" }}>
-            <ul style={{ margin: 0, paddingLeft: "18px", color: "#e7ebff", lineHeight: 1.7 }}>
+            <ul
+              style={{
+                margin: 0,
+                paddingLeft: "18px",
+                color: "#e7ebff",
+                lineHeight: 1.7,
+              }}
+            >
               {item.bullets.map((b) => (
                 <li key={b.id} style={{ marginTop: "8px" }}>
                   <EditableText
@@ -175,7 +231,8 @@ export default function Resume() {
     const target = sectionRefs.current[id];
     if (!target) return;
     const headerH = (headerRef.current?.offsetHeight ?? 70) + 58;
-    const y = target.getBoundingClientRect().top + window.pageYOffset - headerH - 16;
+    const y =
+      target.getBoundingClientRect().top + window.pageYOffset - headerH - 16;
     window.scrollTo({ top: y, behavior: "smooth" });
   }, []);
 
@@ -250,7 +307,8 @@ export default function Resume() {
             zIndex: 40,
             padding: "10px 18px",
             borderRadius: "999px",
-            background: "linear-gradient(135deg, rgba(139,92,246,0.95), rgba(34,211,238,0.82))",
+            background:
+              "linear-gradient(135deg, rgba(139,92,246,0.95), rgba(34,211,238,0.82))",
             color: "white",
             fontWeight: 700,
             fontSize: "0.85rem",
@@ -262,14 +320,25 @@ export default function Resume() {
             fontFamily: "inherit",
           }}
         >
-          <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#34d399", display: "inline-block", flexShrink: 0 }} />
+          <span
+            style={{
+              width: "8px",
+              height: "8px",
+              borderRadius: "50%",
+              background: "#34d399",
+              display: "inline-block",
+              flexShrink: 0,
+            }}
+          />
           Editing — click to exit
         </div>
       )}
 
       {/* Header */}
       <header
-        ref={(el) => { headerRef.current = el; }}
+        ref={(el) => {
+          headerRef.current = el;
+        }}
         className="resume-header"
         style={{
           ...glass,
@@ -284,12 +353,23 @@ export default function Resume() {
           zIndex: 30,
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "14px", minWidth: 0, flex: 1, overflow: "hidden" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "14px",
+            minWidth: 0,
+            flex: 1,
+            overflow: "hidden",
+          }}
+        >
           <div
             role="button"
             tabIndex={0}
             onClick={enterEdit}
-            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") enterEdit(); }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") enterEdit();
+            }}
             title="Click to edit"
             className="headshot-edit"
             style={{
@@ -302,12 +382,30 @@ export default function Resume() {
               cursor: "pointer",
             }}
           >
-            <img src={sashaHeadshot} alt="Sasha Milshtein" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }} />
+            <img
+              src={sashaHeadshot}
+              alt="Sasha Milshtein"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                objectPosition: "center top",
+              }}
+            />
           </div>
-          <h1 style={{ margin: 0, fontSize: "clamp(1.2rem, 2vw, 1.8rem)", lineHeight: 1, letterSpacing: "-0.04em", whiteSpace: "nowrap" }}>
+          <h1
+            style={{
+              margin: 0,
+              fontSize: "clamp(1.2rem, 2vw, 1.8rem)",
+              lineHeight: 1,
+              letterSpacing: "-0.04em",
+              whiteSpace: "nowrap",
+            }}
+          >
             <span
               style={{
-                background: "linear-gradient(135deg, #ffffff 20%, #b9b8ff 45%, #7ee7f8 85%)",
+                background:
+                  "linear-gradient(135deg, #ffffff 20%, #b9b8ff 45%, #7ee7f8 85%)",
                 WebkitBackgroundClip: "text",
                 backgroundClip: "text",
                 color: "transparent",
@@ -315,7 +413,12 @@ export default function Resume() {
             >
               <EditableText
                 value={data.name.split(" ")[0] ?? ""}
-                onChange={(v) => updateField("name", [v, ...data.name.split(" ").slice(1)].join(" "))}
+                onChange={(v) =>
+                  updateField(
+                    "name",
+                    [v, ...data.name.split(" ").slice(1)].join(" "),
+                  )
+                }
                 isEditing={isEditing}
               />
             </span>
@@ -323,7 +426,9 @@ export default function Resume() {
               {" "}
               <EditableText
                 value={data.name.split(" ").slice(1).join(" ")}
-                onChange={(v) => updateField("name", [data.name.split(" ")[0], v].join(" "))}
+                onChange={(v) =>
+                  updateField("name", [data.name.split(" ")[0], v].join(" "))
+                }
                 isEditing={isEditing}
               />
             </span>
@@ -331,18 +436,45 @@ export default function Resume() {
         </div>
 
         {/* Contact icon pills */}
-        <div className="contact-pills" style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "8px", flexShrink: 0 }}>
-          <a href={`mailto:${data.email}`} style={{ ...contactPill, padding: "0 10px", gap: "7px" }} title={data.email}>
+        <div
+          className="contact-pills"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "8px",
+            flexShrink: 0,
+          }}
+        >
+          <a
+            href={`mailto:${data.email}`}
+            style={{ ...contactPill, padding: "0 10px", gap: "7px" }}
+            title={data.email}
+          >
             <Mail size={13} />
-            <span style={{ fontSize: "0.78rem", fontWeight: 500 }}>{data.email}</span>
+            <span style={{ fontSize: "0.78rem", fontWeight: 500 }}>
+              {data.email}
+            </span>
           </a>
-          <span style={{ ...contactPill, padding: "0 10px", gap: "7px" }} title={data.phone}>
+          <span
+            style={{ ...contactPill, padding: "0 10px", gap: "7px" }}
+            title={data.phone}
+          >
             <Phone size={13} />
-            <span style={{ fontSize: "0.78rem", fontWeight: 500 }}>{data.phone}</span>
+            <span style={{ fontSize: "0.78rem", fontWeight: 500 }}>
+              {data.phone}
+            </span>
           </span>
-          <a href={`https://www.linkedin.com/in/${data.linkedin}`} target="_blank" rel="noopener noreferrer" style={{ ...contactPill, padding: "0 10px", gap: "7px" }}>
+          <a
+            href={`https://www.linkedin.com/in/${data.linkedin}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ ...contactPill, padding: "0 10px", gap: "7px" }}
+          >
             <Linkedin size={13} />
-            <span style={{ fontSize: "0.78rem", fontWeight: 500 }}>{`linkedin.com/in/${data.linkedin}`}</span>
+            <span
+              style={{ fontSize: "0.78rem", fontWeight: 500 }}
+            >{`linkedin.com/in/${data.linkedin}`}</span>
           </a>
         </div>
       </header>
@@ -374,7 +506,9 @@ export default function Resume() {
                 padding: "7px 16px",
                 borderRadius: "10px",
                 color: isActive ? "#c4b5fd" : "#b8c0ea",
-                border: isActive ? "1px solid rgba(139,92,246,0.45)" : "1px solid transparent",
+                border: isActive
+                  ? "1px solid rgba(139,92,246,0.45)"
+                  : "1px solid transparent",
                 background: isActive ? "rgba(139,92,246,0.15)" : "transparent",
                 fontWeight: isActive ? 700 : 500,
                 cursor: "pointer",
@@ -392,14 +526,38 @@ export default function Resume() {
 
       {/* Summary */}
       <section
-        ref={(el) => { sectionRefs.current["summary"] = el; }}
+        ref={(el) => {
+          sectionRefs.current["summary"] = el;
+        }}
         id="summary"
-        style={{ ...glass, borderRadius: "20px", padding: "20px 22px", marginTop: "16px", scrollMarginTop: "12px" }}
+        style={{
+          ...glass,
+          borderRadius: "20px",
+          padding: "20px 22px",
+          marginTop: "16px",
+          scrollMarginTop: "12px",
+        }}
       >
-        <h2 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "#a5b0e6", margin: "0 0 12px" }}>
+        <h2
+          style={{
+            fontSize: "0.85rem",
+            textTransform: "uppercase",
+            letterSpacing: "0.12em",
+            color: "#a5b0e6",
+            margin: "0 0 12px",
+          }}
+        >
           Summary
         </h2>
-        <p style={{ margin: 0, fontSize: "0.95rem", lineHeight: 1.75, color: "#c8d0f0", fontWeight: 400 }}>
+        <p
+          style={{
+            margin: 0,
+            fontSize: "0.95rem",
+            lineHeight: 1.75,
+            color: "#c8d0f0",
+            fontWeight: 400,
+          }}
+        >
           <EditableText
             value={data.summary}
             onChange={(v) => updateField("summary", v)}
@@ -434,7 +592,15 @@ export default function Resume() {
         >
           {/* Strengths */}
           <div>
-            <h2 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "#a5b0e6", margin: "0 0 12px" }}>
+            <h2
+              style={{
+                fontSize: "0.85rem",
+                textTransform: "uppercase",
+                letterSpacing: "0.12em",
+                color: "#a5b0e6",
+                margin: "0 0 12px",
+              }}
+            >
               Strengths
             </h2>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "7px" }}>
@@ -460,7 +626,15 @@ export default function Resume() {
 
           {/* Coursework */}
           <div>
-            <h2 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "#a5b0e6", margin: "0 0 12px" }}>
+            <h2
+              style={{
+                fontSize: "0.85rem",
+                textTransform: "uppercase",
+                letterSpacing: "0.12em",
+                color: "#a5b0e6",
+                margin: "0 0 12px",
+              }}
+            >
               {data.courses.length > 5 ? "Coursework" : "Relevant Coursework"}
             </h2>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "7px" }}>
@@ -487,64 +661,100 @@ export default function Resume() {
 
         {/* Main content */}
         <main style={{ display: "grid", gap: "24px" }}>
-
           {/* Experience */}
           <section
-            ref={(el) => { sectionRefs.current["experience"] = el; }}
+            ref={(el) => {
+              sectionRefs.current["experience"] = el;
+            }}
             id="experience"
-            style={{ ...glass, borderRadius: "28px", padding: "22px", scrollMarginTop: "12px" }}
+            style={{
+              ...glass,
+              borderRadius: "28px",
+              padding: "22px",
+              scrollMarginTop: "12px",
+            }}
           >
-            <h2 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "#a5b0e6", margin: "0 0 16px" }}>
+            <h2
+              style={{
+                fontSize: "0.85rem",
+                textTransform: "uppercase",
+                letterSpacing: "0.12em",
+                color: "#a5b0e6",
+                margin: "0 0 16px",
+              }}
+            >
               Experience
             </h2>
-            <div className="filter-row" style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "16px" }}>
-              {(["all", "marketing", "events", "ops"] as FilterType[]).map((f) => {
-                const isActive = activeFilter === f;
-                const label = f === "ops" ? "Operations" : f === "all" ? "All" : f.charAt(0).toUpperCase() + f.slice(1);
-                return (
-                  <button
-                    key={f}
-                    onClick={() => setActiveFilter(f)}
-                    style={{
-                      padding: "8px 16px",
-                      borderRadius: "10px",
-                      border: isActive
-                        ? "1px solid rgba(139,92,246,0.5)"
-                        : "1px solid rgba(255,255,255,0.1)",
-                      background: isActive
-                        ? "rgba(139,92,246,0.18)"
-                        : "rgba(255,255,255,0.04)",
-                      color: isActive ? "#c4b5fd" : "#9aa3c9",
-                      cursor: "pointer",
-                      fontWeight: isActive ? 700 : 500,
-                      fontSize: "0.87rem",
-                      fontFamily: "inherit",
-                      transition: "all 150ms ease",
-                      letterSpacing: "0.01em",
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!isActive) {
-                        (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.08)";
-                        (e.currentTarget as HTMLElement).style.color = "#eef2ff";
-                        (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.18)";
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!isActive) {
-                        (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.04)";
-                        (e.currentTarget as HTMLElement).style.color = "#9aa3c9";
-                        (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.1)";
-                      }
-                    }}
-                  >
-                    {label}
-                  </button>
-                );
-              })}
+            <div
+              className="filter-row"
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "8px",
+                marginBottom: "16px",
+              }}
+            >
+              {(["all :)", "marketing!", "events!", "ops!"] as FilterType[]).map(
+                (f) => {
+                  const isActive = activeFilter === f;
+                  const label =
+                    f === "ops"
+                      ? "Operations"
+                      : f === "all"
+                        ? "All"
+                        : f.charAt(0).toUpperCase() + f.slice(1);
+                  return (
+                    <button
+                      key={f}
+                      onClick={() => setActiveFilter(f)}
+                      style={{
+                        padding: "8px 16px",
+                        borderRadius: "10px",
+                        border: isActive
+                          ? "1px solid rgba(139,92,246,0.5)"
+                          : "1px solid rgba(255,255,255,0.1)",
+                        background: isActive
+                          ? "rgba(139,92,246,0.18)"
+                          : "rgba(255,255,255,0.04)",
+                        color: isActive ? "#c4b5fd" : "#9aa3c9",
+                        cursor: "pointer",
+                        fontWeight: isActive ? 700 : 500,
+                        fontSize: "0.87rem",
+                        fontFamily: "inherit",
+                        transition: "all 150ms ease",
+                        letterSpacing: "0.01em",
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!isActive) {
+                          (e.currentTarget as HTMLElement).style.background =
+                            "rgba(255,255,255,0.08)";
+                          (e.currentTarget as HTMLElement).style.color =
+                            "#eef2ff";
+                          (e.currentTarget as HTMLElement).style.borderColor =
+                            "rgba(255,255,255,0.18)";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isActive) {
+                          (e.currentTarget as HTMLElement).style.background =
+                            "rgba(255,255,255,0.04)";
+                          (e.currentTarget as HTMLElement).style.color =
+                            "#9aa3c9";
+                          (e.currentTarget as HTMLElement).style.borderColor =
+                            "rgba(255,255,255,0.1)";
+                        }
+                      }}
+                    >
+                      {label}
+                    </button>
+                  );
+                },
+              )}
             </div>
             <div style={{ display: "grid", gap: "14px" }}>
               {data.experience.map((exp, i) => {
-                const show = activeFilter === "all" || exp.category.includes(activeFilter);
+                const show =
+                  activeFilter === "all" || exp.category.includes(activeFilter);
                 if (!show) return null;
                 return (
                   <CardSection
@@ -553,27 +763,57 @@ export default function Resume() {
                     item={{ ...exp, org: exp.company }}
                     isEditing={isEditing}
                     onUpdateTitle={(v) =>
-                      updateNested((p) => ({ ...p, experience: p.experience.map((e) => e.id === exp.id ? { ...e, title: v } : e) }))
+                      updateNested((p) => ({
+                        ...p,
+                        experience: p.experience.map((e) =>
+                          e.id === exp.id ? { ...e, title: v } : e,
+                        ),
+                      }))
                     }
                     onUpdateOrg={(v) =>
-                      updateNested((p) => ({ ...p, experience: p.experience.map((e) => e.id === exp.id ? { ...e, company: v } : e) }))
+                      updateNested((p) => ({
+                        ...p,
+                        experience: p.experience.map((e) =>
+                          e.id === exp.id ? { ...e, company: v } : e,
+                        ),
+                      }))
                     }
                     onUpdateDate={(v) =>
-                      updateNested((p) => ({ ...p, experience: p.experience.map((e) => e.id === exp.id ? { ...e, dateRange: v } : e) }))
+                      updateNested((p) => ({
+                        ...p,
+                        experience: p.experience.map((e) =>
+                          e.id === exp.id ? { ...e, dateRange: v } : e,
+                        ),
+                      }))
                     }
                     onUpdateLocation={(v) =>
-                      updateNested((p) => ({ ...p, experience: p.experience.map((e) => e.id === exp.id ? { ...e, location: v } : e) }))
+                      updateNested((p) => ({
+                        ...p,
+                        experience: p.experience.map((e) =>
+                          e.id === exp.id ? { ...e, location: v } : e,
+                        ),
+                      }))
                     }
                     onUpdateBadge={(v) =>
-                      updateNested((p) => ({ ...p, experience: p.experience.map((e) => e.id === exp.id ? { ...e, badge: v } : e) }))
+                      updateNested((p) => ({
+                        ...p,
+                        experience: p.experience.map((e) =>
+                          e.id === exp.id ? { ...e, badge: v } : e,
+                        ),
+                      }))
                     }
                     onUpdateBullet={(bId, v) =>
                       updateNested((p) => ({
                         ...p,
                         experience: p.experience.map((e) =>
                           e.id === exp.id
-                            ? { ...e, bullets: e.bullets.map((b) => b.id === bId ? { ...b, text: v } : b) }
-                            : e
+                            ? {
+                                ...e,
+                                bullets: e.bullets.map((b) =>
+                                  b.id === bId ? { ...b, text: v } : b,
+                                ),
+                              }
+                            : e,
                         ),
                       }))
                     }
@@ -586,39 +826,88 @@ export default function Resume() {
 
           {/* Highlights */}
           <section
-            ref={(el) => { sectionRefs.current["impact"] = el; }}
+            ref={(el) => {
+              sectionRefs.current["impact"] = el;
+            }}
             id="impact"
-            style={{ ...glass, borderRadius: "28px", padding: "22px", scrollMarginTop: "12px" }}
+            style={{
+              ...glass,
+              borderRadius: "28px",
+              padding: "22px",
+              scrollMarginTop: "12px",
+            }}
           >
-            <h2 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "#a5b0e6", margin: "0 0 16px" }}>
+            <h2
+              style={{
+                fontSize: "0.85rem",
+                textTransform: "uppercase",
+                letterSpacing: "0.12em",
+                color: "#a5b0e6",
+                margin: "0 0 16px",
+              }}
+            >
               Selected Highlights
             </h2>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "14px" }} className="highlights-grid">
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(3, 1fr)",
+                gap: "14px",
+              }}
+              className="highlights-grid"
+            >
               {data.highlights.map((h) => (
                 <div
                   key={h.id}
                   style={{
                     padding: "18px",
                     borderRadius: "22px",
-                    background: "linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03))",
+                    background:
+                      "linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03))",
                     border: "1px solid rgba(255,255,255,0.08)",
                     minHeight: "140px",
                   }}
                 >
-                  <strong style={{ display: "block", fontSize: "1.6rem", letterSpacing: "-0.04em", marginBottom: "8px", color: "#eef2ff", fontWeight: 800 }}>
+                  <strong
+                    style={{
+                      display: "block",
+                      fontSize: "1.6rem",
+                      letterSpacing: "-0.04em",
+                      marginBottom: "8px",
+                      color: "#eef2ff",
+                      fontWeight: 800,
+                    }}
+                  >
                     <EditableText
                       value={h.stat}
                       onChange={(v) =>
-                        updateNested((p) => ({ ...p, highlights: p.highlights.map((x) => x.id === h.id ? { ...x, stat: v } : x) }))
+                        updateNested((p) => ({
+                          ...p,
+                          highlights: p.highlights.map((x) =>
+                            x.id === h.id ? { ...x, stat: v } : x,
+                          ),
+                        }))
                       }
                       isEditing={isEditing}
                     />
                   </strong>
-                  <p style={{ margin: 0, color: "#b8c0ea", lineHeight: 1.6, fontSize: "0.9rem" }}>
+                  <p
+                    style={{
+                      margin: 0,
+                      color: "#b8c0ea",
+                      lineHeight: 1.6,
+                      fontSize: "0.9rem",
+                    }}
+                  >
                     <EditableText
                       value={h.description}
                       onChange={(v) =>
-                        updateNested((p) => ({ ...p, highlights: p.highlights.map((x) => x.id === h.id ? { ...x, description: v } : x) }))
+                        updateNested((p) => ({
+                          ...p,
+                          highlights: p.highlights.map((x) =>
+                            x.id === h.id ? { ...x, description: v } : x,
+                          ),
+                        }))
                       }
                       isEditing={isEditing}
                       multiline
@@ -631,11 +920,26 @@ export default function Resume() {
 
           {/* Leadership */}
           <section
-            ref={(el) => { sectionRefs.current["leadership"] = el; }}
+            ref={(el) => {
+              sectionRefs.current["leadership"] = el;
+            }}
             id="leadership"
-            style={{ ...glass, borderRadius: "28px", padding: "22px", scrollMarginTop: "12px" }}
+            style={{
+              ...glass,
+              borderRadius: "28px",
+              padding: "22px",
+              scrollMarginTop: "12px",
+            }}
           >
-            <h2 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "#a5b0e6", margin: "0 0 16px" }}>
+            <h2
+              style={{
+                fontSize: "0.85rem",
+                textTransform: "uppercase",
+                letterSpacing: "0.12em",
+                color: "#a5b0e6",
+                margin: "0 0 16px",
+              }}
+            >
               Leadership & Engagement
             </h2>
             <div style={{ display: "grid", gap: "14px" }}>
@@ -646,24 +950,49 @@ export default function Resume() {
                   item={lead}
                   isEditing={isEditing}
                   onUpdateTitle={(v) =>
-                    updateNested((p) => ({ ...p, leadership: p.leadership.map((l) => l.id === lead.id ? { ...l, title: v } : l) }))
+                    updateNested((p) => ({
+                      ...p,
+                      leadership: p.leadership.map((l) =>
+                        l.id === lead.id ? { ...l, title: v } : l,
+                      ),
+                    }))
                   }
                   onUpdateOrg={(v) =>
-                    updateNested((p) => ({ ...p, leadership: p.leadership.map((l) => l.id === lead.id ? { ...l, org: v } : l) }))
+                    updateNested((p) => ({
+                      ...p,
+                      leadership: p.leadership.map((l) =>
+                        l.id === lead.id ? { ...l, org: v } : l,
+                      ),
+                    }))
                   }
                   onUpdateDate={(v) =>
-                    updateNested((p) => ({ ...p, leadership: p.leadership.map((l) => l.id === lead.id ? { ...l, dateRange: v } : l) }))
+                    updateNested((p) => ({
+                      ...p,
+                      leadership: p.leadership.map((l) =>
+                        l.id === lead.id ? { ...l, dateRange: v } : l,
+                      ),
+                    }))
                   }
                   onUpdateBadge={(v) =>
-                    updateNested((p) => ({ ...p, leadership: p.leadership.map((l) => l.id === lead.id ? { ...l, badge: v } : l) }))
+                    updateNested((p) => ({
+                      ...p,
+                      leadership: p.leadership.map((l) =>
+                        l.id === lead.id ? { ...l, badge: v } : l,
+                      ),
+                    }))
                   }
                   onUpdateBullet={(bId, v) =>
                     updateNested((p) => ({
                       ...p,
                       leadership: p.leadership.map((l) =>
                         l.id === lead.id
-                          ? { ...l, bullets: l.bullets.map((b) => b.id === bId ? { ...b, text: v } : b) }
-                          : l
+                          ? {
+                              ...l,
+                              bullets: l.bullets.map((b) =>
+                                b.id === bId ? { ...b, text: v } : b,
+                              ),
+                            }
+                          : l,
                       ),
                     }))
                   }
@@ -675,11 +1004,26 @@ export default function Resume() {
 
           {/* Education */}
           <section
-            ref={(el) => { sectionRefs.current["education"] = el; }}
+            ref={(el) => {
+              sectionRefs.current["education"] = el;
+            }}
             id="education"
-            style={{ ...glass, borderRadius: "28px", padding: "22px", scrollMarginTop: "12px" }}
+            style={{
+              ...glass,
+              borderRadius: "28px",
+              padding: "22px",
+              scrollMarginTop: "12px",
+            }}
           >
-            <h2 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "#a5b0e6", margin: "0 0 16px" }}>
+            <h2
+              style={{
+                fontSize: "0.85rem",
+                textTransform: "uppercase",
+                letterSpacing: "0.12em",
+                color: "#a5b0e6",
+                margin: "0 0 16px",
+              }}
+            >
               Education
             </h2>
 
@@ -693,19 +1037,73 @@ export default function Resume() {
                 marginBottom: "14px",
               }}
             >
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "8px", marginBottom: "6px" }}>
-                <h3 style={{ margin: 0, fontSize: "1.05rem", color: "#eef2ff", lineHeight: 1.4 }}>
-                  <EditableText value={data.educationSchool} onChange={(v) => updateField("educationSchool", v)} isEditing={isEditing} multiline />
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "flex-start",
+                  flexWrap: "wrap",
+                  gap: "8px",
+                  marginBottom: "6px",
+                }}
+              >
+                <h3
+                  style={{
+                    margin: 0,
+                    fontSize: "1.05rem",
+                    color: "#eef2ff",
+                    lineHeight: 1.4,
+                  }}
+                >
+                  <EditableText
+                    value={data.educationSchool}
+                    onChange={(v) => updateField("educationSchool", v)}
+                    isEditing={isEditing}
+                    multiline
+                  />
                 </h3>
-                <span style={{ fontSize: "0.78rem", color: "#9aa3c9", padding: "3px 10px", borderRadius: "6px", background: "rgba(255,255,255,0.05)", whiteSpace: "nowrap" }}>
+                <span
+                  style={{
+                    fontSize: "0.78rem",
+                    color: "#9aa3c9",
+                    padding: "3px 10px",
+                    borderRadius: "6px",
+                    background: "rgba(255,255,255,0.05)",
+                    whiteSpace: "nowrap",
+                  }}
+                >
                   May 2026
                 </span>
               </div>
-              <p style={{ margin: "0 0 8px", color: "#c4b5fd", fontSize: "0.9rem", fontWeight: 600 }}>
-                <EditableText value={data.educationDegree} onChange={(v) => updateField("educationDegree", v)} isEditing={isEditing} multiline />
+              <p
+                style={{
+                  margin: "0 0 8px",
+                  color: "#c4b5fd",
+                  fontSize: "0.9rem",
+                  fontWeight: 600,
+                }}
+              >
+                <EditableText
+                  value={data.educationDegree}
+                  onChange={(v) => updateField("educationDegree", v)}
+                  isEditing={isEditing}
+                  multiline
+                />
               </p>
-              <p style={{ margin: 0, color: "#9aa3c9", fontSize: "0.84rem", lineHeight: 1.6 }}>
-                <EditableText value={data.educationMeta} onChange={(v) => updateField("educationMeta", v)} isEditing={isEditing} multiline />
+              <p
+                style={{
+                  margin: 0,
+                  color: "#9aa3c9",
+                  fontSize: "0.84rem",
+                  lineHeight: 1.6,
+                }}
+              >
+                <EditableText
+                  value={data.educationMeta}
+                  onChange={(v) => updateField("educationMeta", v)}
+                  isEditing={isEditing}
+                  multiline
+                />
               </p>
             </div>
 
@@ -718,13 +1116,42 @@ export default function Resume() {
                 border: "1px solid rgba(255,255,255,0.06)",
               }}
             >
-              <h3 style={{ margin: "0 0 10px", fontSize: "1.05rem", color: "#eef2ff", lineHeight: 1.4 }}>Additional</h3>
+              <h3
+                style={{
+                  margin: "0 0 10px",
+                  fontSize: "1.05rem",
+                  color: "#eef2ff",
+                  lineHeight: 1.4,
+                }}
+              >
+                Additional
+              </h3>
               {isEditing ? (
-                <p style={{ margin: 0, color: "#c8d0f0", lineHeight: 1.65, fontSize: "0.88rem" }}>
-                  <EditableText value={data.additionalText} onChange={(v) => updateField("additionalText", v)} isEditing={isEditing} multiline />
+                <p
+                  style={{
+                    margin: 0,
+                    color: "#c8d0f0",
+                    lineHeight: 1.65,
+                    fontSize: "0.88rem",
+                  }}
+                >
+                  <EditableText
+                    value={data.additionalText}
+                    onChange={(v) => updateField("additionalText", v)}
+                    isEditing={isEditing}
+                    multiline
+                  />
                 </p>
               ) : (
-                <ul style={{ margin: 0, paddingLeft: "18px", color: "#c8d0f0", lineHeight: 1.8, fontSize: "0.88rem" }}>
+                <ul
+                  style={{
+                    margin: 0,
+                    paddingLeft: "18px",
+                    color: "#c8d0f0",
+                    lineHeight: 1.8,
+                    fontSize: "0.88rem",
+                  }}
+                >
                   {data.additionalText
                     .split(/\.\s+/)
                     .map((s) => s.replace(/\.$/, "").trim())
@@ -736,7 +1163,6 @@ export default function Resume() {
               )}
             </div>
           </section>
-
         </main>
       </div>
     </div>
