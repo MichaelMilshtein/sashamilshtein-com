@@ -31,6 +31,13 @@ jobs:
       - name: Build resume
         run: pnpm --dir artifacts/resume run build:production
 
+      - name: Clear stale FTP state file
+        run: |
+          curl -s --ftp-pasv \
+            -Q "DELE public_html/.ftp-deploy-sync-state.json" \
+            "ftp://${{ secrets.FTP_SERVER }}" \
+            --user "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}" || true
+
       - name: Deploy to Hostinger via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
