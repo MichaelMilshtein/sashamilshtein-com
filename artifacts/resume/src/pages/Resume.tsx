@@ -261,26 +261,6 @@ export default function Resume() {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "14px", minWidth: 0, flex: 1 }}>
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              padding: "6px 10px",
-              borderRadius: "999px",
-              background: "rgba(255,255,255,0.06)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              color: "#b8c0ea",
-              fontSize: "12px",
-              letterSpacing: "0.02em",
-              whiteSpace: "nowrap",
-            }}
-          >
-            <EditableText
-              value={data.tagline}
-              onChange={(v) => updateField("tagline", v)}
-              isEditing={isEditing}
-            />
-          </div>
           <h1 style={{ margin: 0, fontSize: "clamp(1.2rem, 2vw, 1.8rem)", lineHeight: 1, letterSpacing: "-0.04em", whiteSpace: "nowrap" }}>
             <span
               style={{
