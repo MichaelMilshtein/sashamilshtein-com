@@ -7,6 +7,7 @@
     "dev": "vite --config vite.config.ts --host 0.0.0.0",
     "build": "vite build --config vite.config.ts",
     "build:hostinger": "cross-env BASE_PATH=/ NODE_ENV=production vite build --config vite.config.ts && node scripts/zip-build.mjs",
+    "build:production": "cross-env BASE_PATH=/ NODE_ENV=production vite build --config vite.config.ts",
     "serve": "vite preview --config vite.config.ts --host 0.0.0.0",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
