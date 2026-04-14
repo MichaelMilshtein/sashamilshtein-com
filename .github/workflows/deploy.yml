@@ -31,18 +31,17 @@ jobs:
       - name: Build resume
         run: pnpm --dir artifacts/resume run build:production
 
-      - name: Clear stale FTP state file
-        run: |
-          curl -s --ftp-pasv \
-            -Q "DELE public_html/.ftp-deploy-sync-state.json" \
-            "ftp://${{ secrets.FTP_SERVER }}" \
-            --user "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}" || true
+      - name: Install lftp
+        run: sudo apt-get install -y lftp
 
-      - name: Deploy to Hostinger via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: artifacts/resume/dist/public/
-          server-dir: public_html/
+      - name: Deploy to Hostinger via lftp
+        run: |
+          lftp -u "${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }}" \
+               ftp://${{ secrets.FTP_SERVER }} <<'EOF'
+          set ftp:passive-mode true
+          set ssl:verify-certificate false
+          mirror --reverse --delete --verbose \
+            artifacts/resume/dist/public/ \
+            public_html/
+          quit
+          EOF
