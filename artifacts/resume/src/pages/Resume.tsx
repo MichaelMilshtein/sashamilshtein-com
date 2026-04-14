@@ -3,6 +3,7 @@ import { useResumeData } from "@/hooks/useResumeData";
 import { useEditMode } from "@/hooks/useEditMode";
 import { EditableText } from "@/components/EditableText";
 import sashaHeadshot from "@/assets/sasha-headshot.jpeg";
+import { Mail, Phone, Linkedin } from "lucide-react";
 
 type FilterType = "all" | "marketing" | "events" | "ops";
 
@@ -162,7 +163,7 @@ export default function Resume() {
   const { isEditing, enterEdit, exitEdit } = useEditMode();
 
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
-  const [activeSection, setActiveSection] = useState("experience");
+  const [activeSection, setActiveSection] = useState("summary");
 
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
   const headerRef = useRef<HTMLElement | null>(null);
@@ -170,8 +171,8 @@ export default function Resume() {
   const scrollTo = useCallback((id: string) => {
     const target = sectionRefs.current[id];
     if (!target) return;
-    const headerH = headerRef.current?.offsetHeight ?? 70;
-    const y = target.getBoundingClientRect().top + window.pageYOffset - headerH - 22;
+    const headerH = (headerRef.current?.offsetHeight ?? 70) + 58;
+    const y = target.getBoundingClientRect().top + window.pageYOffset - headerH - 16;
     window.scrollTo({ top: y, behavior: "smooth" });
   }, []);
 
@@ -200,12 +201,27 @@ export default function Resume() {
   } as CSSProperties;
 
   const navItems = [
+    { id: "summary", label: "Summary" },
     { id: "experience", label: "Experience" },
     { id: "impact", label: "Highlights" },
     { id: "leadership", label: "Leadership" },
     { id: "education", label: "Education" },
-    { id: "contact", label: "Contact" },
   ];
+
+  const contactPill: CSSProperties = {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "32px",
+    height: "32px",
+    borderRadius: "50%",
+    background: "rgba(255,255,255,0.06)",
+    border: "1px solid rgba(255,255,255,0.1)",
+    color: "#b8c0ea",
+    textDecoration: "none",
+    flexShrink: 0,
+    transition: "background 150ms ease, border-color 150ms ease",
+  };
 
   return (
     <div
@@ -299,6 +315,19 @@ export default function Resume() {
           </h1>
         </div>
 
+        {/* Contact icon pills */}
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
+          <a href={`mailto:${data.email}`} style={contactPill} title={data.email}>
+            <Mail size={14} />
+          </a>
+          <span style={contactPill} title={data.phone}>
+            <Phone size={14} />
+          </span>
+          <a href={`https://www.linkedin.com/in/${data.linkedin}`} target="_blank" rel="noopener noreferrer" style={contactPill} title={`linkedin.com/in/${data.linkedin}`}>
+            <Linkedin size={14} />
+          </a>
+        </div>
+
         {!isEditing && (
           <button
             onClick={enterEdit}
@@ -320,6 +349,48 @@ export default function Resume() {
           </button>
         )}
       </header>
+
+      {/* Horizontal sticky nav bar */}
+      <nav
+        style={{
+          ...glass,
+          position: "sticky",
+          top: "88px",
+          zIndex: 29,
+          borderRadius: "16px",
+          padding: "8px 12px",
+          marginTop: "8px",
+          display: "flex",
+          gap: "6px",
+          overflowX: "auto",
+        }}
+      >
+        {navItems.map((nav) => {
+          const isActive = activeSection === nav.id;
+          return (
+            <button
+              key={nav.id}
+              onClick={() => scrollTo(nav.id)}
+              style={{
+                appearance: "none",
+                padding: "7px 16px",
+                borderRadius: "10px",
+                color: isActive ? "#c4b5fd" : "#b8c0ea",
+                border: isActive ? "1px solid rgba(139,92,246,0.45)" : "1px solid transparent",
+                background: isActive ? "rgba(139,92,246,0.15)" : "transparent",
+                fontWeight: isActive ? 700 : 500,
+                cursor: "pointer",
+                fontFamily: "inherit",
+                fontSize: "0.85rem",
+                whiteSpace: "nowrap",
+                transition: "all 150ms ease",
+              }}
+            >
+              {nav.label}
+            </button>
+          );
+        })}
+      </nav>
 
       {/* Summary */}
       <section
@@ -356,68 +427,14 @@ export default function Resume() {
           style={{
             ...glass,
             position: "sticky",
-            top: "86px",
+            top: "150px",
             borderRadius: "28px",
             padding: "18px",
             display: "grid",
-            gap: "18px",
+            gap: "22px",
           }}
         >
-          <div>
-            <h2 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "#a5b0e6", margin: "0 0 12px" }}>
-              Navigate
-            </h2>
-            <div style={{ display: "grid", gap: "6px" }}>
-              {navItems.map((nav) => {
-                const isActive = activeSection === nav.id;
-                return (
-                  <button
-                    key={nav.id}
-                    onClick={() => scrollTo(nav.id)}
-                    style={{
-                      appearance: "none",
-                      padding: "10px 14px",
-                      borderRadius: "12px",
-                      color: isActive ? "#c4b5fd" : "#b8c0ea",
-                      border: isActive
-                        ? "1px solid rgba(139,92,246,0.45)"
-                        : "1px solid rgba(255,255,255,0.09)",
-                      background: isActive
-                        ? "rgba(139,92,246,0.12)"
-                        : "rgba(255,255,255,0.03)",
-                      fontWeight: isActive ? 700 : 500,
-                      cursor: "pointer",
-                      textAlign: "left",
-                      fontFamily: "inherit",
-                      fontSize: "0.92rem",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "10px",
-                      transition: "all 150ms ease",
-                      boxShadow: isActive ? "inset 3px 0 0 rgba(139,92,246,0.7)" : "none",
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!isActive) {
-                        (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.06)";
-                        (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.15)";
-                        (e.currentTarget as HTMLElement).style.color = "#eef2ff";
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!isActive) {
-                        (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.03)";
-                        (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.09)";
-                        (e.currentTarget as HTMLElement).style.color = "#b8c0ea";
-                      }
-                    }}
-                  >
-                    {nav.label}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
+          {/* Strengths */}
           <div>
             <h2 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "#a5b0e6", margin: "0 0 12px" }}>
               Strengths
@@ -430,7 +447,7 @@ export default function Resume() {
                     padding: "5px 10px",
                     borderRadius: "6px",
                     background: "rgba(255,255,255,0.04)",
-                    border: "none",
+                    border: "1px solid rgba(255,255,255,0.07)",
                     color: "#9aa3c9",
                     fontSize: "0.81rem",
                     fontWeight: 400,
@@ -438,6 +455,32 @@ export default function Resume() {
                   }}
                 >
                   {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Coursework */}
+          <div>
+            <h2 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "#a5b0e6", margin: "0 0 12px" }}>
+              {data.courses.length > 5 ? "Coursework" : "Relevant Coursework"}
+            </h2>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "7px" }}>
+              {data.courses.map((course) => (
+                <span
+                  key={course.id}
+                  style={{
+                    padding: "5px 10px",
+                    borderRadius: "6px",
+                    background: "rgba(139,92,246,0.07)",
+                    border: "1px solid rgba(139,92,246,0.18)",
+                    color: "#b4a9e8",
+                    fontSize: "0.81rem",
+                    fontWeight: 400,
+                    letterSpacing: "0.01em",
+                  }}
+                >
+                  {course.name}
                 </span>
               ))}
             </div>
@@ -669,110 +712,36 @@ export default function Resume() {
               </p>
             </div>
 
-            {/* Coursework + Additional in a two-column row */}
-            <div className="edu-sub-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
-              <div
-                style={{
-                  padding: "16px 18px",
-                  borderRadius: "16px",
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(255,255,255,0.06)",
-                }}
-              >
-                <p style={{ margin: "0 0 10px", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#6b7280" }}>
-                  Relevant Coursework
+            {/* Additional — full width */}
+            <div
+              style={{
+                padding: "16px 18px",
+                borderRadius: "16px",
+                background: "rgba(255,255,255,0.03)",
+                border: "1px solid rgba(255,255,255,0.06)",
+              }}
+            >
+              <p style={{ margin: "0 0 10px", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#6b7280" }}>
+                Additional
+              </p>
+              {isEditing ? (
+                <p style={{ margin: 0, color: "#c8d0f0", lineHeight: 1.65, fontSize: "0.88rem" }}>
+                  <EditableText value={data.additionalText} onChange={(v) => updateField("additionalText", v)} isEditing={isEditing} multiline />
                 </p>
+              ) : (
                 <ul style={{ margin: 0, paddingLeft: "18px", color: "#c8d0f0", lineHeight: 1.8, fontSize: "0.88rem" }}>
-                  {data.courses.map((c) => (
-                    <li key={c.id}>
-                      <EditableText
-                        value={c.name}
-                        onChange={(v) => updateNested((p) => ({ ...p, courses: p.courses.map((x) => x.id === c.id ? { ...x, name: v } : x) }))}
-                        isEditing={isEditing}
-                      />
-                    </li>
-                  ))}
+                  {data.additionalText
+                    .split(/\.\s+/)
+                    .map((s) => s.replace(/\.$/, "").trim())
+                    .filter(Boolean)
+                    .map((sentence, i) => (
+                      <li key={i}>{sentence}</li>
+                    ))}
                 </ul>
-              </div>
-
-              <div
-                style={{
-                  padding: "16px 18px",
-                  borderRadius: "16px",
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(255,255,255,0.06)",
-                }}
-              >
-                <p style={{ margin: "0 0 10px", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#6b7280" }}>
-                  Additional
-                </p>
-                {isEditing ? (
-                  <p style={{ margin: 0, color: "#c8d0f0", lineHeight: 1.65, fontSize: "0.88rem" }}>
-                    <EditableText value={data.additionalText} onChange={(v) => updateField("additionalText", v)} isEditing={isEditing} multiline />
-                  </p>
-                ) : (
-                  <ul style={{ margin: 0, paddingLeft: "18px", color: "#c8d0f0", lineHeight: 1.8, fontSize: "0.88rem" }}>
-                    {data.additionalText
-                      .split(/\.\s+/)
-                      .map((s) => s.replace(/\.$/, "").trim())
-                      .filter(Boolean)
-                      .map((sentence, i) => (
-                        <li key={i}>{sentence}</li>
-                      ))}
-                  </ul>
-                )}
-              </div>
+              )}
             </div>
           </section>
 
-          {/* Contact */}
-          <section
-            ref={(el) => { sectionRefs.current["contact"] = el; }}
-            id="contact"
-            style={{ ...glass, borderRadius: "28px", padding: "22px", scrollMarginTop: "12px" }}
-          >
-            <h2 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "#a5b0e6", margin: "0 0 16px" }}>
-              Contact
-            </h2>
-            <div className="contact-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "14px" }}>
-              {(
-                [
-                  { label: "Email", value: data.email, href: `mailto:${data.email}`, field: "email" as const },
-                  { label: "Phone", value: data.phone, href: `tel:+1${data.phone.replace(/\D/g, "")}`, field: "phone" as const },
-                  { label: "LinkedIn", value: data.linkedin, href: `https://www.linkedin.com/in/${data.linkedin}`, field: "linkedin" as const },
-                ] as const
-              ).map(({ label, value, href, field }) => (
-                <a
-                  key={field}
-                  href={isEditing ? undefined : href}
-                  target={field === "linkedin" ? "_blank" : undefined}
-                  rel={field === "linkedin" ? "noopener noreferrer" : undefined}
-                  style={{
-                    display: "block",
-                    padding: "18px",
-                    borderRadius: "20px",
-                    background: "rgba(255,255,255,0.04)",
-                    border: "1px solid rgba(255,255,255,0.08)",
-                    textDecoration: "none",
-                    color: "inherit",
-                    transition: "transform 160ms ease, border-color 160ms ease",
-                    cursor: isEditing ? "default" : "pointer",
-                  }}
-                >
-                  <div style={{ color: "#aab4e8", fontSize: "0.82rem", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "8px" }}>
-                    {label}
-                  </div>
-                  <div style={{ fontSize: "1rem", fontWeight: 700, color: "#eef2ff", wordBreak: "break-word" }}>
-                    <EditableText
-                      value={value}
-                      onChange={(v) => updateField(field, v)}
-                      isEditing={isEditing}
-                    />
-                  </div>
-                </a>
-              ))}
-            </div>
-          </section>
         </main>
       </div>
     </div>
