@@ -69,8 +69,19 @@ a {
     display: none !important;
   }
 
-  .resume-layout > nav {
+  .resume-nav {
     display: none !important;
+  }
+
+  .contact-label {
+    display: none !important;
+  }
+
+  .contact-pills a,
+  .contact-pills span {
+    width: 32px !important;
+    padding: 0 !important;
+    justify-content: center !important;
   }
 
   /* filter buttons: single scrollable row */

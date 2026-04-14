@@ -277,7 +277,7 @@ export default function Resume() {
           zIndex: 30,
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "14px", minWidth: 0, flex: 1 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "14px", minWidth: 0, flex: 1, overflow: "hidden" }}>
           <div style={{
             width: "48px",
             height: "48px",
@@ -316,18 +316,18 @@ export default function Resume() {
         </div>
 
         {/* Contact icon pills */}
-        <div style={{ display: "flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
+        <div className="contact-pills" style={{ display: "flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
           <a href={`mailto:${data.email}`} style={{ ...contactPill, width: "auto", padding: "0 10px", gap: "8px" }} title={data.email}>
             <Mail size={14} />
-            <span style={{ fontSize: "0.8rem", fontWeight: 500 }}>Email</span>
+            <span className="contact-label" style={{ fontSize: "0.8rem", fontWeight: 500 }}>Email</span>
           </a>
           <span style={{ ...contactPill, width: "auto", padding: "0 10px", gap: "8px" }} title={data.phone}>
             <Phone size={14} />
-            <span style={{ fontSize: "0.8rem", fontWeight: 500 }}>{data.phone}</span>
+            <span className="contact-label" style={{ fontSize: "0.8rem", fontWeight: 500 }}>{data.phone}</span>
           </span>
           <a href={`https://www.linkedin.com/in/${data.linkedin}`} target="_blank" rel="noopener noreferrer" style={{ ...contactPill, width: "auto", padding: "0 10px", gap: "8px" }} title={`linkedin.com/in/${data.linkedin}`}>
             <Linkedin size={14} />
-            <span style={{ fontSize: "0.8rem", fontWeight: 500 }}>LinkedIn</span>
+            <span className="contact-label" style={{ fontSize: "0.8rem", fontWeight: 500 }}>LinkedIn</span>
           </a>
         </div>
 
@@ -355,6 +355,7 @@ export default function Resume() {
 
       {/* Horizontal sticky nav bar */}
       <nav
+        className="resume-nav"
         style={{
           ...glass,
           position: "sticky",
@@ -724,9 +725,7 @@ export default function Resume() {
                 border: "1px solid rgba(255,255,255,0.06)",
               }}
             >
-              <p style={{ margin: "0 0 10px", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#6b7280" }}>
-                <span style={{ fontSize: "0.85rem", letterSpacing: "0.12em", color: "#a5b0e6", fontWeight: 600 }}>Additional</span>
-              </p>
+              <h3 style={{ margin: "0 0 10px", fontSize: "1.05rem", color: "#eef2ff", lineHeight: 1.4 }}>Additional</h3>
               {isEditing ? (
                 <p style={{ margin: 0, color: "#c8d0f0", lineHeight: 1.65, fontSize: "0.88rem" }}>
                   <EditableText value={data.additionalText} onChange={(v) => updateField("additionalText", v)} isEditing={isEditing} multiline />
