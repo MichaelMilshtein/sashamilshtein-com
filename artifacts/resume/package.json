@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite --config vite.config.ts --host 0.0.0.0",
     "build": "vite build --config vite.config.ts",
+    "build:hostinger": "cross-env BASE_PATH=/ NODE_ENV=production vite build --config vite.config.ts && node scripts/zip-build.mjs",
     "serve": "vite preview --config vite.config.ts --host 0.0.0.0",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
@@ -49,9 +50,11 @@
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",
     "@workspace/api-client-react": "workspace:*",
+    "archiver": "^7.0.1",
     "class-variance-authority": "catalog:",
     "clsx": "catalog:",
     "cmdk": "^1.1.1",
+    "cross-env": "^10.1.0",
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "catalog:",
