@@ -60,7 +60,7 @@ function CardSection({
         style={{
           padding: "18px 20px",
           display: "grid",
-          gridTemplateColumns: "1fr auto",
+          gridTemplateColumns: "1fr auto auto",
           gap: "12px",
           alignItems: "center",
           cursor: isEditing ? "default" : "pointer",
@@ -68,30 +68,12 @@ function CardSection({
         }}
       >
         <div>
-          <h3 style={{ margin: "0 0 6px", fontSize: "1.08rem", letterSpacing: "-0.02em", color: "#eef2ff", display: "flex", alignItems: "center", gap: "8px" }}>
-            <span
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "20px",
-                height: "20px",
-                flexShrink: 0,
-                opacity: isEditing ? 0 : 1,
-                transition: "transform 220ms ease, opacity 150ms",
-                transform: open ? "rotate(90deg)" : "rotate(0deg)",
-                color: open ? "#a78bfa" : "#6b7280",
-              }}
-            >
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M4 2L8 6L4 10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </span>
+          <h3 style={{ margin: "0 0 6px", fontSize: "1.08rem", letterSpacing: "-0.02em", color: "#eef2ff" }}>
             <EditableText value={item.title} onChange={onUpdateTitle} isEditing={isEditing} />
             {" — "}
             <EditableText value={item.org} onChange={onUpdateOrg} isEditing={isEditing} />
           </h3>
-          <div style={{ color: "#b8c0ea", display: "flex", flexWrap: "wrap", gap: "10px", fontSize: "0.93rem", paddingLeft: isEditing ? "0" : "28px" }}>
+          <div style={{ color: "#b8c0ea", display: "flex", flexWrap: "wrap", gap: "10px", fontSize: "0.93rem" }}>
             <EditableText value={item.dateRange} onChange={onUpdateDate} isEditing={isEditing} />
             {showLocation && item.location && (
               <>
@@ -123,6 +105,25 @@ function CardSection({
         >
           <EditableText value={item.badge} onChange={onUpdateBadge} isEditing={isEditing} />
         </div>
+        {!isEditing && (
+          <span
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "24px",
+              height: "24px",
+              flexShrink: 0,
+              transition: "transform 220ms ease",
+              transform: open ? "rotate(90deg)" : "rotate(0deg)",
+              color: open ? "#a78bfa" : "#6b7280",
+            }}
+          >
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M4 2L8 6L4 10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </span>
+        )}
       </div>
 
       <div
@@ -330,52 +331,19 @@ export default function Resume() {
       <section
         ref={(el) => { sectionRefs.current["summary"] = el; }}
         id="summary"
-        style={{
-          marginTop: "16px",
-          borderRadius: "20px",
-          background: "rgba(18,25,54,0.72)",
-          backdropFilter: "blur(18px)",
-          WebkitBackdropFilter: "blur(18px)",
-          border: "1px solid rgba(255,255,255,0.09)",
-          borderLeft: "3px solid transparent",
-          backgroundImage: "linear-gradient(rgba(18,25,54,0.72), rgba(18,25,54,0.72)), linear-gradient(180deg, rgba(139,92,246,0.7) 0%, rgba(34,211,238,0.5) 100%)",
-          backgroundOrigin: "border-box",
-          backgroundClip: "padding-box, border-box",
-          padding: "20px 24px",
-          display: "flex",
-          gap: "16px",
-          alignItems: "flex-start",
-        }}
+        style={{ ...glass, borderRadius: "20px", padding: "20px 22px", marginTop: "16px", scrollMarginTop: "12px" }}
       >
-        <div
-          style={{
-            width: "3px",
-            minHeight: "100%",
-            alignSelf: "stretch",
-            borderRadius: "2px",
-            background: "linear-gradient(180deg, #a78bfa 0%, #22d3ee 100%)",
-            flexShrink: 0,
-          }}
-        />
-        <div>
-          <p
-            style={{
-              margin: 0,
-              fontSize: "1.0rem",
-              lineHeight: 1.75,
-              color: "#c8d0f0",
-              fontStyle: "italic",
-              fontWeight: 400,
-            }}
-          >
-            <EditableText
-              value={data.summary}
-              onChange={(v) => updateField("summary", v)}
-              isEditing={isEditing}
-              multiline
-            />
-          </p>
-        </div>
+        <h2 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "#a5b0e6", margin: "0 0 12px" }}>
+          Summary
+        </h2>
+        <p style={{ margin: 0, fontSize: "0.95rem", lineHeight: 1.75, color: "#c8d0f0", fontWeight: 400 }}>
+          <EditableText
+            value={data.summary}
+            onChange={(v) => updateField("summary", v)}
+            isEditing={isEditing}
+            multiline
+          />
+        </p>
       </section>
 
       {/* Body layout */}
@@ -719,28 +687,17 @@ export default function Resume() {
                 <p style={{ margin: "0 0 10px", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#6b7280" }}>
                   Relevant Coursework
                 </p>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                <ul style={{ margin: 0, paddingLeft: "18px", color: "#c8d0f0", lineHeight: 1.8, fontSize: "0.88rem" }}>
                   {data.courses.map((c) => (
-                    <span
-                      key={c.id}
-                      style={{
-                        padding: "4px 10px",
-                        borderRadius: "6px",
-                        background: "rgba(139,92,246,0.1)",
-                        border: "1px solid rgba(139,92,246,0.2)",
-                        color: "#c4b5fd",
-                        fontSize: "0.8rem",
-                        fontWeight: 500,
-                      }}
-                    >
+                    <li key={c.id}>
                       <EditableText
                         value={c.name}
                         onChange={(v) => updateNested((p) => ({ ...p, courses: p.courses.map((x) => x.id === c.id ? { ...x, name: v } : x) }))}
                         isEditing={isEditing}
                       />
-                    </span>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
 
               <div
@@ -754,9 +711,21 @@ export default function Resume() {
                 <p style={{ margin: "0 0 10px", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#6b7280" }}>
                   Additional
                 </p>
-                <p style={{ margin: 0, color: "#9aa3c9", lineHeight: 1.65, fontSize: "0.84rem" }}>
-                  <EditableText value={data.additionalText} onChange={(v) => updateField("additionalText", v)} isEditing={isEditing} multiline />
-                </p>
+                {isEditing ? (
+                  <p style={{ margin: 0, color: "#c8d0f0", lineHeight: 1.65, fontSize: "0.88rem" }}>
+                    <EditableText value={data.additionalText} onChange={(v) => updateField("additionalText", v)} isEditing={isEditing} multiline />
+                  </p>
+                ) : (
+                  <ul style={{ margin: 0, paddingLeft: "18px", color: "#c8d0f0", lineHeight: 1.8, fontSize: "0.88rem" }}>
+                    {data.additionalText
+                      .split(/\.\s+/)
+                      .map((s) => s.replace(/\.$/, "").trim())
+                      .filter(Boolean)
+                      .map((sentence, i) => (
+                        <li key={i}>{sentence}</li>
+                      ))}
+                  </ul>
+                )}
               </div>
             </div>
           </section>
