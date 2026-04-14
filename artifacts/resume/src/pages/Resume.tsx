@@ -217,7 +217,7 @@ function CardSection({
 }
 
 export default function Resume() {
-  const { data, updateField, updateNested } = useResumeData();
+  const { data, updateField, updateNested, resetToDefault } = useResumeData();
   const { isEditing, enterEdit, exitEdit } = useEditMode();
   const isMobile = useIsMobile();
 
@@ -332,6 +332,26 @@ export default function Resume() {
           Editing — click to exit
         </div>
       )}
+      <button
+        type="button"
+        onClick={resetToDefault}
+        style={{
+          position: "fixed",
+          bottom: "24px",
+          left: "24px",
+          zIndex: 40,
+          padding: "10px 16px",
+          borderRadius: "999px",
+          border: "1px solid rgba(255,255,255,0.18)",
+          background: "rgba(17,24,39,0.9)",
+          color: "#fff",
+          fontWeight: 700,
+          fontSize: "0.85rem",
+          cursor: "pointer",
+        }}
+      >
+        Reset saved data
+      </button>
 
       {/* Header */}
       <header
