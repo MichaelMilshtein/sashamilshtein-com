@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, useCallback, CSSProperties } from "react";
 import { useResumeData } from "@/hooks/useResumeData";
 import { useEditMode } from "@/hooks/useEditMode";
 import { EditableText } from "@/components/EditableText";
-import { PasswordModal } from "@/components/PasswordModal";
 
 type FilterType = "all" | "marketing" | "events" | "ops";
 
@@ -156,7 +155,7 @@ function CardSection({
 
 export default function Resume() {
   const { data, updateField, updateNested } = useResumeData();
-  const { isEditing, showPrompt, passwordError, tryEnterEdit, exitEdit, openPrompt, closePrompt } = useEditMode();
+  const { isEditing, enterEdit, exitEdit } = useEditMode();
 
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
   const [activeSection, setActiveSection] = useState("experience");
@@ -196,6 +195,7 @@ export default function Resume() {
   } as CSSProperties;
 
   const navItems = [
+    { id: "summary", label: "Summary" },
     { id: "experience", label: "Experience" },
     { id: "impact", label: "Highlights" },
     { id: "leadership", label: "Leadership" },
@@ -213,10 +213,6 @@ export default function Resume() {
         fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
       }}
     >
-      {showPrompt && (
-        <PasswordModal onSubmit={tryEnterEdit} onClose={closePrompt} hasError={passwordError} />
-      )}
-
       {isEditing && (
         <div
           onClick={exitEdit}
@@ -310,7 +306,7 @@ export default function Resume() {
 
         {!isEditing && (
           <button
-            onClick={openPrompt}
+            onClick={enterEdit}
             style={{
               padding: "7px 14px",
               borderRadius: "999px",
@@ -329,6 +325,58 @@ export default function Resume() {
           </button>
         )}
       </header>
+
+      {/* Summary */}
+      <section
+        ref={(el) => { sectionRefs.current["summary"] = el; }}
+        id="summary"
+        style={{
+          marginTop: "16px",
+          borderRadius: "20px",
+          background: "rgba(18,25,54,0.72)",
+          backdropFilter: "blur(18px)",
+          WebkitBackdropFilter: "blur(18px)",
+          border: "1px solid rgba(255,255,255,0.09)",
+          borderLeft: "3px solid transparent",
+          backgroundImage: "linear-gradient(rgba(18,25,54,0.72), rgba(18,25,54,0.72)), linear-gradient(180deg, rgba(139,92,246,0.7) 0%, rgba(34,211,238,0.5) 100%)",
+          backgroundOrigin: "border-box",
+          backgroundClip: "padding-box, border-box",
+          padding: "20px 24px",
+          display: "flex",
+          gap: "16px",
+          alignItems: "flex-start",
+        }}
+      >
+        <div
+          style={{
+            width: "3px",
+            minHeight: "100%",
+            alignSelf: "stretch",
+            borderRadius: "2px",
+            background: "linear-gradient(180deg, #a78bfa 0%, #22d3ee 100%)",
+            flexShrink: 0,
+          }}
+        />
+        <div>
+          <p
+            style={{
+              margin: 0,
+              fontSize: "1.0rem",
+              lineHeight: 1.75,
+              color: "#c8d0f0",
+              fontStyle: "italic",
+              fontWeight: 400,
+            }}
+          >
+            <EditableText
+              value={data.summary}
+              onChange={(v) => updateField("summary", v)}
+              isEditing={isEditing}
+              multiline
+            />
+          </p>
+        </div>
+      </section>
 
       {/* Body layout */}
       <div
@@ -631,92 +679,83 @@ export default function Resume() {
             <h2 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "#a5b0e6", margin: "0 0 16px" }}>
               Education
             </h2>
-            <div className="edu-grid" style={{ display: "grid", gridTemplateColumns: "1.2fr 0.8fr", gap: "16px" }}>
+
+            {/* Degree card */}
+            <div
+              style={{
+                padding: "20px 22px",
+                borderRadius: "18px",
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(255,255,255,0.08)",
+                marginBottom: "14px",
+              }}
+            >
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "8px", marginBottom: "6px" }}>
+                <h3 style={{ margin: 0, fontSize: "1.05rem", color: "#eef2ff", lineHeight: 1.4 }}>
+                  <EditableText value={data.educationSchool} onChange={(v) => updateField("educationSchool", v)} isEditing={isEditing} multiline />
+                </h3>
+                <span style={{ fontSize: "0.78rem", color: "#9aa3c9", padding: "3px 10px", borderRadius: "6px", background: "rgba(255,255,255,0.05)", whiteSpace: "nowrap" }}>
+                  May 2026
+                </span>
+              </div>
+              <p style={{ margin: "0 0 8px", color: "#c4b5fd", fontSize: "0.9rem", fontWeight: 600 }}>
+                <EditableText value={data.educationDegree} onChange={(v) => updateField("educationDegree", v)} isEditing={isEditing} multiline />
+              </p>
+              <p style={{ margin: 0, color: "#9aa3c9", fontSize: "0.84rem", lineHeight: 1.6 }}>
+                <EditableText value={data.educationMeta} onChange={(v) => updateField("educationMeta", v)} isEditing={isEditing} multiline />
+              </p>
+            </div>
+
+            {/* Coursework + Additional in a two-column row */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
               <div
                 style={{
-                  padding: "20px",
-                  borderRadius: "22px",
-                  background: "rgba(255,255,255,0.04)",
-                  border: "1px solid rgba(255,255,255,0.08)",
+                  padding: "16px 18px",
+                  borderRadius: "16px",
+                  background: "rgba(255,255,255,0.03)",
+                  border: "1px solid rgba(255,255,255,0.06)",
                 }}
               >
-                <h3 style={{ margin: "0 0 8px", fontSize: "1.05rem", color: "#eef2ff" }}>
-                  <EditableText
-                    value={data.educationSchool}
-                    onChange={(v) => updateField("educationSchool", v)}
-                    isEditing={isEditing}
-                    multiline
-                  />
-                </h3>
-                <p style={{ margin: "0 0 6px", color: "#b8c0ea", lineHeight: 1.6, fontSize: "0.92rem", fontWeight: 600 }}>
-                  <EditableText
-                    value={data.educationDegree}
-                    onChange={(v) => updateField("educationDegree", v)}
-                    isEditing={isEditing}
-                    multiline
-                  />
+                <p style={{ margin: "0 0 10px", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#6b7280" }}>
+                  Relevant Coursework
                 </p>
-                <p style={{ margin: "0 0 14px", color: "#b8c0ea", lineHeight: 1.65, fontSize: "0.88rem" }}>
-                  <EditableText
-                    value={data.educationMeta}
-                    onChange={(v) => updateField("educationMeta", v)}
-                    isEditing={isEditing}
-                    multiline
-                  />
-                </p>
-                <div style={{ display: "grid", gap: "10px" }}>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
                   {data.courses.map((c) => (
-                    <div
+                    <span
                       key={c.id}
                       style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        gap: "14px",
-                        padding: "12px 14px",
-                        borderRadius: "16px",
-                        background: "rgba(255,255,255,0.03)",
-                        border: "1px solid rgba(255,255,255,0.06)",
-                        color: "#ebefff",
-                        fontSize: "0.9rem",
+                        padding: "4px 10px",
+                        borderRadius: "6px",
+                        background: "rgba(139,92,246,0.1)",
+                        border: "1px solid rgba(139,92,246,0.2)",
+                        color: "#c4b5fd",
+                        fontSize: "0.8rem",
+                        fontWeight: 500,
                       }}
                     >
                       <EditableText
                         value={c.name}
-                        onChange={(v) =>
-                          updateNested((p) => ({ ...p, courses: p.courses.map((x) => x.id === c.id ? { ...x, name: v } : x) }))
-                        }
+                        onChange={(v) => updateNested((p) => ({ ...p, courses: p.courses.map((x) => x.id === c.id ? { ...x, name: v } : x) }))}
                         isEditing={isEditing}
                       />
-                      <span style={{ color: "#b8c0ea", whiteSpace: "nowrap" }}>
-                        <EditableText
-                          value={c.grade}
-                          onChange={(v) =>
-                            updateNested((p) => ({ ...p, courses: p.courses.map((x) => x.id === c.id ? { ...x, grade: v } : x) }))
-                          }
-                          isEditing={isEditing}
-                        />
-                      </span>
-                    </div>
+                    </span>
                   ))}
                 </div>
               </div>
 
               <div
                 style={{
-                  padding: "20px",
-                  borderRadius: "22px",
-                  background: "rgba(255,255,255,0.04)",
-                  border: "1px solid rgba(255,255,255,0.08)",
+                  padding: "16px 18px",
+                  borderRadius: "16px",
+                  background: "rgba(255,255,255,0.03)",
+                  border: "1px solid rgba(255,255,255,0.06)",
                 }}
               >
-                <h3 style={{ margin: "0 0 8px", fontSize: "1.05rem", color: "#eef2ff" }}>Additional</h3>
-                <p style={{ margin: 0, color: "#b8c0ea", lineHeight: 1.65, fontSize: "0.9rem" }}>
-                  <EditableText
-                    value={data.additionalText}
-                    onChange={(v) => updateField("additionalText", v)}
-                    isEditing={isEditing}
-                    multiline
-                  />
+                <p style={{ margin: "0 0 10px", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#6b7280" }}>
+                  Additional
+                </p>
+                <p style={{ margin: 0, color: "#9aa3c9", lineHeight: 1.65, fontSize: "0.84rem" }}>
+                  <EditableText value={data.additionalText} onChange={(v) => updateField("additionalText", v)} isEditing={isEditing} multiline />
                 </p>
               </div>
             </div>

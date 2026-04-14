@@ -32,12 +32,12 @@ export interface HighlightItem {
 export interface CourseItem {
   id: string;
   name: string;
-  grade: string;
 }
 
 export interface ResumeData {
   name: string;
   tagline: string;
+  summary: string;
   email: string;
   phone: string;
   linkedin: string;
@@ -56,6 +56,8 @@ export interface ResumeData {
 export const defaultResumeData: ResumeData = {
   name: "Sasha Milshtein",
   tagline: "Marketing • Events • CRM • Content",
+  summary:
+    "Marketing & Psychology graduate from USD's Knauss School of Business, with hands-on experience across CRM operations, campaign execution, event coordination, and content strategy. Known for building organized workflows, keeping complex projects on track, and delivering polished work under pressure. Currently contributing as a Corporate Engagement Consultant at Per Scholas while completing her BBA (May 2026).",
   email: "sasha.milshtein@gmail.com",
   phone: "925-949-9398",
   linkedin: "alexandra-milshtein",
@@ -261,14 +263,14 @@ export const defaultResumeData: ResumeData = {
   educationDegree:
     "Bachelor of Business Administration in Marketing and Psychology",
   educationMeta:
-    "Graduating May 2026. GPA 3.6. Dean's List. USD Alcala Scholarship recipient. Honors Program participant with interdisciplinary coursework and an original scholarship project requirement. Relevant coursework: Marketing Strategy, Advertising Campaigns, Public Relations, Marketing Research, Consumer Behavior.",
+    "Graduating May 2026 · GPA 3.6 · Dean's List · USD Alcala Scholarship · Honors Program",
   courses: [
-    { id: "c1", name: "Marketing Strategy", grade: "A-" },
-    { id: "c2", name: "Advertising Campaigns", grade: "A" },
-    { id: "c3", name: "Public Relations", grade: "B+" },
-    { id: "c4", name: "Consumer Behavior", grade: "A" },
-    { id: "c5", name: "Marketing Research", grade: "B+" },
-    { id: "c6", name: "Fashion Marketing", grade: "A-" },
+    { id: "c1", name: "Marketing Strategy" },
+    { id: "c2", name: "Advertising Campaigns" },
+    { id: "c3", name: "Public Relations" },
+    { id: "c4", name: "Consumer Behavior" },
+    { id: "c5", name: "Marketing Research" },
+    { id: "c6", name: "Fashion Marketing" },
   ],
   additionalText:
     "Summer Business Program student at the University of Cambridge, UK. Lead Volunteer for Ukraine Humanitarian Relief (March–June 2022). Certifications: Microsoft Excel Certification, GenAI for Marketing Professional by AMA, National Honor Society, California Scholarship Federation. Foreign Languages: Russian (fluent).",
