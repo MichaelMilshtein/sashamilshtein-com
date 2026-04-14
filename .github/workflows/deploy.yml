@@ -39,3 +39,4 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: artifacts/resume/dist/public/
           server-dir: /
+          dangerous-clean-slate: true
