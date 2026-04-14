@@ -41,16 +41,17 @@ export function RightLarge() {
           </p>
         </div>
         {/* Right: large photo */}
-        <div style={{ width: "200px", flexShrink: 0, position: "relative" }}>
+        <div style={{ width: "220px", flexShrink: 0, position: "relative", overflow: "hidden" }}>
           <img
             src={sashaPhoto}
             alt="Sasha Milshtein"
             style={{
               width: "100%",
-              height: "100%",
+              height: "140%",
               objectFit: "cover",
               objectPosition: "top center",
               display: "block",
+              transformOrigin: "top center",
             }}
           />
           {/* Subtle gradient blend on left edge */}
