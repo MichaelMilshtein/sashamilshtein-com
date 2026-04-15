@@ -1,3 +1,8 @@
+# Disable LiteSpeed server cache
+<IfModule LiteSpeed>
+CacheLookup off
+</IfModule>
+
 # Enable mod_rewrite
 Options -MultiViews
 RewriteEngine On
