@@ -7,7 +7,7 @@ import MobileResume from "@/pages/MobileResume";
 import sashaHeadshot from "@/assets/sasha-headshot.jpeg";
 import { Mail, Phone, Linkedin } from "lucide-react";
 
-type FilterType = "all!" | "marketing!" | "events!" | "ops!";
+type FilterType = "all" | "marketing" | "events" | "ops";
 
 interface CardItem {
   id: string;
@@ -714,7 +714,7 @@ export default function Resume() {
               }}
             >
               {(
-                ["all :)", "marketing!", "events!", "ops!"] as FilterType[]
+                ["all", "marketing", "events", "ops"] as FilterType[]
               ).map((f) => {
                 const isActive = activeFilter === f;
                 const label =
