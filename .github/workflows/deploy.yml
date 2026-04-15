@@ -31,35 +31,16 @@ jobs:
       - name: Build resume
         run: pnpm --dir artifacts/resume run build:production
 
-      - name: Deploy via SSH + rsync
+      - name: Deploy via rsync over SSH
         env:
           SSH_HOST: ${{ secrets.FTP_SERVER }}
           SSH_USER: ${{ secrets.FTP_USERNAME }}
           SSH_PASS: ${{ secrets.FTP_PASSWORD }}
         run: |
           sudo apt-get install -y sshpass rsync
-
-          SSH_OPTS="-o StrictHostKeyChecking=no -o ConnectTimeout=15 -p 65002"
           WEBROOT="/home/$SSH_USER/public_html/domains/sashamilshtein.com/public_html"
-
-          echo "=== Step 1: Clean up stray files left in parent directories ==="
-          sshpass -p "$SSH_PASS" ssh $SSH_OPTS "$SSH_USER@$SSH_HOST" "
-            PARENT=\"/home/$SSH_USER/public_html\"
-            echo 'Cleaning \$PARENT ...'
-            ls -la \$PARENT
-            rm -f \$PARENT/.htaccess
-            rm -f \$PARENT/index.html
-            rm -f \$PARENT/favicon.svg
-            rm -f \$PARENT/opengraph.jpg
-            rm -rf \$PARENT/assets
-            echo 'After cleanup:'
-            ls -la \$PARENT
-          "
-
-          echo "=== Step 2: Sync resume files to the real web root ==="
-          echo "Target: $WEBROOT"
-          sshpass -p "$SSH_PASS" rsync -avz --delete \
-            -e "ssh $SSH_OPTS" \
+          sshpass -p "$SSH_PASS" rsync -avz \
+            -e "ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -p 65002" \
             artifacts/resume/dist/public/ \
             "$SSH_USER@$SSH_HOST:$WEBROOT/"
 
@@ -71,6 +52,6 @@ jobs:
           if [ "$STATUS" = "200" ]; then
             echo "SUCCESS: Site is UP!"
           else
-            BODY=$(curl -s https://sashamilshtein.com | head -c 300)
-            echo "Response: $BODY"
+            echo "Unexpected response: $STATUS"
+            exit 1
           fi

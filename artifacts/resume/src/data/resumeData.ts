@@ -57,7 +57,7 @@ export const defaultResumeData: ResumeData = {
   name: "Sasha Milshtein",
   tagline: "Marketing • Events • CRM • Content",
   summary:
-    "Hello ladies! Marketing & Psychology graduate from USD's Knauss School of Business, with hands-on experience across CRM operations, campaign execution, event coordination, and content strategy. Known for building organized workflows, keeping complex projects on track, and delivering polished work under pressure. Currently contributing as a Corporate Engagement Consultant at Per Scholas while completing her BBA (May 2026).",
+    "Marketing & Psychology graduate from USD's Knauss School of Business, with hands-on experience across CRM operations, campaign execution, event coordination, and content strategy. Known for building organized workflows, keeping complex projects on track, and delivering polished work under pressure. Currently contributing as a Corporate Engagement Consultant at Per Scholas while completing her BBA (May 2026).",
   email: "sasha.milshtein@gmail.com",
   phone: "925-949-9398",
   linkedin: "alexandra-milshtein",
