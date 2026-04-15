@@ -31,26 +31,31 @@ jobs:
       - name: Build resume
         run: pnpm --dir artifacts/resume run build:production
 
-      - name: Upload files to Hostinger via curl FTP
+      - name: Deploy via SSH + rsync
         env:
-          FTP_SERVER: ${{ secrets.FTP_SERVER }}
-          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          SSH_HOST: ${{ secrets.FTP_SERVER }}
+          SSH_USER: ${{ secrets.FTP_USERNAME }}
+          SSH_PASS: ${{ secrets.FTP_PASSWORD }}
         run: |
-          DIST="artifacts/resume/dist/public"
-          TARGET="ftp://$FTP_SERVER/domains/sashamilshtein.com/public_html/"
+          sudo apt-get install -y sshpass rsync
 
-          echo "=== Uploading all files to $TARGET ==="
-          find "$DIST" -type f | sort | while read filepath; do
-            remote="${filepath#$DIST/}"
-            echo ">>> $remote"
-            curl -s --max-time 60 \
-              --user "$FTP_USERNAME:$FTP_PASSWORD" \
-              --ftp-create-dirs \
-              -T "$filepath" \
-              "${TARGET}${remote}"
-            echo "  OK"
-          done
+          SSH_OPTS="-o StrictHostKeyChecking=no -o ConnectTimeout=15 -p 65002"
+
+          echo "=== Locating web root for sashamilshtein.com ==="
+          WEBROOT=$(sshpass -p "$SSH_PASS" ssh $SSH_OPTS "$SSH_USER@$SSH_HOST" \
+            "find /home -maxdepth 5 -type d -name 'public_html' 2>/dev/null | grep -i sashamilshtein | head -1")
+          echo "Found: $WEBROOT"
+
+          if [ -z "$WEBROOT" ]; then
+            echo "Falling back to default path"
+            WEBROOT="/home/$SSH_USER/domains/sashamilshtein.com/public_html"
+          fi
+
+          echo "=== Syncing files to $WEBROOT ==="
+          sshpass -p "$SSH_PASS" rsync -avz --delete \
+            -e "ssh $SSH_OPTS" \
+            artifacts/resume/dist/public/ \
+            "$SSH_USER@$SSH_HOST:$WEBROOT/"
 
       - name: Verify site is up
         run: |
@@ -60,6 +65,5 @@ jobs:
           if [ "$STATUS" = "200" ]; then
             echo "SUCCESS: Site is UP!"
           else
-            BODY=$(curl -s https://sashamilshtein.com | head -c 500)
-            echo "Response: $BODY"
+            echo "Unexpected status $STATUS"
           fi
