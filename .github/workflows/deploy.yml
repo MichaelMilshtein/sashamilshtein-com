@@ -31,22 +31,42 @@ jobs:
       - name: Build resume
         run: pnpm --dir artifacts/resume run build:production
 
-      - name: Deploy via rsync over SSH
+      - name: Deploy via lftp FTP
         env:
-          SSH_HOST: ${{ secrets.FTP_SERVER }}
-          SSH_USER: ${{ secrets.FTP_USERNAME }}
-          SSH_PASS: ${{ secrets.FTP_PASSWORD }}
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |
-          sudo apt-get install -y sshpass rsync
-          SSH="sshpass -p $SSH_PASS ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -p 65002 $SSH_USER@$SSH_HOST"
-          RSYNC="sshpass -p $SSH_PASS rsync -avz -e 'ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -p 65002'"
+          sudo apt-get install -y lftp
+          DIST="artifacts/resume/dist/public"
 
-          WEBROOT="/home/$SSH_USER/domains/sashamilshtein.com/public_html"
-          echo "=== Syncing to $WEBROOT ==="
-          sshpass -p "$SSH_PASS" rsync -avz \
-            -e "ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -p 65002" \
-            artifacts/resume/dist/public/ \
-            "$SSH_USER@$SSH_HOST:$WEBROOT/"
+          # Write lftp commands to a script file (avoids quoting issues)
+          cat > /tmp/lftp_script.txt << 'LFTP_EOF'
+          set ftp:ssl-allow no
+          set ftp:passive-mode on
+          set net:timeout 60
+          set net:max-retries 3
+          set net:reconnect-interval-base 3
+          LFTP_EOF
+
+          # Navigate up from FTP root (/public_html) to home, then into domain web root
+          echo "cd .." >> /tmp/lftp_script.txt
+          echo "cd domains/sashamilshtein.com/public_html" >> /tmp/lftp_script.txt
+          echo "mkdir -p assets" >> /tmp/lftp_script.txt
+
+          # Add a put command for every file in the build
+          find "$DIST" -type f | sort | while read filepath; do
+            remote="${filepath#$DIST/}"
+            echo "put \"$filepath\" -o \"$remote\"" >> /tmp/lftp_script.txt
+          done
+
+          echo "bye" >> /tmp/lftp_script.txt
+
+          echo "=== lftp script ==="
+          cat /tmp/lftp_script.txt
+
+          echo "=== Running upload ==="
+          lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "ftp://$FTP_SERVER" -f /tmp/lftp_script.txt
 
       - name: Verify site is up
         run: |
