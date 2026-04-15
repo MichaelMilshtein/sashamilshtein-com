@@ -31,28 +31,47 @@ jobs:
       - name: Build resume
         run: pnpm --dir artifacts/resume run build:production
 
-      - name: Deploy to Hostinger via lftp
+      - name: Upload files to Hostinger via curl FTP
         env:
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |
-          sudo apt-get install -y lftp
-          lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "ftp://$FTP_SERVER" << 'LFTP_SCRIPT'
-            set ftp:ssl-allow no
-            set ftp:passive-mode on
-            set net:timeout 120
-            set net:max-retries 5
-            set net:reconnect-interval-base 5
-            mirror --reverse --verbose --transfer-all artifacts/resume/dist/public/ /
-            echo "=== Upload complete. Verifying files ==="
-            ls -la
-            ls -la assets/
-            bye
-          LFTP_SCRIPT
+          DIST="artifacts/resume/dist/public"
 
-      - name: Check site is up
+          echo "=== VERBOSE TEST: uploading index.html to confirm FTP path ==="
+          curl -v --max-time 30 \
+            --user "$FTP_USERNAME:$FTP_PASSWORD" \
+            --ftp-create-dirs \
+            -T "$DIST/index.html" \
+            "ftp://$FTP_SERVER/index.html" 2>&1 || true
+
+          echo ""
+          echo "=== UPLOADING ALL FILES ==="
+          find "$DIST" -type f | sort | while read filepath; do
+            remote="${filepath#$DIST/}"
+            echo ">>> $remote"
+            curl -s --max-time 60 \
+              --user "$FTP_USERNAME:$FTP_PASSWORD" \
+              --ftp-create-dirs \
+              -T "$filepath" \
+              "ftp://$FTP_SERVER/$remote"
+            echo "  OK"
+          done
+
+          echo ""
+          echo "=== LISTING SERVER ROOT AFTER UPLOAD ==="
+          curl -s --max-time 10 \
+            --user "$FTP_USERNAME:$FTP_PASSWORD" \
+            "ftp://$FTP_SERVER/" 2>&1 || true
+
+      - name: Verify site is up
         run: |
           sleep 5
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://sashamilshtein.com)
           echo "Site returned HTTP $STATUS"
+          if [ "$STATUS" = "200" ]; then
+            echo "Site is UP!"
+          else
+            echo "Site returned $STATUS — check FTP logs above"
+          fi
