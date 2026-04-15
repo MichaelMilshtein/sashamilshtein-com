@@ -345,12 +345,10 @@ export default function Resume() {
             href={`https://www.linkedin.com/in/${data.linkedin}`}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ ...contactPill, padding: "0 10px", gap: "7px" }}
+            style={{ ...contactPill, padding: "0 10px" }}
+            title={`linkedin.com/in/${data.linkedin}`}
           >
             <Linkedin size={13} />
-            <span style={{ fontSize: "0.78rem", fontWeight: 500 }}>
-              {`linkedin.com/in/${data.linkedin}`}
-            </span>
           </a>
         </div>
       </header>
