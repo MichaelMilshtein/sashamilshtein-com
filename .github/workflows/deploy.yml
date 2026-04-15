@@ -65,8 +65,11 @@ jobs:
           echo "=== lftp script ==="
           cat /tmp/lftp_script.txt
 
+          # Prepend connection command at top of script
+          sed -i "1s|^|open -u $FTP_USERNAME,$FTP_PASSWORD ftp://$FTP_SERVER\n|" /tmp/lftp_script.txt
+
           echo "=== Running upload ==="
-          lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "ftp://$FTP_SERVER" -f /tmp/lftp_script.txt
+          lftp < /tmp/lftp_script.txt
 
       - name: Verify site is up
         run: |
