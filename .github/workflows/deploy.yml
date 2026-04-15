@@ -38,7 +38,23 @@ jobs:
           SSH_PASS: ${{ secrets.FTP_PASSWORD }}
         run: |
           sudo apt-get install -y sshpass rsync
-          WEBROOT="/home/$SSH_USER/public_html/domains/sashamilshtein.com/public_html"
+          SSH="sshpass -p $SSH_PASS ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -p 65002 $SSH_USER@$SSH_HOST"
+          RSYNC="sshpass -p $SSH_PASS rsync -avz -e 'ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -p 65002'"
+
+          echo "=== Finding web root ==="
+          WEBROOT=$($SSH "find /home -maxdepth 6 -type d -name 'public_html' 2>/dev/null | grep -i sashamilshtein | head -1")
+          echo "Found: $WEBROOT"
+
+          if [ -z "$WEBROOT" ]; then
+            echo "=== Not found via find, checking home structure ==="
+            $SSH "ls -la ~/ && echo '---' && ls -la ~/domains/ 2>/dev/null || true"
+          fi
+
+          if [ -z "$WEBROOT" ]; then
+            echo "ERROR: Could not locate web root" && exit 1
+          fi
+
+          echo "=== Syncing to $WEBROOT ==="
           sshpass -p "$SSH_PASS" rsync -avz \
             -e "ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -p 65002" \
             artifacts/resume/dist/public/ \
@@ -52,6 +68,5 @@ jobs:
           if [ "$STATUS" = "200" ]; then
             echo "SUCCESS: Site is UP!"
           else
-            echo "Unexpected response: $STATUS"
-            exit 1
+            echo "Unexpected response: $STATUS" && exit 1
           fi
