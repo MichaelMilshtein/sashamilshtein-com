@@ -31,7 +31,7 @@ jobs:
       - name: Build resume
         run: pnpm --dir artifacts/resume run build:production
 
-      - name: Diagnose FTP directory structure
+      - name: Deploy to Hostinger via lftp
         env:
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
@@ -41,14 +41,18 @@ jobs:
           lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "ftp://$FTP_SERVER" << 'LFTP_SCRIPT'
             set ftp:ssl-allow no
             set ftp:passive-mode on
-            set net:timeout 30
-            set net:max-retries 1
-            echo "=== FTP ROOT ==="
+            set net:timeout 120
+            set net:max-retries 5
+            set net:reconnect-interval-base 5
+            mirror --reverse --verbose --transfer-all artifacts/resume/dist/public/ /
+            echo "=== Upload complete. Verifying files ==="
             ls -la
-            echo "=== TRYING cd public_html ==="
-            cd public_html
-            echo "=== INSIDE public_html ==="
-            ls -la
-            echo "=== DONE ==="
+            ls -la assets/
             bye
           LFTP_SCRIPT
+
+      - name: Check site is up
+        run: |
+          sleep 5
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://sashamilshtein.com)
+          echo "Site returned HTTP $STATUS"
