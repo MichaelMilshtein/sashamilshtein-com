@@ -40,5 +40,5 @@ jobs:
           protocol: ftps
           port: 21
           local-dir: artifacts/resume/dist/public/
-          server-dir: public_html/
-          state-name: .ftp-deploy-sync-state-v2.json
+          server-dir: /
+          state-name: .ftp-deploy-sync-state-v3.json
