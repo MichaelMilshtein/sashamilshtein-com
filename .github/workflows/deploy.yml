@@ -37,8 +37,6 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftps
-          port: 21
           local-dir: artifacts/resume/dist/public/
           server-dir: /
           state-name: .ftp-deploy-sync-state-v3.json
