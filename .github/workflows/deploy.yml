@@ -39,4 +39,4 @@ jobs:
         run: |
           sudo apt-get install -y lftp
           lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "ftp://$FTP_SERVER" \
-            -e "set ftp:ssl-allow no; set net:timeout 30; set net:max-retries 3; mirror --reverse --delete --verbose artifacts/resume/dist/public/ /; bye"
+            -e "set ftp:ssl-allow no; set net:timeout 120; set net:max-retries 5; set ftp:passive-mode on; mirror --reverse --verbose --use-cache artifacts/resume/dist/public/ /; bye"
