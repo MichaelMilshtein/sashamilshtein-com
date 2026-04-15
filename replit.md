@@ -25,3 +25,14 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 - `pnpm --filter @workspace/api-server run dev` — run API server locally
 
 See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and package details.
+
+## Resume Site (sashamilshtein.com)
+
+- **Artifact**: `artifacts/resume` — React + Vite SPA
+- **Live URL**: https://sashamilshtein.com
+- **Hosting**: Hostinger shared hosting
+- **Deploy**: GitHub Actions → rsync over SSH (port 65002)
+- **Web root on server**: `/home/u763333732/domains/sashamilshtein.com/public_html`
+- **Trigger**: any push to `main` branch auto-deploys
+- **LocalStorage key**: `sasha_resume_data_v1` (users must click "Reset saved data" to pick up file-based content changes)
+- **Git remote**: `git push github main` triggers deploy (remote "github" uses GITHUB_PAT)
