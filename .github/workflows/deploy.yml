@@ -44,6 +44,6 @@ jobs:
             set net:timeout 120;
             set net:max-retries 5;
             set net:reconnect-interval-base 5;
-            mirror --reverse --verbose --continue artifacts/resume/dist/public/ /;
+            mirror --reverse --verbose --continue artifacts/resume/dist/public/ public_html/;
             bye;
           "
