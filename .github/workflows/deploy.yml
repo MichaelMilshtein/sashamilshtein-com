@@ -31,45 +31,14 @@ jobs:
       - name: Build resume
         run: pnpm --dir artifacts/resume run build:production
 
-      - name: Upload files to Hostinger public_html via curl FTP
+      - name: Upload files to Hostinger via curl FTP
         env:
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |
           DIST="artifacts/resume/dist/public"
-
-          # FTP login lands in /public_html — upload to public_html/ subfolder
-          # which means on the server it becomes /public_html/public_html/ ??
-          # We need to test: try uploading directly and check both paths
-
-          echo "=== Uploading test file to root (/) ==="
-          echo "test-root" > /tmp/test-root.html
-          curl -s --max-time 15 --user "$FTP_USERNAME:$FTP_PASSWORD" \
-            -T /tmp/test-root.html "ftp://$FTP_SERVER/test-root.html"
-          sleep 2
-          ROOT_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://sashamilshtein.com/test-root.html)
-          echo "test-root.html at /: HTTP $ROOT_STATUS"
-
-          echo "=== Uploading test file to public_html/ ==="
-          curl -s --max-time 15 --user "$FTP_USERNAME:$FTP_PASSWORD" \
-            --ftp-create-dirs \
-            -T /tmp/test-root.html "ftp://$FTP_SERVER/public_html/test-pub.html"
-          sleep 2
-          PUB_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://sashamilshtein.com/test-pub.html)
-          echo "test-pub.html at /public_html/: HTTP $PUB_STATUS"
-
-          echo "=== Results ==="
-          echo "/ -> $ROOT_STATUS  |  /public_html/ -> $PUB_STATUS"
-
-          # Upload to the path that works
-          if [ "$PUB_STATUS" = "200" ]; then
-            TARGET="ftp://$FTP_SERVER/public_html/"
-            echo "==> Using public_html/ as upload target"
-          else
-            TARGET="ftp://$FTP_SERVER/"
-            echo "==> Using FTP root as upload target"
-          fi
+          TARGET="ftp://$FTP_SERVER/domains/sashamilshtein.com/public_html/"
 
           echo "=== Uploading all files to $TARGET ==="
           find "$DIST" -type f | sort | while read filepath; do
