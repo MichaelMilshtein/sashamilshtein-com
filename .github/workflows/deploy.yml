@@ -83,27 +83,22 @@ jobs:
               continue
             fi
             echo "=== Deploying static page: $page ==="
-            cat > /tmp/lftp_static.txt << 'LFTP_EOF'
-            set ftp:ssl-allow no
-            set ftp:passive-mode on
-            set net:timeout 60
-            set net:max-retries 3
-            LFTP_EOF
-
-            sed -i "1s|^|open -u $FTP_USERNAME,$FTP_PASSWORD ftp://$FTP_SERVER\n|" /tmp/lftp_static.txt
-            echo "cd .." >> /tmp/lftp_static.txt
-            echo "cd domains/sashamilshtein.com/public_html/$page" >> /tmp/lftp_static.txt
-
-            find "$page_dir" -type f | sort | while read filepath; do
-              remote="${filepath#$page_dir}"
-              dir=$(dirname "$remote")
-              if [ "$dir" != "." ]; then
-                echo "mkdir -p $dir" >> /tmp/lftp_static.txt
-              fi
-              echo "put \"$filepath\" -o \"$remote\"" >> /tmp/lftp_static.txt
-            done
-
-            echo "bye" >> /tmp/lftp_static.txt
+            {
+              echo "set ftp:ssl-allow no"
+              echo "set ftp:passive-mode on"
+              echo "set net:timeout 60"
+              echo "set net:max-retries 3"
+              echo "open -u $FTP_USERNAME,$FTP_PASSWORD ftp://$FTP_SERVER"
+              echo "cd .."
+              echo "cd domains/sashamilshtein.com/public_html/$page"
+              find "$page_dir" -type f | sort | while read filepath; do
+                remote="${filepath#$page_dir}"
+                dir=$(dirname "$remote")
+                if [ "$dir" != "." ]; then echo "mkdir -p $dir"; fi
+                echo "put \"$filepath\" -o \"$remote\""
+              done
+              echo "bye"
+            } > /tmp/lftp_static.txt
             lftp < /tmp/lftp_static.txt
             echo "Done: $page"
           done
