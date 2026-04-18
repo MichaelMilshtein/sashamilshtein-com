@@ -601,7 +601,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           {
             question: 'Introduction',
             answer: [
-              'Hello. I am Sasha Milshtein, and I am excited to apply for Visa\'s Sales Development Program. I like roles where communication drives outcomes, structure matters, and follow-through is the difference between interest and action.'
+              'Hello, and thank you for visiting my profile! I am Sasha Milshtein, and I am excited to apply for Visa\'s Sales Development Program. I like roles where communication drives outcomes, structure matters, and follow-through is the difference between interest and action.'
             ],
             cta: {
               label: 'Sasha Milshtein Resume',
