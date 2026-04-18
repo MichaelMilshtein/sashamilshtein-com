@@ -1,0 +1,52 @@
+name: Pull visa page from server
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_PAT }}
+
+      - name: Download visa folder from server via FTP
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          sudo apt-get install -y lftp
+
+          mkdir -p static-pages/visa
+
+          cat > /tmp/lftp_pull.txt << 'LFTP_EOF'
+          set ftp:ssl-allow no
+          set ftp:passive-mode on
+          set net:timeout 60
+          set net:max-retries 3
+          LFTP_EOF
+
+          sed -i "1s|^|open -u $FTP_USERNAME,$FTP_PASSWORD ftp://$FTP_SERVER\n|" /tmp/lftp_pull.txt
+          echo "cd .." >> /tmp/lftp_pull.txt
+          echo "cd domains/sashamilshtein.com/public_html/visa" >> /tmp/lftp_pull.txt
+          echo "mirror . static-pages/visa" >> /tmp/lftp_pull.txt
+          echo "bye" >> /tmp/lftp_pull.txt
+
+          lftp < /tmp/lftp_pull.txt
+
+          echo "=== Files downloaded ==="
+          find static-pages/visa -type f | sort
+
+      - name: Commit visa files to repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add static-pages/
+          git diff --staged --quiet && echo "Nothing to commit" || (git commit -m "pull: import visa page from server" && git push)
