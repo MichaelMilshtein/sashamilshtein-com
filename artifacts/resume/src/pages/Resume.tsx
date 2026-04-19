@@ -3,7 +3,7 @@ import { useResumeData } from "@/hooks/useResumeData";
 import { useIsMobile } from "@/hooks/use-mobile";
 import MobileResume from "@/pages/MobileResume";
 import sashaHeadshot from "@/assets/sasha-headshot.jpeg";
-import { Mail, Phone, Linkedin, ChevronsUpDown, ChevronsDownUp, TrendingUp, CalendarCheck, Target, BarChart2, Users, Star, ClipboardList, Timer, Sparkles, ChevronDown } from "lucide-react";
+import { Mail, Phone, Linkedin, ChevronsUpDown, ChevronsDownUp, TrendingUp, CalendarCheck, Target, BarChart2, Users, Star, ClipboardList, Timer, Sparkles, ChevronDown, Settings } from "lucide-react";
 
 
 interface CardItem {
@@ -697,7 +697,7 @@ export default function Resume() {
             </h2>
             <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
               <div>
-                <p style={{ margin: "0 0 6px", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#7b86b8", fontWeight: 600 }}>Functional</p>
+                <p style={{ margin: "0 0 6px", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#7b86b8", fontWeight: 600, display: "flex", alignItems: "center", gap: "5px" }}><Settings size={11} strokeWidth={2} style={{ flexShrink: 0 }} />Functional</p>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "7px" }}>
                   {data.competencies.functional.map((item, i) => (
                     <span
@@ -719,7 +719,7 @@ export default function Resume() {
                 </div>
               </div>
               <div>
-                <p style={{ margin: "0 0 6px", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#8fb8a8", fontWeight: 600 }}>Soft Skills</p>
+                <p style={{ margin: "0 0 6px", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#8fb8a8", fontWeight: 600, display: "flex", alignItems: "center", gap: "5px" }}><Star size={11} strokeWidth={2} style={{ flexShrink: 0 }} />Soft Skills</p>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "7px" }}>
                   {data.competencies.soft.map((item, i) => (
                     <span

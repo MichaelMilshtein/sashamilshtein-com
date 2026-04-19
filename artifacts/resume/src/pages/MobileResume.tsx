@@ -1,6 +1,6 @@
 import sashaHeadshot from "@/assets/sasha-headshot.jpeg";
 import type { ResumeData } from "@/data/resumeData";
-import { TrendingUp, CalendarCheck, Target, BarChart2, Users, Star, ClipboardList, Timer } from "lucide-react";
+import { TrendingUp, CalendarCheck, Target, BarChart2, Users, Star, ClipboardList, Timer, Settings } from "lucide-react";
 
 const c = {
   bg: "transparent",
@@ -245,7 +245,7 @@ export default function MobileResume({ data }: { data: ResumeData }) {
       <SectionLabel>Core Competencies</SectionLabel>
       <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "22px" }}>
         <div>
-          <p style={{ margin: "0 0 6px", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#7b86b8", fontWeight: 600 }}>Functional</p>
+          <p style={{ margin: "0 0 6px", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#7b86b8", fontWeight: 600, display: "flex", alignItems: "center", gap: "5px" }}><Settings size={11} strokeWidth={2} style={{ flexShrink: 0 }} />Functional</p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "7px" }}>
             {data.competencies.functional.map((item, i) => (
               <span
@@ -266,7 +266,7 @@ export default function MobileResume({ data }: { data: ResumeData }) {
           </div>
         </div>
         <div>
-          <p style={{ margin: "0 0 6px", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#8fb8a8", fontWeight: 600 }}>Soft Skills</p>
+          <p style={{ margin: "0 0 6px", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#8fb8a8", fontWeight: 600, display: "flex", alignItems: "center", gap: "5px" }}><Star size={11} strokeWidth={2} style={{ flexShrink: 0 }} />Soft Skills</p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "7px" }}>
             {data.competencies.soft.map((item, i) => (
               <span
