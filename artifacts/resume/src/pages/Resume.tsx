@@ -297,10 +297,7 @@ export default function Resume() {
   const scrollTo = useCallback((id: string) => {
     const target = sectionRefs.current[id];
     if (!target) return;
-    const headerH = (headerRef.current?.offsetHeight ?? 70) + 58;
-    const y =
-      target.getBoundingClientRect().top + window.pageYOffset - headerH - 16;
-    window.scrollTo({ top: y, behavior: "smooth" });
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
   }, []);
 
   useEffect(() => {
@@ -362,7 +359,7 @@ export default function Resume() {
         zIndex: 1,
         width: "min(calc(100% - 32px), 1200px)",
         margin: "16px auto 0",
-        paddingBottom: "50vh",
+        paddingBottom: "100vh",
         fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
       }}
     >
@@ -511,7 +508,10 @@ export default function Resume() {
           return (
             <button
               key={nav.id}
-              onClick={() => { expandSection(nav.id); scrollTo(nav.id); }}
+              onClick={() => {
+                expandSection(nav.id);
+                requestAnimationFrame(() => requestAnimationFrame(() => scrollTo(nav.id)));
+              }}
               style={{
                 appearance: "none",
                 padding: "7px 16px",
@@ -544,7 +544,7 @@ export default function Resume() {
           borderRadius: "20px",
           padding: "20px 22px",
           marginTop: "16px",
-          scrollMarginTop: "12px",
+          scrollMarginTop: "150px",
         }}
       >
         <h2
@@ -591,7 +591,7 @@ export default function Resume() {
               borderRadius: "20px",
               marginTop: "12px",
               overflow: "hidden",
-              scrollMarginTop: "12px",
+              scrollMarginTop: "150px",
             }}
           >
             {/* Header row */}
@@ -857,7 +857,7 @@ export default function Resume() {
               ...glass,
               borderRadius: "28px",
               padding: "22px",
-              scrollMarginTop: "12px",
+              scrollMarginTop: "150px",
             }}
           >
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
