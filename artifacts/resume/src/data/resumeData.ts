@@ -42,73 +42,102 @@ export interface ResumeData {
   phone: string;
   linkedin: string;
   location: string;
-  skills: string[];
+  competencies: { functional: string[]; soft: string[] };
+  tools: string[];
   experience: ExperienceItem[];
   leadership: LeadershipItem[];
   highlights: HighlightItem[];
   educationSchool: string;
   educationDegree: string;
   educationMeta: string;
+  honorsProgram: string[];
+  cambridgeDate: string;
+  cambridgeDescription: string;
+  certifications: string;
   courses: CourseItem[];
-  additionalText: string;
 }
 
 export const defaultResumeData: ResumeData = {
   name: "Sasha Milshtein",
   tagline: "Marketing • Events • CRM • Content",
   summary:
-    "Marketing & Psychology graduate from USD's Knauss School of Business, with hands-on experience across CRM operations, campaign execution, event coordination, and content strategy. Known for building organized workflows, keeping complex projects on track, and delivering polished work under pressure. Currently contributing as a Corporate Engagement Consultant at Per Scholas while completing BBA (May 2026).",
+    "Marketing graduate with 2 years of hands-on experience in <strong>campaign execution, content strategy, CRM management, and event operations</strong>. Proven ability to increase engagement, support sales initiatives, and manage projects from start to finish. Detail-oriented, reliable, and comfortable working in fast-paced, team-driven environments. Authorized to work in the U.S.",
   email: "sasha.milshtein@gmail.com",
   phone: "925-949-9398",
   linkedin: "alexandra-milshtein",
   location: "San Diego, CA",
-  skills: [
-    "Marketing Strategy",
-    "Campaign Management",
-    "Marketing Analytics",
-    "Digital Marketing",
-    "Email Marketing",
-    "Social Media Marketing",
-    "Business Development",
-    "Content Marketing",
-    "Content Creation",
-    "Social Media Management",
-    "Social Media Communications",
-    "Event Planning",
-    "CRM Workflows",
-    "Market Research",
-    "Presentation Skills",
-    "Generative AI for Marketing",
-    "Prompt Engineering",
-    "Data Management",
+  competencies: {
+    functional: [
+      "CRM Management",
+      "Sales Development",
+      "Performance Tracking",
+      "Market Research & Data Analysis",
+      "Event & Program Management",
+      "Business Development Support",
+      "Content Creation & Strategy",
+    ],
+    soft: [
+      "Clear Communication",
+      "Ownership & Accountability",
+      "Cross-Functional Collaboration",
+      "Leadership & Team Coordination",
+      "Adaptability & Learning Agility",
+      "Pipeline & Task Prioritization",
+      "Problem Solving & Critical Thinking",
+    ],
+  },
+  tools: [
+    "Google Suite",
+    "MS Office",
+    "Slack",
     "Salesforce",
     "Airtable",
-    "Mailchimp",
-    "HubSpot",
-    "Google Suite",
-    "Tableau",
-    "Canva",
     "Apollo",
-    "Microsoft Office",
+    "Qualtrics",
+    "HubSpot",
+    "Tableau",
+    "Smartsheet",
   ],
   highlights: [
     {
       id: "h1",
-      stat: "50%",
-      description:
-        "Increase in engagement from targeted social campaigns shaped by segmentation and performance analysis.",
+      stat: "15%",
+      description: "CRM outreach targeting improvement via Salesforce & Airtable workflow optimization.",
     },
     {
       id: "h2",
-      stat: "100",
-      description:
-        "Chapter members coordinated during a 9-month recruitment campaign involving cross-functional planning and communication standards.",
+      stat: "45+",
+      description: "Virtual corporate engagement events managed end-to-end with multi-stakeholder coordination.",
     },
     {
       id: "h3",
+      stat: "10/wk",
+      description: "Activation quota consistently exceeded as a Corporate Engagement Consultant.",
+    },
+    {
+      id: "h4",
+      stat: "50%",
+      description: "Engagement lift from targeted social campaigns built on audience segmentation and analytics.",
+    },
+    {
+      id: "h5",
+      stat: "100",
+      description: "Chapter members coordinated across a 9-month, $5K recruitment campaign — largest new-member class on campus.",
+    },
+    {
+      id: "h6",
       stat: "5★",
-      description:
-        "Student feedback earned while mentoring first-year students through academic and social transition at USD.",
+      description: "Student feedback earned while mentoring first-year students through academic and social transition at USD.",
+    },
+    {
+      id: "h7",
+      stat: "15",
+      description: "AMA events planned and executed as VP of Operations, including venue, speakers, and funding.",
+    },
+    {
+      id: "h8",
+      stat: "5 hrs/mo",
+      description: "Administrative time saved through automated AMA calendar and planning workflows.",
     },
   ],
   experience: [
@@ -116,83 +145,64 @@ export const defaultResumeData: ResumeData = {
       id: "e1",
       title: "Corporate Engagement Consultant",
       company: "Per Scholas",
-      dateRange: "Jan 2026 – Present",
-      location: "Contract",
-      badge: "CRM + Partnerships",
+      dateRange: "06/2025 – Present",
+      location: "Remote, CA",
+      badge: "CRM + Events",
       category: "marketing ops",
       bullets: [
         {
           id: "e1b1",
-          text: "Built and refined Salesforce and Airtable workflows that improved project visibility, supported team coordination, and helped keep moving priorities, audience lists, and follow-up activities organized across partnership and growth initiatives.",
+          text: "Built and optimized Salesforce & Airtable CRM workflows that improved outreach targeting by <strong>15%</strong> and enabled pipeline tracking for corporate partnerships and fundraising campaigns.",
         },
         {
           id: "e1b2",
-          text: "Supported projects from planning through execution by building materials, coordinating timelines, tracking deliverables, and helping keep multiple workstreams on schedule in a fast-moving, detail-oriented environment.",
+          text: "Conducted <strong>targeted market and client research</strong>, synthesizing insights into <strong>actionable reports</strong> that supported strategic planning across Sales and Development teams; <strong>consistently exceeded a quota of 10 activations per week</strong>.",
         },
         {
           id: "e1b3",
-          text: "Managed project logistics, stakeholder communications, and execution details across multiple workstreams, helping keep assets and deliverables on schedule and ensuring strong follow-through from planning through final execution.",
+          text: "Managed logistics and communications for <strong>45+ virtual corporate engagement events</strong>, ensuring attendee readiness and smooth execution across multi-stakeholder team.",
+        },
+        {
+          id: "e1b4",
+          text: "As an Events & Business Development Intern, streamlined and updated CRM records; conducted market research, and compiled reports to inform <strong>Sales and Development team decision-making</strong>.",
         },
       ],
     },
     {
       id: "e2",
-      title: "Event and Business Development Intern",
-      company: "Per Scholas",
-      dateRange: "Jun 2025 – Jan 2026",
-      location: "San Diego, CA",
-      badge: "Research + CRM",
-      category: "marketing ops",
+      title: "Marketing Strategy Associate",
+      company: "Sukin Kot LLC",
+      dateRange: "07/2024 – 06/2025",
+      location: "Walnut Creek, CA",
+      badge: "Content + Growth",
+      category: "marketing",
       bullets: [
         {
           id: "e2b1",
-          text: "Maintained organized records, conducted research, and prepared reports, decks, and support materials that helped teams stay aligned and support content, client-facing materials, and campaign execution efficiently.",
+          text: "Designed targeted social campaigns that <strong>increased engagement 50%</strong> and directly drove a <strong>10% lift in book sales</strong> within four months through audience segmentation and performance analytics.",
         },
         {
           id: "e2b2",
-          text: "Conducted market research and assembled reports that helped inform team decisions around outreach opportunities and relationship development.",
+          text: "Led daily end-to-end content creation and campaign management by designing visually compelling posts, writing persuasive captions and analyzing performance metrics with the goal of expanding audience reach.",
         },
       ],
     },
     {
       id: "e3",
-      title: "Marketing Strategy Associate",
-      company: "Sukin Kot LLC",
-      dateRange: "Jul 2024 – Jun 2025",
-      location: "Freelance",
-      badge: "Content + Growth",
-      category: "marketing",
-      bullets: [
-        {
-          id: "e3b1",
-          text: "Developed social and audience-facing content that increased engagement 50% and contributed to a 10% lift in book sales within four months through strong messaging, performance analysis, and consistent execution.",
-        },
-        {
-          id: "e3b2",
-          text: "Supported content and communication execution by writing and editing audience-focused copy, coordinating rollout across channels, performing quality checks, and tracking performance to strengthen engagement and support broader marketing goals.",
-        },
-      ],
-    },
-    {
-      id: "e4",
-      title: "Production Director, Summer Camp",
+      title: "Production Director — Summer Camp",
       company: "Berkeley Playhouse",
-      dateRange: "Jun 2021 – Jul 2024",
+      dateRange: "06/2019 – 07/2024",
       location: "Berkeley, CA",
       badge: "Leadership + Live Production",
       category: "events ops",
       bullets: [
         {
-          id: "e4b1",
-          text: "Led large-scale live productions for 5–15 performers, managing schedules, teams, and moving parts under tight deadlines.",
+          id: "e3b1",
+          text: "Led large-scale live productions for <strong>15-30 performers</strong>, managing schedules, teams, and logistics under tight deadlines; promoted twice for reliability, leadership, and program impact.",
         },
         {
-          id: "e4b2",
-          text: "Earned two promotions for reliability, leadership, and the ability to keep programs running smoothly in fast-paced settings.",
-        },
-        {
-          id: "e4b3",
-          text: "Built practical experience in team coordination, communication, and execution pressure that translates directly to event and operations work.",
+          id: "e3b2",
+          text: "Demonstrated strong leadership and team building abilities by increasing <strong>student retention</strong> and <strong>participation</strong> in programs <strong>by 12%.</strong> Earned two promotions in two years in recognition of impact to program and <strong>100% parent satisfaction score</strong> based on post-program feedback, resulting in repeat enrollment.",
         },
       ],
     },
@@ -200,39 +210,43 @@ export const defaultResumeData: ResumeData = {
   leadership: [
     {
       id: "l1",
-      title: "Vice President of Operations",
-      org: "American Marketing Association",
-      dateRange: "May 2025 – Present",
-      badge: "Operations",
+      title: "Vice President of Membership",
+      org: "Kappa Alpha Theta — Eta Iota Chapter",
+      dateRange: "01/2025 – 01/2026",
+      badge: "Campaign Leadership",
       bullets: [
         {
           id: "l1b1",
-          text: "Led planning and operational coordination for AMA events, managing timelines, logistics, approvals, meeting agendas, and cross-functional communication to deliver polished experiences and keep projects moving.",
+          text: "Partnered with campus Panhellenic representatives and national organization to coordinate recruitment execution, compliance, and deadlines.",
         },
         {
           id: "l1b2",
-          text: "Managed shared planning tools and digital resources for onboarding, events, and member communications, helping standardize workflows, improve coordination, and strengthen follow-up across the executive board.",
+          text: "Directed a <strong>9-months</strong> recruitment campaign ($5K budget), coordinating <strong>100 members</strong> and cross-functional event execution, resulting in the <strong>largest</strong> new-member <strong>class</strong> on campus (<strong>50</strong>).",
+        },
+        {
+          id: "l1b3",
+          text: "Developed and executed social media strategy and promotional content to communicate sorority's values and recruitment events. <strong>Increased</strong> engagement by <strong>50%,</strong> achieving <strong>10</strong> consecutive <strong>days of trending</strong> content and generating <strong>3K+</strong> views per post during the recruitment period.",
         },
       ],
     },
     {
       id: "l2",
-      title: "Vice President of Membership",
-      org: "Kappa Alpha Theta — Eta Iota Chapter",
-      dateRange: "Dec 2024 – Present",
-      badge: "Campaign Leadership",
+      title: "Vice President of Operations",
+      org: "American Marketing Association",
+      dateRange: "05/2025 – Present",
+      badge: "Operations",
       bullets: [
         {
           id: "l2b1",
-          text: "Directed a 9-month recruitment campaign with a $5K budget, coordinating 100 members, timelines, communications, and event execution, resulting in the largest new-member class on campus (50).",
+          text: "Spearheaded operational <strong>planning and execution</strong> for <strong>15</strong> AMA events, overseeing venue bookings, speaker coordination, catering, and funding approvals; maintained cross-functional alignment through structured communication with executive leadership.",
         },
         {
           id: "l2b2",
-          text: "Partnered with campus Panhellenic representatives and the national organization to coordinate recruitment execution, compliance, and deadlines.",
+          text: "Owned and enhanced <strong>digital infrastructure and workflows</strong>, streamlining onboarding, event planning, and member engagement, while supporting executive board oversight and strategic initiatives.",
         },
         {
           id: "l2b3",
-          text: "Designed and led recruitment training for one hundred chapter members, setting communication, presentation, and behavioral standards.",
+          text: "<strong>Automated</strong> the AMA calendar and planning processes, improving visibility and coordination across teams and generating approximately <strong>5 hours of administrative time savings per month</strong>, enhancing organizational efficiency and member experience.",
         },
       ],
     },
@@ -240,42 +254,34 @@ export const defaultResumeData: ResumeData = {
       id: "l3",
       title: "Alcala Club Associate",
       org: "USD Alcala Club",
-      dateRange: "Feb 2023 – Present",
+      dateRange: "04/2023 – Present",
       badge: "Representation",
       bullets: [
         {
           id: "l3b1",
-          text: "Acted as a liaison between the president's office and campus visitors, representing USD at events and providing polished, welcoming support to VIPs, alumni, and community members.",
+          text: "Acted as a liaison between the president's office and campus visitors, representing USD at <strong>4 events</strong> per semester and providing exceptional guest experiences to VIPs, alumni, and community members.",
         },
         {
           id: "l3b2",
-          text: "Assisted in organizing key campus events, including fundraising, graduation, and alumni gatherings, coordinating logistics and helping ensure a professional, positive student and guest experience.",
-        },
-      ],
-    },
-    {
-      id: "l4",
-      title: "Scholastic Assistant",
-      org: "USD Leadership",
-      dateRange: "Aug 2023 – May 2024",
-      badge: "Mentorship",
-      bullets: [
-        {
-          id: "l4b1",
-          text: "Mentored first-year students at USD, helping them navigate academic and social transitions and serving as a liaison between students and faculty advisors. Received 5-star student feedback.",
-        },
-        {
-          id: "l4b2",
-          text: "Built strong, supportive relationships with students and helped encourage ongoing campus involvement, with many mentees later choosing to become Scholastic Assistants themselves.",
+          text: "Supported key events, including fundraising, graduation, and alumni gatherings, ensuring a professional and positive representation of the university.",
         },
       ],
     },
   ],
-  educationSchool: "University of San Diego — Knauss School of Business",
+  educationSchool: "University of San Diego, Knauss School of Business",
   educationDegree:
-    "Bachelor of Business Administration in Marketing and Psychology",
+    "Bachelor of Business Administration, Marketing and Psychology",
   educationMeta:
-    "Graduating May 2026 · GPA 3.6 · Dean's List · USD Alcala Scholarship · Honors Program",
+    "GPA 3.6, Dean's List, USD Alcala Scholarship for excellence in academics and extracurricular activities",
+  honorsProgram: [
+    "Competitively selected to join program for high-achieving and academically motivated students.",
+    "Program requires completion of 24 units of Honors coursework, focused on approaching complex issues from interdisciplinary prospectives and the completion of an original independent scholarship project.",
+  ],
+  cambridgeDate: "08/2021",
+  cambridgeDescription:
+    "Completed a selective summer program in Business Management and Economics at Reach Cambridge. Engaged in an intensive curriculum covering core business disciplines (strategy, marketing, finance) and foundational economic concepts (market structures, supply and demand, globalization), with a focus on applying theory to real-world scenarios.",
+  certifications:
+    "Intermediate Microsoft Excel | Generative AI for Marketing Professionals (AMA)",
   courses: [
     { id: "c1", name: "Marketing Strategy" },
     { id: "c2", name: "Advertising Campaigns" },
@@ -284,6 +290,4 @@ export const defaultResumeData: ResumeData = {
     { id: "c5", name: "Marketing Research" },
     { id: "c6", name: "Fashion Marketing" },
   ],
-  additionalText:
-    "Summer Business Program student at the University of Cambridge, UK. Lead Volunteer for Ukraine Humanitarian Relief (March–June 2022). Certifications: Microsoft Excel Certification, GenAI for Marketing Professional by AMA, National Honor Society, California Scholarship Federation. Foreign Languages: Russian (fluent).",
 };

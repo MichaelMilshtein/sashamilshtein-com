@@ -1,5 +1,6 @@
 import sashaHeadshot from "@/assets/sasha-headshot.jpeg";
 import type { ResumeData } from "@/data/resumeData";
+import { TrendingUp, CalendarCheck, Target, BarChart2, Users, Star, ClipboardList, Timer } from "lucide-react";
 
 const c = {
   bg: "transparent",
@@ -101,9 +102,51 @@ export default function MobileResume({ data }: { data: ResumeData }) {
 
       {/* ── Summary ── */}
       <SectionLabel>Summary</SectionLabel>
-      <p style={{ margin: 0, fontSize: "0.88rem", color: c.text, lineHeight: 1.7 }}>
-        {data.summary}
-      </p>
+      <p style={{ margin: 0, fontSize: "0.88rem", color: c.text, lineHeight: 1.7 }}
+        dangerouslySetInnerHTML={{ __html: data.summary }}
+      />
+
+      <Divider />
+
+      {/* ── Key Numbers ── */}
+      <SectionLabel>Key Numbers</SectionLabel>
+      {(() => {
+        const iconMap: Record<string, JSX.Element> = {
+          h1: <TrendingUp size={14} />,
+          h2: <CalendarCheck size={14} />,
+          h3: <Target size={14} />,
+          h4: <BarChart2 size={14} />,
+          h5: <Users size={14} />,
+          h6: <Star size={14} />,
+          h7: <ClipboardList size={14} />,
+          h8: <Timer size={14} />,
+        };
+        return (
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
+            {data.highlights.map((h) => (
+              <div
+                key={h.id}
+                style={{
+                  background: "rgba(255,255,255,0.04)",
+                  border: "1px solid rgba(255,255,255,0.07)",
+                  borderRadius: "10px",
+                  padding: "10px 12px",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "5px", marginBottom: "4px" }}>
+                  <span style={{ color: "rgba(247,144,30,0.65)" }}>{iconMap[h.id]}</span>
+                  <span style={{ fontSize: "1rem", fontWeight: 800, color: "#F7901E", letterSpacing: "-0.02em", lineHeight: 1 }}>
+                    {h.stat}
+                  </span>
+                </div>
+                <p style={{ margin: 0, fontSize: "0.72rem", color: c.muted, lineHeight: 1.5 }}>
+                  {h.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        );
+      })()}
 
       <Divider />
 
@@ -123,9 +166,9 @@ export default function MobileResume({ data }: { data: ResumeData }) {
             </p>
             <ul style={{ margin: 0, paddingLeft: "16px", display: "flex", flexDirection: "column", gap: "5px" }}>
               {exp.bullets.map((b) => (
-                <li key={b.id} style={{ fontSize: "0.84rem", color: c.text, lineHeight: 1.6 }}>
-                  {b.text}
-                </li>
+                <li key={b.id} style={{ fontSize: "0.84rem", color: c.text, lineHeight: 1.6 }}
+                  dangerouslySetInnerHTML={{ __html: b.text }}
+                />
               ))}
             </ul>
           </div>
@@ -150,9 +193,9 @@ export default function MobileResume({ data }: { data: ResumeData }) {
             </p>
             <ul style={{ margin: 0, paddingLeft: "16px", display: "flex", flexDirection: "column", gap: "5px" }}>
               {item.bullets.map((b) => (
-                <li key={b.id} style={{ fontSize: "0.84rem", color: c.text, lineHeight: 1.6 }}>
-                  {b.text}
-                </li>
+                <li key={b.id} style={{ fontSize: "0.84rem", color: c.text, lineHeight: 1.6 }}
+                  dangerouslySetInnerHTML={{ __html: b.text }}
+                />
               ))}
             </ul>
           </div>
@@ -162,37 +205,83 @@ export default function MobileResume({ data }: { data: ResumeData }) {
       <Divider />
 
       {/* ── Education ── */}
-      <SectionLabel>Education</SectionLabel>
-      <p style={{ margin: "0 0 2px", fontSize: "0.95rem", fontWeight: 700, color: c.textBright }}>
+      <SectionLabel>Education &amp; Certifications</SectionLabel>
+
+      <p style={{ margin: "0 0 1px", fontSize: "0.95rem", fontWeight: 700, color: c.textBright }}>
         {data.educationSchool}
       </p>
-      <p style={{ margin: "0 0 4px", fontSize: "0.88rem", color: c.accent, fontWeight: 600 }}>
+      <p style={{ margin: "0 0 1px", fontSize: "0.82rem", color: c.muted }}>Graduating May 2026</p>
+      <p style={{ margin: "0 0 2px", fontSize: "0.84rem", color: c.text }}>
         {data.educationDegree}
       </p>
-      <p style={{ margin: "0 0 16px", fontSize: "0.82rem", color: c.muted, lineHeight: 1.6 }}>
+      <p style={{ margin: "0 0 10px", fontSize: "0.82rem", color: c.muted, lineHeight: 1.6 }}>
         {data.educationMeta}
       </p>
-
-      {/* Additional */}
-      <ul style={{ margin: 0, paddingLeft: "16px", display: "flex", flexDirection: "column", gap: "5px" }}>
-        {data.additionalText
-          .split(/\.\s+/)
-          .map((s) => s.replace(/\.$/, "").trim())
-          .filter(Boolean)
-          .map((sentence, i) => (
-            <li key={i} style={{ fontSize: "0.84rem", color: c.text, lineHeight: 1.6 }}>
-              {sentence}
-            </li>
-          ))}
+      <p style={{ margin: "0 0 6px", fontSize: "0.84rem", fontWeight: 700, color: c.textBright }}>
+        Honors Program
+      </p>
+      <ul style={{ margin: "0 0 20px", paddingLeft: "16px", display: "flex", flexDirection: "column", gap: "5px" }}>
+        {data.honorsProgram.map((b, i) => (
+          <li key={i} style={{ fontSize: "0.84rem", color: c.text, lineHeight: 1.6 }}>{b}</li>
+        ))}
       </ul>
+
+      <p style={{ margin: "0 0 1px", fontSize: "0.95rem", fontWeight: 700, color: c.textBright }}>
+        University of Cambridge (UK)
+      </p>
+      <p style={{ margin: "0 0 8px", fontSize: "0.82rem", color: c.muted }}>{data.cambridgeDate}</p>
+      <p style={{ margin: "0 0 20px", fontSize: "0.84rem", color: c.text, lineHeight: 1.6 }}>
+        {data.cambridgeDescription}
+      </p>
+
+      <p style={{ margin: "0 0 4px", fontSize: "0.95rem", fontWeight: 700, color: c.textBright }}>
+        Certifications
+      </p>
+      <p style={{ margin: 0, fontSize: "0.84rem", color: c.text }}>{data.certifications}</p>
 
       <Divider />
 
-      {/* ── Skills ── */}
-      <SectionLabel>Skills</SectionLabel>
-      <p style={{ margin: 0, fontSize: "0.84rem", color: c.text, lineHeight: 1.8 }}>
-        {data.skills.join(" · ")}
-      </p>
+      {/* ── Core Competencies ── */}
+      <SectionLabel>Core Competencies</SectionLabel>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "7px", marginBottom: "22px" }}>
+        {[...data.competencies.functional, ...data.competencies.soft].map((item, i) => (
+          <span
+            key={i}
+            style={{
+              padding: "5px 10px",
+              borderRadius: "6px",
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid rgba(255,255,255,0.07)",
+              color: c.muted,
+              fontSize: "0.81rem",
+              fontWeight: 400,
+            }}
+          >
+            {item}
+          </span>
+        ))}
+      </div>
+
+      {/* ── Tools & Platforms ── */}
+      <SectionLabel>Tools &amp; Platforms</SectionLabel>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "7px" }}>
+        {data.tools.map((tool, i) => (
+          <span
+            key={i}
+            style={{
+              padding: "5px 10px",
+              borderRadius: "6px",
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid rgba(255,255,255,0.07)",
+              color: c.muted,
+              fontSize: "0.81rem",
+              fontWeight: 400,
+            }}
+          >
+            {tool}
+          </span>
+        ))}
+      </div>
 
     </div>
   );

@@ -1,11 +1,10 @@
-import { useState, useEffect, useRef, useCallback, CSSProperties } from "react";
+import { useState, useEffect, useRef, useCallback, CSSProperties, ReactNode, ReactElement } from "react";
 import { useResumeData } from "@/hooks/useResumeData";
 import { useIsMobile } from "@/hooks/use-mobile";
 import MobileResume from "@/pages/MobileResume";
 import sashaHeadshot from "@/assets/sasha-headshot.jpeg";
-import { Mail, Phone, Linkedin } from "lucide-react";
+import { Mail, Phone, Linkedin, ChevronsUpDown, ChevronsDownUp, TrendingUp, CalendarCheck, Target, BarChart2, Users, Star, ClipboardList, Timer, Sparkles, ChevronDown } from "lucide-react";
 
-type FilterType = "all" | "marketing" | "events" | "ops";
 
 interface CardItem {
   id: string;
@@ -21,40 +20,41 @@ function CardSection({
   item,
   defaultOpen,
   showLocation = true,
+  open: controlledOpen,
+  onToggle,
 }: {
   item: CardItem;
   defaultOpen?: boolean;
   showLocation?: boolean;
+  open?: boolean;
+  onToggle?: () => void;
 }) {
-  const [open, setOpen] = useState(!!defaultOpen);
+  const [internalOpen, setInternalOpen] = useState(!!defaultOpen);
+  const isControlled = controlledOpen !== undefined;
+  const open = isControlled ? controlledOpen : internalOpen;
+  const toggle = isControlled ? (onToggle ?? (() => {})) : () => setInternalOpen((p) => !p);
   const [hovered, setHovered] = useState(false);
 
   return (
     <article
       style={{
-        borderRadius: "22px",
         background: open
-          ? "rgba(255,255,255,0.055)"
+          ? "rgba(255,255,255,0.04)"
           : hovered
-            ? "rgba(255,255,255,0.045)"
-            : "rgba(255,255,255,0.03)",
-        border: open
-          ? "1px solid rgba(139,92,246,0.3)"
-          : hovered
-            ? "1px solid rgba(255,255,255,0.14)"
-            : "1px solid rgba(255,255,255,0.07)",
+            ? "rgba(255,255,255,0.025)"
+            : "transparent",
         overflow: "hidden",
         transition: "border-color 180ms ease, background 180ms ease",
       }}
     >
       <div
-        onClick={() => setOpen((p) => !p)}
+        onClick={toggle}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         style={{
           padding: "18px 20px",
           display: "grid",
-          gridTemplateColumns: "1fr auto auto",
+          gridTemplateColumns: "1fr auto",
           gap: "12px",
           alignItems: "center",
           cursor: "pointer",
@@ -89,24 +89,6 @@ function CardSection({
               </>
             )}
           </div>
-        </div>
-        <div
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            padding: "6px 12px",
-            borderRadius: "8px",
-            background: "rgba(139,92,246,0.15)",
-            border: "1px solid rgba(139,92,246,0.3)",
-            color: "#c4b5fd",
-            whiteSpace: "nowrap",
-            fontSize: "0.78rem",
-            fontWeight: 600,
-            flexShrink: 0,
-            letterSpacing: "0.02em",
-          }}
-        >
-          {item.badge}
         </div>
         <span
           style={{
@@ -151,11 +133,117 @@ function CardSection({
               }}
             >
               {item.bullets.map((b) => (
-                <li key={b.id} style={{ marginTop: "8px" }}>
-                  {b.text}
-                </li>
+                <li key={b.id} style={{ marginTop: "8px" }}
+                  dangerouslySetInnerHTML={{ __html: b.text }}
+                />
               ))}
             </ul>
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function EduCard({
+  title,
+  date,
+  defaultOpen,
+  children,
+  open: controlledOpen,
+  onToggle,
+}: {
+  title: string;
+  date?: string;
+  defaultOpen?: boolean;
+  children: ReactNode;
+  open?: boolean;
+  onToggle?: () => void;
+}) {
+  const [internalOpen, setInternalOpen] = useState(!!defaultOpen);
+  const isControlled = controlledOpen !== undefined;
+  const open = isControlled ? controlledOpen : internalOpen;
+  const toggle = isControlled ? (onToggle ?? (() => {})) : () => setInternalOpen((p) => !p);
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <article
+      style={{
+        background: open
+          ? "rgba(255,255,255,0.04)"
+          : hovered
+            ? "rgba(255,255,255,0.025)"
+            : "transparent",
+        overflow: "hidden",
+        transition: "background 180ms ease",
+      }}
+    >
+      <div
+        onClick={toggle}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        style={{
+          padding: "18px 20px",
+          display: "grid",
+          gridTemplateColumns: "1fr auto",
+          gap: "12px",
+          alignItems: "center",
+          cursor: "pointer",
+          userSelect: "none",
+        }}
+      >
+        <div>
+          <h3
+            style={{
+              margin: "0 0 6px",
+              fontSize: "1.08rem",
+              letterSpacing: "-0.02em",
+              color: "#eef2ff",
+            }}
+          >
+            {title}
+          </h3>
+          {date && (
+            <div style={{ color: "#b8c0ea", fontSize: "0.93rem" }}>
+              {date}
+            </div>
+          )}
+        </div>
+        <span
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "24px",
+            height: "24px",
+            flexShrink: 0,
+            transition: "transform 220ms ease",
+            transform: open ? "rotate(90deg)" : "rotate(0deg)",
+            color: open ? "#a78bfa" : "#6b7280",
+          }}
+        >
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path
+              d="M4 2L8 6L4 10"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </span>
+      </div>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateRows: open ? "1fr" : "0fr",
+          transition: "grid-template-rows 220ms ease",
+        }}
+      >
+        <div style={{ overflow: "hidden" }}>
+          <div style={{ padding: open ? "0 20px 18px" : "0 20px" }}>
+            {children}
           </div>
         </div>
       </div>
@@ -167,15 +255,41 @@ export default function Resume() {
   const { data } = useResumeData();
   const isMobile = useIsMobile();
 
-  const [activeFilter, setActiveFilter] = useState<FilterType>("all");
   const [activeSection, setActiveSection] = useState("summary");
+
+  const expCount = data.experience.length;
+  const leadCount = data.leadership.length;
+  const EDU_COUNT = 3;
+
+  const [expOpen, setExpOpen] = useState<boolean[]>(() =>
+    Array.from({ length: expCount }, (_, i) => i === 0)
+  );
+  const [leadOpen, setLeadOpen] = useState<boolean[]>(() =>
+    Array.from({ length: leadCount }, (_, i) => i === 0)
+  );
+  const [eduOpen, setEduOpen] = useState<boolean[]>([true, false, false]);
+  const [highlightsOpen, setHighlightsOpen] = useState(true);
+
+  const allOpen = (states: boolean[]) => states.every(Boolean);
+
+  const smartToggle = (states: boolean[], setter: (s: boolean[]) => void) => {
+    const next = !allOpen(states);
+    setter(states.map(() => next));
+  };
+
+  const expandSection = (id: string) => {
+    if (id === "highlights") setHighlightsOpen(true);
+    else if (id === "experience") setExpOpen(Array(expCount).fill(true));
+    else if (id === "leadership") setLeadOpen(Array(leadCount).fill(true));
+    else if (id === "education") setEduOpen(Array(EDU_COUNT).fill(true));
+  };
 
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
   const headerRef = useRef<HTMLElement | null>(null);
   const navItems = [
     { id: "summary", label: "Summary" },
-    { id: "experience", label: "Experience" },
-    { id: "impact", label: "Highlights" },
+    { id: "highlights", label: "Key Numbers" },
+    { id: "experience", label: "Work Experience" },
     { id: "leadership", label: "Leadership" },
     { id: "education", label: "Education" },
   ];
@@ -191,12 +305,22 @@ export default function Resume() {
 
   useEffect(() => {
     const navIds = new Set(navItems.map((n) => n.id));
-    const sections = Object.entries(sectionRefs.current);
+    const ACTIVE_THRESHOLD = 160;
     const handler = () => {
-      const trigger = window.scrollY + 180;
-      let current = "experience";
+      const atBottom =
+        window.scrollY + window.innerHeight >=
+        document.documentElement.scrollHeight - 50;
+      if (atBottom) {
+        setActiveSection(navItems[navItems.length - 1].id);
+        return;
+      }
+      const sections = Object.entries(sectionRefs.current);
+      let current = navItems[0].id;
       sections.forEach(([id, el]) => {
-        if (navIds.has(id) && el && el.offsetTop <= trigger) current = id;
+        if (navIds.has(id) && el) {
+          const top = el.getBoundingClientRect().top;
+          if (top <= ACTIVE_THRESHOLD) current = id;
+        }
       });
       setActiveSection(current);
     };
@@ -289,30 +413,42 @@ export default function Resume() {
               }}
             />
           </div>
-          <h1
-            style={{
-              margin: 0,
-              fontSize: "clamp(1.2rem, 2vw, 1.8rem)",
-              lineHeight: 1,
-              letterSpacing: "-0.04em",
-              whiteSpace: "nowrap",
-            }}
-          >
-            <span
+          <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+            <h1
               style={{
-                background:
-                  "linear-gradient(135deg, #ffffff 20%, #b9b8ff 45%, #7ee7f8 85%)",
-                WebkitBackgroundClip: "text",
-                backgroundClip: "text",
-                color: "transparent",
+                margin: 0,
+                fontSize: "clamp(1.05rem, 2vw, 1.65rem)",
+                lineHeight: 1,
+                letterSpacing: "-0.04em",
+                whiteSpace: "nowrap",
               }}
             >
-              {data.name.split(" ")[0]}
-            </span>
-            <span style={{ color: "#eef2ff" }}>
-              {" "}{data.name.split(" ").slice(1).join(" ")}
-            </span>
-          </h1>
+              <span
+                style={{
+                  background:
+                    "linear-gradient(135deg, #ffffff 20%, #b9b8ff 45%, #7ee7f8 85%)",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  color: "transparent",
+                }}
+              >
+                {data.name.split(" ")[0]}
+              </span>
+              <span style={{ color: "#eef2ff" }}>
+                {" "}{data.name.split(" ").slice(1).join(" ")}
+              </span>
+            </h1>
+            <p style={{
+              margin: 0,
+              fontSize: "clamp(0.62rem, 1vw, 0.75rem)",
+              fontWeight: 600,
+              letterSpacing: "0.04em",
+              color: "#F7901E",
+              whiteSpace: "nowrap",
+            }}>
+              Marketing &amp; Communications&nbsp;&nbsp;|&nbsp;&nbsp;Public Relations&nbsp;&nbsp;|&nbsp;&nbsp;Event Operations
+            </p>
+          </div>
         </div>
 
         {/* Contact icon pills */}
@@ -374,7 +510,7 @@ export default function Resume() {
           return (
             <button
               key={nav.id}
-              onClick={() => scrollTo(nav.id)}
+              onClick={() => { expandSection(nav.id); scrollTo(nav.id); }}
               style={{
                 appearance: "none",
                 padding: "7px 16px",
@@ -429,10 +565,98 @@ export default function Resume() {
             color: "#c8d0f0",
             fontWeight: 400,
           }}
-        >
-          {data.summary}
-        </p>
+          dangerouslySetInnerHTML={{ __html: data.summary }}
+        />
       </section>
+
+      {/* Key Numbers — full width, collapsible */}
+      {(() => {
+        const iconMap: Record<string, ReactElement> = {
+          h1: <TrendingUp size={15} />,
+          h2: <CalendarCheck size={15} />,
+          h3: <Target size={15} />,
+          h4: <BarChart2 size={15} />,
+          h5: <Users size={15} />,
+          h6: <Star size={15} />,
+          h7: <ClipboardList size={15} />,
+          h8: <Timer size={15} />,
+        };
+        return (
+          <div
+            ref={(el) => { sectionRefs.current["highlights"] = el; }}
+            id="highlights"
+            style={{
+              ...glass,
+              borderRadius: "20px",
+              marginTop: "12px",
+              overflow: "hidden",
+              scrollMarginTop: "12px",
+            }}
+          >
+            {/* Header row */}
+            <button
+              onClick={() => setHighlightsOpen((p) => !p)}
+              style={{
+                width: "100%",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "14px 20px",
+                color: "#a5b0e6",
+                fontFamily: "inherit",
+              }}
+            >
+              <span style={{ display: "flex", alignItems: "center", gap: "7px", fontSize: "0.78rem", textTransform: "uppercase", letterSpacing: "0.12em", fontWeight: 600 }}>
+                <Sparkles size={13} style={{ color: "#F7901E" }} />
+                Key Numbers
+              </span>
+              <ChevronDown
+                size={15}
+                style={{ transition: "transform 220ms ease", transform: highlightsOpen ? "rotate(180deg)" : "rotate(0deg)" }}
+              />
+            </button>
+
+            {/* Cards grid — animated */}
+            <div style={{ display: "grid", gridTemplateRows: highlightsOpen ? "1fr" : "0fr", transition: "grid-template-rows 250ms ease" }}>
+              <div style={{ overflow: "hidden" }}>
+                <div style={{ padding: "0 14px 14px", display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "8px" }}>
+                  {data.highlights.map((h) => (
+                    <div
+                      key={h.id}
+                      style={{
+                        background: "rgba(255,255,255,0.03)",
+                        border: "1px solid rgba(255,255,255,0.07)",
+                        borderRadius: "10px",
+                        padding: "10px 14px",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "14px",
+                      }}
+                    >
+                      {/* Stat + icon */}
+                      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "3px", flexShrink: 0 }}>
+                        <span style={{ color: "rgba(247,144,30,0.6)" }}>{iconMap[h.id]}</span>
+                        <span style={{ fontSize: "1.05rem", fontWeight: 800, color: "#F7901E", letterSpacing: "-0.02em", lineHeight: 1, whiteSpace: "nowrap" }}>
+                          {h.stat}
+                        </span>
+                      </div>
+                      {/* Divider */}
+                      <div style={{ width: "1px", alignSelf: "stretch", background: "rgba(255,255,255,0.08)", flexShrink: 0 }} />
+                      {/* Description */}
+                      <p style={{ margin: 0, fontSize: "0.72rem", color: "#9aa3c9", lineHeight: 1.5 }}>
+                        {h.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Body layout */}
       <div
@@ -457,7 +681,7 @@ export default function Resume() {
             gap: "22px",
           }}
         >
-          {/* Strengths */}
+          {/* Core Competencies */}
           <div>
             <h2
               style={{
@@ -468,10 +692,10 @@ export default function Resume() {
                 margin: "0 0 12px",
               }}
             >
-              Strengths
+              Core Competencies
             </h2>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "7px" }}>
-              {data.skills.map((skill, i) => (
+              {[...data.competencies.functional, ...data.competencies.soft].map((item, i) => (
                 <span
                   key={i}
                   style={{
@@ -485,7 +709,41 @@ export default function Resume() {
                     letterSpacing: "0.01em",
                   }}
                 >
-                  {skill}
+                  {item}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Tools & Platforms */}
+          <div>
+            <h2
+              style={{
+                fontSize: "0.85rem",
+                textTransform: "uppercase",
+                letterSpacing: "0.12em",
+                color: "#a5b0e6",
+                margin: "0 0 12px",
+              }}
+            >
+              Tools &amp; Platforms
+            </h2>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "7px" }}>
+              {data.tools.map((tool, i) => (
+                <span
+                  key={i}
+                  style={{
+                    padding: "5px 10px",
+                    borderRadius: "6px",
+                    background: "rgba(255,255,255,0.04)",
+                    border: "1px solid rgba(255,255,255,0.07)",
+                    color: "#9aa3c9",
+                    fontSize: "0.81rem",
+                    fontWeight: 400,
+                    letterSpacing: "0.01em",
+                  }}
+                >
+                  {tool}
                 </span>
               ))}
             </div>
@@ -511,9 +769,9 @@ export default function Resume() {
                   style={{
                     padding: "5px 10px",
                     borderRadius: "6px",
-                    background: "rgba(139,92,246,0.07)",
-                    border: "1px solid rgba(139,92,246,0.18)",
-                    color: "#b4a9e8",
+                    background: "rgba(255,255,255,0.04)",
+                    border: "1px solid rgba(255,255,255,0.07)",
+                    color: "#9aa3c9",
                     fontSize: "0.81rem",
                     fontWeight: 400,
                     letterSpacing: "0.01em",
@@ -532,163 +790,29 @@ export default function Resume() {
           <section
             ref={(el) => { sectionRefs.current["experience"] = el; }}
             id="experience"
-            style={{
-              ...glass,
-              borderRadius: "28px",
-              padding: "22px",
-              scrollMarginTop: "12px",
-            }}
+            style={{ ...glass, borderRadius: "28px", padding: "22px", scrollMarginTop: "12px" }}
           >
-            <h2
-              style={{
-                fontSize: "0.85rem",
-                textTransform: "uppercase",
-                letterSpacing: "0.12em",
-                color: "#a5b0e6",
-                margin: "0 0 16px",
-              }}
-            >
-              Experience
-            </h2>
-            <div
-              className="filter-row"
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: "8px",
-                marginBottom: "16px",
-              }}
-            >
-              {(["all", "marketing", "events", "ops"] as FilterType[]).map((f) => {
-                const isActive = activeFilter === f;
-                const label =
-                  f === "ops"
-                    ? "Operations"
-                    : f === "all"
-                      ? "All"
-                      : f.charAt(0).toUpperCase() + f.slice(1);
-                return (
-                  <button
-                    key={f}
-                    onClick={() => setActiveFilter(f)}
-                    style={{
-                      padding: "8px 16px",
-                      borderRadius: "10px",
-                      border: isActive
-                        ? "1px solid rgba(139,92,246,0.5)"
-                        : "1px solid rgba(255,255,255,0.1)",
-                      background: isActive
-                        ? "rgba(139,92,246,0.12)"
-                        : "rgba(255,255,255,0.04)",
-                      color: isActive ? "#c4b5fd" : "#9aa3c9",
-                      cursor: "pointer",
-                      fontWeight: isActive ? 700 : 500,
-                      fontSize: "0.87rem",
-                      fontFamily: "inherit",
-                      transition: "all 150ms ease",
-                      letterSpacing: "0.01em",
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!isActive) {
-                        (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.08)";
-                        (e.currentTarget as HTMLElement).style.color = "#eef2ff";
-                        (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.18)";
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!isActive) {
-                        (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.04)";
-                        (e.currentTarget as HTMLElement).style.color = "#9aa3c9";
-                        (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.1)";
-                      }
-                    }}
-                  >
-                    {label}
-                  </button>
-                );
-              })}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
+              <h2 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "#a5b0e6", margin: 0 }}>
+                Work Experience
+              </h2>
+              <button
+                onClick={() => smartToggle(expOpen, setExpOpen)}
+                title={allOpen(expOpen) ? "Collapse all" : "Expand all"}
+                style={{ background: "none", border: "none", cursor: "pointer", color: allOpen(expOpen) ? "#a78bfa" : "#6b7280", padding: "4px 24px 4px 4px", display: "flex", alignItems: "center", transition: "color 150ms ease" }}
+              >
+                {allOpen(expOpen) ? <ChevronsDownUp size={16} /> : <ChevronsUpDown size={16} />}
+              </button>
             </div>
             <div style={{ display: "grid", gap: "14px" }}>
-              {data.experience.map((exp, i) => {
-                const show = activeFilter === "all" || exp.category.includes(activeFilter);
-                if (!show) return null;
-                return (
-                  <CardSection
-                    key={`${exp.id}-${activeFilter}`}
-                    defaultOpen={activeFilter === "all" || i === 0}
-                    item={{ ...exp, org: exp.company }}
-                    showLocation
-                  />
-                );
-              })}
-            </div>
-          </section>
-
-          {/* Highlights */}
-          <section
-            ref={(el) => { sectionRefs.current["impact"] = el; }}
-            id="impact"
-            style={{
-              ...glass,
-              borderRadius: "28px",
-              padding: "22px",
-              scrollMarginTop: "12px",
-            }}
-          >
-            <h2
-              style={{
-                fontSize: "0.85rem",
-                textTransform: "uppercase",
-                letterSpacing: "0.12em",
-                color: "#a5b0e6",
-                margin: "0 0 16px",
-              }}
-            >
-              Selected Highlights
-            </h2>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
-                gap: "14px",
-              }}
-              className="highlights-grid"
-            >
-              {data.highlights.map((h) => (
-                <div
-                  key={h.id}
-                  style={{
-                    padding: "18px",
-                    borderRadius: "22px",
-                    background:
-                      "linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03))",
-                    border: "1px solid rgba(255,255,255,0.08)",
-                    minHeight: "140px",
-                  }}
-                >
-                  <strong
-                    style={{
-                      display: "block",
-                      fontSize: "1.6rem",
-                      letterSpacing: "-0.04em",
-                      marginBottom: "8px",
-                      color: "#eef2ff",
-                      fontWeight: 800,
-                    }}
-                  >
-                    {h.stat}
-                  </strong>
-                  <p
-                    style={{
-                      margin: 0,
-                      color: "#b8c0ea",
-                      lineHeight: 1.6,
-                      fontSize: "0.9rem",
-                    }}
-                  >
-                    {h.description}
-                  </p>
-                </div>
+              {data.experience.map((exp, i) => (
+                <CardSection
+                  key={exp.id}
+                  item={{ ...exp, org: exp.company }}
+                  showLocation
+                  open={expOpen[i]}
+                  onToggle={() => setExpOpen((prev) => prev.map((v, j) => j === i ? !v : v))}
+                />
               ))}
             </div>
           </section>
@@ -697,31 +821,28 @@ export default function Resume() {
           <section
             ref={(el) => { sectionRefs.current["leadership"] = el; }}
             id="leadership"
-            style={{
-              ...glass,
-              borderRadius: "28px",
-              padding: "22px",
-              scrollMarginTop: "12px",
-            }}
+            style={{ ...glass, borderRadius: "28px", padding: "22px", scrollMarginTop: "12px" }}
           >
-            <h2
-              style={{
-                fontSize: "0.85rem",
-                textTransform: "uppercase",
-                letterSpacing: "0.12em",
-                color: "#a5b0e6",
-                margin: "0 0 16px",
-              }}
-            >
-              Leadership & Engagement
-            </h2>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
+              <h2 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "#a5b0e6", margin: 0 }}>
+                Leadership &amp; Engagement
+              </h2>
+              <button
+                onClick={() => smartToggle(leadOpen, setLeadOpen)}
+                title={allOpen(leadOpen) ? "Collapse all" : "Expand all"}
+                style={{ background: "none", border: "none", cursor: "pointer", color: allOpen(leadOpen) ? "#a78bfa" : "#6b7280", padding: "4px 24px 4px 4px", display: "flex", alignItems: "center", transition: "color 150ms ease" }}
+              >
+                {allOpen(leadOpen) ? <ChevronsDownUp size={16} /> : <ChevronsUpDown size={16} />}
+              </button>
+            </div>
             <div style={{ display: "grid", gap: "14px" }}>
               {data.leadership.map((lead, i) => (
                 <CardSection
                   key={lead.id}
-                  defaultOpen={i === 0}
                   item={lead}
                   showLocation={false}
+                  open={leadOpen[i]}
+                  onToggle={() => setLeadOpen((prev) => prev.map((v, j) => j === i ? !v : v))}
                 />
               ))}
             </div>
@@ -738,119 +859,64 @@ export default function Resume() {
               scrollMarginTop: "12px",
             }}
           >
-            <h2
-              style={{
-                fontSize: "0.85rem",
-                textTransform: "uppercase",
-                letterSpacing: "0.12em",
-                color: "#a5b0e6",
-                margin: "0 0 16px",
-              }}
-            >
-              Education
-            </h2>
-
-            {/* Degree card */}
-            <div
-              style={{
-                padding: "20px 22px",
-                borderRadius: "18px",
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                marginBottom: "14px",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "flex-start",
-                  flexWrap: "wrap",
-                  gap: "8px",
-                  marginBottom: "6px",
-                }}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
+              <h2 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "#a5b0e6", margin: 0 }}>
+                Education &amp; Certifications
+              </h2>
+              <button
+                onClick={() => smartToggle(eduOpen, setEduOpen)}
+                title={allOpen(eduOpen) ? "Collapse all" : "Expand all"}
+                style={{ background: "none", border: "none", cursor: "pointer", color: allOpen(eduOpen) ? "#a78bfa" : "#6b7280", padding: "4px 24px 4px 4px", display: "flex", alignItems: "center", transition: "color 150ms ease" }}
               >
-                <h3
-                  style={{
-                    margin: 0,
-                    fontSize: "1.05rem",
-                    color: "#eef2ff",
-                    lineHeight: 1.4,
-                  }}
-                >
-                  {data.educationSchool}
-                </h3>
-                <span
-                  style={{
-                    fontSize: "0.78rem",
-                    color: "#9aa3c9",
-                    padding: "3px 10px",
-                    borderRadius: "6px",
-                    background: "rgba(255,255,255,0.05)",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  May 2026
-                </span>
-              </div>
-              <p
-                style={{
-                  margin: "0 0 8px",
-                  color: "#c4b5fd",
-                  fontSize: "0.9rem",
-                  fontWeight: 600,
-                }}
-              >
-                {data.educationDegree}
-              </p>
-              <p
-                style={{
-                  margin: 0,
-                  color: "#9aa3c9",
-                  fontSize: "0.84rem",
-                  lineHeight: 1.6,
-                }}
-              >
-                {data.educationMeta}
-              </p>
+                {allOpen(eduOpen) ? <ChevronsDownUp size={16} /> : <ChevronsUpDown size={16} />}
+              </button>
             </div>
 
-            {/* Additional — full width */}
-            <div
-              style={{
-                padding: "16px 18px",
-                borderRadius: "16px",
-                background: "rgba(255,255,255,0.03)",
-                border: "1px solid rgba(255,255,255,0.06)",
-              }}
-            >
-              <h3
-                style={{
-                  margin: "0 0 10px",
-                  fontSize: "1.05rem",
-                  color: "#eef2ff",
-                  lineHeight: 1.4,
-                }}
+            <div style={{ display: "grid", gap: "14px" }}>
+
+              <EduCard
+                title={data.educationSchool}
+                date="Graduating May 2026"
+                open={eduOpen[0]}
+                onToggle={() => setEduOpen((p) => p.map((v, j) => j === 0 ? !v : v))}
               >
-                Additional
-              </h3>
-              <ul
-                style={{
-                  margin: 0,
-                  paddingLeft: "18px",
-                  color: "#c8d0f0",
-                  lineHeight: 1.8,
-                  fontSize: "0.88rem",
-                }}
-              >
-                {data.additionalText
-                  .split(/\.\s+/)
-                  .map((s) => s.replace(/\.$/, "").trim())
-                  .filter(Boolean)
-                  .map((sentence, i) => (
-                    <li key={i}>{sentence}</li>
+                <div style={{ color: "#b8c0ea", fontSize: "0.93rem", marginBottom: "2px" }}>
+                  {data.educationDegree}
+                </div>
+                <div style={{ color: "#9aa3c9", fontSize: "0.84rem", lineHeight: 1.6, marginBottom: "14px" }}>
+                  {data.educationMeta}
+                </div>
+                <p style={{ margin: "0 0 8px", fontSize: "0.88rem", fontWeight: 700, color: "#eef2ff" }}>
+                  Honors Program
+                </p>
+                <ul style={{ margin: 0, paddingLeft: "18px", color: "#e7ebff", lineHeight: 1.7 }}>
+                  {data.honorsProgram.map((b, i) => (
+                    <li key={i} style={{ marginTop: "8px" }}>{b}</li>
                   ))}
-              </ul>
+                </ul>
+              </EduCard>
+
+              <EduCard
+                title="University of Cambridge (UK)"
+                date={data.cambridgeDate}
+                open={eduOpen[1]}
+                onToggle={() => setEduOpen((p) => p.map((v, j) => j === 1 ? !v : v))}
+              >
+                <p style={{ margin: 0, color: "#e7ebff", lineHeight: 1.7 }}>
+                  {data.cambridgeDescription}
+                </p>
+              </EduCard>
+
+              <EduCard
+                title="Certifications"
+                open={eduOpen[2]}
+                onToggle={() => setEduOpen((p) => p.map((v, j) => j === 2 ? !v : v))}
+              >
+                <p style={{ margin: 0, color: "#e7ebff", lineHeight: 1.7 }}>
+                  {data.certifications}
+                </p>
+              </EduCard>
+
             </div>
           </section>
         </main>
