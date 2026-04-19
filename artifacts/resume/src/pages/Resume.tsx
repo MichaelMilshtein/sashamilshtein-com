@@ -695,24 +695,51 @@ export default function Resume() {
             >
               Core Competencies
             </h2>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "7px" }}>
-              {[...data.competencies.functional, ...data.competencies.soft].map((item, i) => (
-                <span
-                  key={i}
-                  style={{
-                    padding: "5px 10px",
-                    borderRadius: "6px",
-                    background: "rgba(255,255,255,0.04)",
-                    border: "1px solid rgba(255,255,255,0.07)",
-                    color: "#9aa3c9",
-                    fontSize: "0.81rem",
-                    fontWeight: 400,
-                    letterSpacing: "0.01em",
-                  }}
-                >
-                  {item}
-                </span>
-              ))}
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+              <div>
+                <p style={{ margin: "0 0 6px", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#7b86b8", fontWeight: 600 }}>Functional</p>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "7px" }}>
+                  {data.competencies.functional.map((item, i) => (
+                    <span
+                      key={i}
+                      style={{
+                        padding: "5px 10px",
+                        borderRadius: "6px",
+                        background: "rgba(165,176,230,0.08)",
+                        border: "1px solid rgba(165,176,230,0.18)",
+                        color: "#9aa3c9",
+                        fontSize: "0.81rem",
+                        fontWeight: 400,
+                        letterSpacing: "0.01em",
+                      }}
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p style={{ margin: "0 0 6px", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#8fb8a8", fontWeight: 600 }}>Soft Skills</p>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "7px" }}>
+                  {data.competencies.soft.map((item, i) => (
+                    <span
+                      key={i}
+                      style={{
+                        padding: "5px 10px",
+                        borderRadius: "6px",
+                        background: "rgba(143,184,168,0.08)",
+                        border: "1px solid rgba(143,184,168,0.18)",
+                        color: "#96bfac",
+                        fontSize: "0.81rem",
+                        fontWeight: 400,
+                        letterSpacing: "0.01em",
+                      }}
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 
