@@ -361,7 +361,8 @@ export default function Resume() {
         position: "relative",
         zIndex: 1,
         width: "min(calc(100% - 32px), 1200px)",
-        margin: "16px auto 60px",
+        margin: "16px auto 0",
+        paddingBottom: "50vh",
         fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
       }}
     >
