@@ -31,8 +31,11 @@ See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and pa
 - **Artifact**: `artifacts/resume` — React + Vite SPA
 - **Live URL**: https://sashamilshtein.com
 - **Hosting**: Hostinger shared hosting
-- **Deploy**: GitHub Actions → rsync over SSH (port 65002)
+- **Deploy**: `./deploy.sh` — builds locally and uploads via FTP directly (no GitHub Actions needed)
 - **Web root on server**: `/home/u763333732/domains/sashamilshtein.com/public_html`
-- **Trigger**: any push to `main` branch auto-deploys
-- **LocalStorage key**: `sasha_resume_data_v1` (users must click "Reset saved data" to pick up file-based content changes)
-- **Git remote**: `git push github main` triggers deploy (remote "github" uses GITHUB_PAT)
+- **FTP credentials**: stored as Replit secrets `FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD`
+- **Git remote**: `github` remote (uses `GITHUB_PAT`) — used for code storage only, not deployment
+
+### Server pages (do NOT delete — managed outside this repo)
+- `/visa/` — visa invitation page (pulled into `static-pages/visa/`, deployed by `deploy.sh`)
+- `/greece2026/` — manually created on server by Misha, not managed in this repo
