@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>⛵️ Greek Isles Sailing · Addy · Sasha · Alyona · Misha</title>
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Leaflet (maps) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f5f3ef 0%, #e9f0f5 100%);
+            font-family: 'Inter', sans-serif;
+            padding: 30px 20px;
+            display: flex;
+            justify-content: center;
+            color: #1a2e3b;
+        }
+
+        .itinerary-card {
+            max-width: 1300px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 48px;
+            box-shadow: 0 25px 50px -8px rgba(2, 30, 45, 0.25), 0 8px 20px rgba(0, 20, 30, 0.1);
+            padding: 32px 28px;
+            border: 1px solid rgba(210, 230, 245, 0.5);
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            font-size: 3.4rem;
+            letter-spacing: -0.5px;
+            color: #0b3b4f;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #9ec5d9;
+            padding-bottom: 18px;
+            margin-bottom: 28px;
+        }
+
+        h1 i {
+            color: #2a7f6e;
+            font-size: 2.8rem;
+            background: #dff3f0;
+            padding: 12px;
+            border-radius: 60px;
+            box-shadow: 0 6px 10px rgba(34, 101, 93, 0.08);
+        }
+
+        .grad-cap-group {
+            display: flex;
+            gap: 5px;
+            margin-left: auto;
+            background: #f4e9d8;
+            padding: 10px 18px;
+            border-radius: 60px;
+            font-size: 2rem;
+            color: #1e5f6b;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .trip-meta {
+            display: flex;
+            gap: 28px;
+            flex-wrap: wrap;
+            margin-bottom: 32px;
+            background: #e7f1f5b3;
+            padding: 14px 24px;
+            border-radius: 80px;
+            backdrop-filter: blur(4px);
+            font-weight: 500;
+            color: #144d5e;
+        }
+
+        .trip-meta i {
+            margin-right: 8px;
+            color: #2a7f6e;
+        }
+
+        .day-block {
+            margin-bottom: 40px;
+            border-left: 5px solid #3fa2b0;
+            padding-left: 24px;
+            transition: all 0.1s ease;
+        }
+
+        .day-header {
+            display: flex;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 12px 25px;
+            margin-bottom: 16px;
+        }
+
+        .day-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 700;
+            font-size: 2.1rem;
+            color: #1b5f72;
+            letter-spacing: -0.02em;
+        }
+
+        .day-date {
+            font-size: 1.1rem;
+            font-weight: 400;
+            background: #bee0dd;
+            padding: 4px 16px;
+            border-radius: 40px;
+            color: #053140;
+        }
+
+        .leg-card {
+            background: white;
+            border-radius: 28px;
+            padding: 20px 25px;
+            margin-bottom: 18px;
+            box-shadow: 0 8px 16px -6px rgba(21, 70, 80, 0.12);
+            border: 1px solid #cbe3e9;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .leg-icon {
+            font-size: 2.2rem;
+            min-width: 60px;
+            text-align: center;
+            color: #1c7c7c;
+        }
+
+        .leg-details {
+            flex: 3 1 260px;
+        }
+
+        .leg-route {
+            font-size: 1.5rem;
+            font-weight: 600;
+            font-family: 'Cormorant Garamond', serif;
+            color: #093e4b;
+            line-height: 1.2;
+        }
+
+        .leg-airline {
+            font-weight: 500;
+            color: #2a5f6b;
+            margin: 6px 0 4px;
+        }
+
+        .leg-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px 30px;
+            margin-top: 8px;
+            font-size: 0.95rem;
+            color: #2b5a66;
+        }
+
+        .leg-meta i {
+            width: 20px;
+            color: #379683;
+        }
+
+        .booking-ref {
+            font-family: monospace;
+            background: #e2f0f2;
+            padding: 3px 10px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            letter-spacing: 0.3px;
+        }
+
+        .map-wrapper {
+            position: relative;
+            flex: 1 1 240px;
+            min-width: 220px;
+        }
+
+        .map-container {
+            width: 100%;
+            height: 140px;
+            border-radius: 20px;
+            border: 2px solid #bcd4df;
+            background: #d9e9f0;
+            z-index: 1;
+        }
+
+        .map-expand-icon {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(4px);
+            border-radius: 30px;
+            padding: 5px 10px;
+            font-size: 13px;
+            color: #0f4b5a;
+            border: 1px solid #b1cfdb;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            text-decoration: none;
+            z-index: 10;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .map-expand-icon:hover {
+            background: #ffffff;
+            border-color: #2a7f6e;
+            color: #06333f;
+        }
+
+        .sailing-highlight {
+            background: linear-gradient(105deg, #e4f3f8 0%, #d2ebf0 100%);
+            border: 2px dashed #2a9d8f;
+            border-radius: 36px;
+            padding: 24px 28px;
+            margin: 25px 0 18px;
+        }
+
+        .sailing-highlight .leg-icon {
+            color: #1e7e6c;
+            font-size: 2.8rem;
+        }
+
+        .sailing-highlight .leg-route {
+            font-size: 2rem;
+            color: #05485c;
+        }
+
+        .host-note {
+            display: inline-block;
+            background: #fef6e3;
+            border-radius: 30px;
+            padding: 6px 18px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            border: 1px solid #e3cbaa;
+        }
+
+        .stay-badge {
+            background: #e0f0ec;
+            border-radius: 24px;
+            padding: 2px 15px;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .footer-note {
+            margin-top: 45px;
+            text-align: right;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 500;
+            color: #1b6070;
+            border-top: 2px dashed #9ec5d9;
+            padding-top: 25px;
+            font-style: italic;
+        }
+
+        .text-muted-italic {
+            color: #43656e;
+            font-style: italic;
+        }
+
+        .divider-wave {
+            margin: 10px 0 5px;
+            color: #74b9c2;
+            font-size: 1.2rem;
+        }
+
+        .link-style {
+            color: #1a5f6b;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            text-decoration-thickness: 1px;
+            text-decoration-color: #6da5b5;
+            font-weight: 500;
+        }
+        .link-style:hover {
+            color: #0a3a44;
+            text-decoration-color: #1e7e6c;
+        }
+
+        .apartment-link-text {
+            color: #0f4b5a;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        /* responsive */
+        @media (max-width: 650px) {
+            body { padding: 10px 8px; }
+            .itinerary-card { padding: 20px 14px; }
+            h1 { font-size: 2.4rem; }
+            .leg-card { flex-direction: column; }
+            .map-container { width: 100%; height: 150px; }
+            .grad-cap-group { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+<div class="itinerary-card">
+    
+    <h1>
+        <i class="fas fa-sailboat"></i> 
+        Greek Isles Sailing Odyssey
+        <span class="grad-cap-group">
+            <i class="fas fa-graduation-cap"></i><i class="fas fa-graduation-cap"></i>
+        </span>
+    </h1>
+    
+    <div class="trip-meta">
+        <span><i class="fas fa-calendar-alt"></i> May 27 – June 7, 2026</span>
+        <span><i class="fas fa-water"></i> Addy · Sasha · Alyona · Misha</span>
+        <span><i class="fas fa-umbrella-beach"></i> Ionian · Aegean spirit</span>
+    </div>
+
+    <!-- DAY: May 27 (legs) -->
+    <div class="day-block">
+        <div class="day-header">
+            <span class="day-title"><i class="fas fa-plane-departure" style="margin-right: 10px;"></i>Departure · San Francisco → Athens</span>
+            <span class="day-date">May 27, 2026 · overnight</span>
+        </div>
+        
+        <!-- LEG 1 SFO-CPH -->
+        <div class="leg-card">
+            <div class="leg-icon"><i class="fas fa-plane"></i></div>
+            <div class="leg-details">
+                <div class="leg-route">SFO ✈︎ CPH</div>
+                <div class="leg-airline"><i class="fas fa-tag"></i> SAS · flight 16:45 · 10h</div>
+                <div class="leg-meta">
+                    <span><i class="fas fa-clock"></i> Arrive May 28, 12:00 · layover 2h20m</span>
+                    <span class="booking-ref"><i class="fas fa-hashtag"></i> CR7WNH</span>
+                </div>
+                <div style="margin-top: 8px;"><i class="fas fa-link"></i> <a href="https://www.flysas.com/" target="_blank" class="link-style">flysas.com</a> / SAS app · booking CR7WNH</div>
+            </div>
+            <div class="map-wrapper">
+                <div id="mapSFOCPH" class="map-container"></div>
+                <a href="#" class="map-expand-icon" data-map="SFOCPH" title="Open full map"><i class="fas fa-external-link-alt"></i> expand</a>
+            </div>
+        </div>
+        
+        <!-- LEG 2 CPH-ATH -->
+        <div class="leg-card">
+            <div class="leg-icon"><i class="fas fa-plane-arrival"></i></div>
+            <div class="leg-details">
+                <div class="leg-route">CPH ✈︎ ATH</div>
+                <div class="leg-airline"><i class="fas fa-tag"></i> SAS · 14:20 · 3h20m</div>
+                <div class="leg-meta">
+                    <span><i class="fas fa-clock"></i> May 28 · Arrive Athens 18:40</span>
+                    <span class="booking-ref"><i class="fas fa-hashtag"></i> Y2P4GZ</span>
+                </div>
+                <div><i class="fas fa-link"></i> <a href="https://www.flysas.com/" target="_blank" class="link-style">flysas.com</a> · booking Y2P4GZ</div>
+            </div>
+            <div class="map-wrapper">
+                <div id="mapCPHATH" class="map-container"></div>
+                <a href="#" class="map-expand-icon" data-map="CPHATH" title="Open full map"><i class="fas fa-external-link-alt"></i> expand</a>
+            </div>
+        </div>
+        <div class="divider-wave"><i class="fas fa-chevron-down"></i> evening arrival · Athens airport</div>
+    </div>
+
+    <!-- MAY 28 · transfer + Lefkada night -->
+    <div class="day-block">
+        <div class="day-header">
+            <span class="day-title"><i class="fas fa-car-side"></i> Athens → Lefkada & Overnight</span>
+            <span class="day-date">May 28, 2026</span>
+        </div>
+        <div class="leg-card">
+            <div class="leg-icon"><i class="fas fa-shuttle-van"></i></div>
+            <div class="leg-details">
+                <div class="leg-route">Athens Airport · transfer to Lefkada</div>
+                <div class="leg-airline"><i class="fas fa-clock"></i> Pickup 19:30 (May 28) · ~4+ hr drive</div>
+                <div class="leg-meta">
+                    <span><i class="fas fa-hotel"></i> Allure Retreat · Lefkada</span>
+                    <span><i class="fas fa-map-marked-alt"></i> <a href="https://allureretreat.com/" target="_blank" class="link-style">allureretreat.com</a></span>
+                </div>
+                <div style="margin-top: 8px;"><i class="fas fa-bed"></i> Night in Lefkada — relax before sailing</div>
+            </div>
+            <div class="map-wrapper">
+                <div id="mapAthensLefkada" class="map-container"></div>
+                <a href="#" class="map-expand-icon" data-map="AthensLefkada" title="Open full map"><i class="fas fa-external-link-alt"></i> expand</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAY 29 – JUNE 5 : SAILING MAIN EVENT -->
+    <div class="day-block">
+        <div class="day-header">
+            <span class="day-title"><i class="fas fa-ship"></i> Main event · Sailing the Greek Islands</span>
+            <span class="day-date">May 29 – June 5, 2026</span>
+        </div>
+        <div class="sailing-highlight">
+            <div style="display: flex; align-items: center; gap: 18px; flex-wrap: wrap;">
+                <div class="leg-icon"><i class="fas fa-sailboat"></i><i class="fas fa-fish"></i></div>
+                <div>
+                    <div class="leg-route">⛵️🐬🐳🧜‍♀️ Ionian & Aegean sailing · @anemos_sailing</div>
+                    <div class="host-note"><i class="fab fa-facebook"></i> <a href="https://www.facebook.com/elena.len.376043" target="_blank" class="link-style">Elena Len · facebook.com/elena.len.376043</a></div>
+                    <div style="margin-top: 14px; background: #ffffffb0; border-radius: 20px; padding: 10px 16px;">
+                        <i class="fas fa-water" style="margin-right: 8px;"></i> 
+                        <strong>Sailing adventure:</strong> 7 nights exploring hidden coves, turquoise waters, island hopping.
+                    </div>
+                </div>
+            </div>
+            <!-- small map for sailing region (Lefkada base only) -->
+            <div class="map-wrapper" style="margin-top:20px;">
+                <div id="mapSailingRegion" style="height:160px; width:100%; border-radius:24px; border:1px solid #6da5b5;"></div>
+                <a href="#" class="map-expand-icon" data-map="SailingRegion" style="bottom:12px; right:12px;" title="Open full map"><i class="fas fa-external-link-alt"></i> expand</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- JUNE 5 · Night Lefkada after sailing -->
+    <div class="day-block">
+        <div class="day-header">
+            <span class="day-title"><i class="fas fa-anchor"></i> Return to Lefkada · Overnight</span>
+            <span class="day-date">June 5, 2026</span>
+        </div>
+        <div class="leg-card">
+            <div class="leg-icon"><i class="fas fa-moon"></i></div>
+            <div class="leg-details">
+                <div class="leg-route">Allure Retreat · Lefkada</div>
+                <div class="leg-meta">
+                    <span><i class="fas fa-calendar-check"></i> post‑sailing night</span>
+                    <span><i class="fas fa-map-pin"></i> <a href="https://allureretreat.com/" target="_blank" class="link-style">allureretreat.com</a></span>
+                </div>
+            </div>
+            <div class="map-wrapper">
+                <div id="mapLefkadaNight" class="map-container"></div>
+                <a href="#" class="map-expand-icon" data-map="LefkadaNight" title="Open full map"><i class="fas fa-external-link-alt"></i> expand</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- JUNE 6 · Transfer Lefkada→Athens & night Spata -->
+    <div class="day-block">
+        <div class="day-header">
+            <span class="day-title"><i class="fas fa-road"></i> Lefkada → Athens (Spata)</span>
+            <span class="day-date">June 6, 2026</span>
+        </div>
+        <div class="leg-card">
+            <div class="leg-icon"><i class="fas fa-car"></i></div>
+            <div class="leg-details">
+                <div class="leg-route">Transfer: Lefkada → Athens / Spata</div>
+                <div class="leg-airline"><i class="fas fa-clock"></i> Pickup 11:00 · ~4+ hr drive</div>
+                <div class="leg-meta">
+                    <span><i class="fas fa-building"></i> <a href="https://www.airstay.gr/elise-apartment/" target="_blank" class="link-style">Elise Apartment Airport by Airstay</a></span>
+                    <span><i class="fas fa-location-dot"></i> 55 Agias Varvaras, Spata 19004</span>
+                </div>
+                <div><i class="fas fa-shuttle-van"></i> Need early morning shuttle to ATH</div>
+            </div>
+            <div class="map-wrapper">
+                <div id="mapLefkadaSpata" class="map-container"></div>
+                <a href="#" class="map-expand-icon" data-map="LefkadaSpata" title="Open full map"><i class="fas fa-external-link-alt"></i> expand</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- JUNE 7 · Return flights ATH-CPH-SFO -->
+    <div class="day-block">
+        <div class="day-header">
+            <span class="day-title"><i class="fas fa-plane-arrival"></i> Return · Athens → San Francisco</span>
+            <span class="day-date">June 7, 2026</span>
+        </div>
+        
+        <!-- LEG ATH-CPH -->
+        <div class="leg-card">
+            <div class="leg-icon"><i class="fas fa-plane"></i></div>
+            <div class="leg-details">
+                <div class="leg-route">ATH ✈︎ CPH</div>
+                <div class="leg-airline"><i class="fas fa-tag"></i> Aegean · 07:55 · 3h20m</div>
+                <div class="leg-meta">
+                    <span><i class="fas fa-clock"></i> arrive CPH 10:05</span>
+                    <span class="booking-ref"><i class="fas fa-hashtag"></i> Y2PHU2 (Aegean)</span>
+                </div>
+                <div><i class="fas fa-link"></i> <a href="https://en.aegeanair.com/" target="_blank" class="link-style">en.aegeanair.com</a> · booking Y2PHU2</div>
+            </div>
+            <div class="map-wrapper">
+                <div id="mapATHCPH" class="map-container"></div>
+                <a href="#" class="map-expand-icon" data-map="ATHCPH" title="Open full map"><i class="fas fa-external-link-alt"></i> expand</a>
+            </div>
+        </div>
+        
+        <!-- LEG CPH-SFO -->
+        <div class="leg-card">
+            <div class="leg-icon"><i class="fas fa-plane"></i></div>
+            <div class="leg-details">
+                <div class="leg-route">CPH ✈︎ SFO</div>
+                <div class="leg-airline"><i class="fas fa-tag"></i> SAS · 12:45 · 11h</div>
+                <div class="leg-meta">
+                    <span><i class="fas fa-clock"></i> arrive SFO 14:40</span>
+                    <span class="booking-ref"><i class="fas fa-hashtag"></i> CR7WNH (SAS)</span>
+                </div>
+                <div><i class="fas fa-link"></i> <a href="https://www.flysas.com/" target="_blank" class="link-style">flysas.com</a> · booking CR7WNH</div>
+            </div>
+            <div class="map-wrapper">
+                <div id="mapCPHSFO" class="map-container"></div>
+                <a href="#" class="map-expand-icon" data-map="CPHSFO" title="Open full map"><i class="fas fa-external-link-alt"></i> expand</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer-note">
+        <i class="fas fa-heart" style="color: #bc6c25;"></i> I MISS Y'ALL ALREADY! 
+        <span style="font-size: 1.2rem; display: block; font-family: 'Inter'; font-style: normal; margin-top: 8px;">⛵️🐬🐳🧜‍♀️  fair winds & following seas  🧜‍♀️🐳🐬⛵️</span>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // Store map instances and bounds for expand functionality
+        const mapInstances = {};
+        const mapBounds = {};
+
+        // Initialize all Leaflet maps with custom styles and markers
+        function createMap(id, coords, zoom = 5, markerPlaces = []) {
+            const mapEl = document.getElementById(id);
+            if (!mapEl) return null;
+            
+            const map = L.map(id, { 
+                attributionControl: false,
+                zoomControl: true,
+                dragging: true,
+                scrollWheelZoom: false
+            }).setView(coords, zoom);
+            
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                subdomains: 'abcd',
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>, CartoDB'
+            }).addTo(map);
+            
+            markerPlaces.forEach((p, idx) => {
+                const iconHtml = p.iconType === 'airport' ? 'fa-plane' : (p.iconType === 'hotel' ? 'fa-bed' : (p.iconType === 'sail' ? 'fa-sailboat' : 'fa-map-marker-alt'));
+                const markerColor = p.iconColor || '#1e6f5c';
+                
+                const customIcon = L.divIcon({
+                    html: `<div style="background:${markerColor}; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid white; box-shadow:0 4px 8px rgba(0,20,30,0.3);"><i class="fas ${iconHtml}" style="color:white; font-size:14px;"></i></div>`,
+                    className: 'custom-marker',
+                    iconSize: [28, 28],
+                    iconAnchor: [14, 28],
+                    popupAnchor: [0, -20]
+                });
+                
+                const marker = L.marker([p.lat, p.lng], { icon: customIcon }).addTo(map);
+                if (p.title) marker.bindPopup(`<b>${p.title}</b>`);
+                if (idx === 0 && markerPlaces.length === 2) {
+                    const latlngs = markerPlaces.map(m => [m.lat, m.lng]);
+                    L.polyline(latlngs, { color: '#2a7f6e', weight: 3, opacity: 0.7, dashArray: '6, 8' }).addTo(map);
+                }
+            });
+            
+            let bounds;
+            if (markerPlaces.length > 1) {
+                bounds = L.latLngBounds(markerPlaces.map(p => [p.lat, p.lng]));
+                map.fitBounds(bounds, { padding: [20, 20] });
+            } else if (markerPlaces.length === 1) {
+                bounds = L.latLngBounds([[markerPlaces[0].lat, markerPlaces[0].lng]]);
+            } else {
+                bounds = L.latLngBounds([[coords[0]-5, coords[1]-5], [coords[0]+5, coords[1]+5]]);
+            }
+            
+            mapBounds[id] = bounds;
+            mapInstances[id] = map;
+            return map;
+        }
+
+        // ---- Map definitions ----
+        createMap('mapSFOCPH', [55.0, -10.0], 3, [
+            { lat: 37.6213, lng: -122.3790, title: 'SFO · San Francisco', iconColor: '#1e6f5c', iconType: 'airport' },
+            { lat: 55.6181, lng: 12.6560, title: 'CPH · Copenhagen', iconColor: '#1e6f5c', iconType: 'airport' }
+        ]);
+        
+        createMap('mapCPHATH', [48.0, 18.0], 4, [
+            { lat: 55.6181, lng: 12.6560, title: 'CPH', iconColor: '#1e6f5c', iconType: 'airport' },
+            { lat: 37.9364, lng: 23.9445, title: 'ATH · Athens', iconColor: '#1e6f5c', iconType: 'airport' }
+        ]);
+        
+        createMap('mapAthensLefkada', [38.2, 22.9], 7, [
+            { lat: 37.9364, lng: 23.9445, title: 'Athens Airport', iconColor: '#b0895c', iconType: 'car' },
+            { lat: 38.8336, lng: 20.7069, title: 'Lefkada · Allure Retreat', iconColor: '#2a7f6e', iconType: 'hotel' }
+        ]);
+        
+        // Sailing region: ONLY Lefkada base marker
+        createMap('mapSailingRegion', [38.6, 20.7], 8, [
+            { lat: 38.8336, lng: 20.7069, title: '⛵ Lefkada sailing base', iconColor: '#0b5e5e', iconType: 'sail' }
+        ]);
+        
+        createMap('mapLefkadaNight', [38.8336, 20.7069], 10, [
+            { lat: 38.8336, lng: 20.7069, title: 'Allure Retreat Lefkada', iconColor: '#1e6f5c', iconType: 'hotel' }
+        ]);
+        
+        createMap('mapLefkadaSpata', [38.4, 22.5], 7, [
+            { lat: 38.8336, lng: 20.7069, title: 'Lefkada', iconColor: '#b0895c', iconType: 'car' },
+            { lat: 37.9700, lng: 23.9300, title: 'Spata · Elise Apartment', iconColor: '#1e6f5c', iconType: 'hotel' }
+        ]);
+        
+        createMap('mapATHCPH', [48.0, 18.0], 4, [
+            { lat: 37.9364, lng: 23.9445, title: 'ATH', iconColor: '#1e6f5c', iconType: 'airport' },
+            { lat: 55.6181, lng: 12.6560, title: 'CPH', iconColor: '#1e6f5c', iconType: 'airport' }
+        ]);
+        
+        createMap('mapCPHSFO', [55.0, -20.0], 3, [
+            { lat: 55.6181, lng: 12.6560, title: 'CPH', iconColor: '#1e6f5c', iconType: 'airport' },
+            { lat: 37.6213, lng: -122.3790, title: 'SFO', iconColor: '#1e6f5c', iconType: 'airport' }
+        ]);
+
+        // ---- Expand map functionality ----
+        document.querySelectorAll('.map-expand-icon').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const mapId = this.getAttribute('data-map');
+                const fullMapId = `map${mapId}`;
+                const map = mapInstances[fullMapId];
+                const bounds = mapBounds[fullMapId];
+                
+                if (!map || !bounds) return;
+
+                // Create a new window with a fullscreen map
+                const win = window.open('', '_blank');
+                const doc = win.document;
+                
+                doc.write(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>Map · Greek Sailing</title>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+                        <style>
+                            body { margin:0; padding:0; }
+                            #fullmap { width:100vw; height:100vh; background:#d4e7ed; }
+                            .leaflet-control-attribution { font-size:10px; }
+                        </style>
+                    </head>
+                    <body>
+                        <div id="fullmap"></div>
+                        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"><\/script>
+                        <script>
+                            const fullMap = L.map('fullmap', { zoomControl: true });
+                            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>, CartoDB'
+                            }).addTo(fullMap);
+                            
+                            const bounds = ${JSON.stringify(bounds)};
+                            fullMap.fitBounds(bounds);
+                            
+                            // Recreate markers from parent (simplified)
+                            const parentMap = window.opener.mapInstances['${fullMapId}'];
+                            if (parentMap) {
+                                parentMap.eachLayer(layer => {
+                                    if (layer instanceof L.Marker) {
+                                        const latlng = layer.getLatLng();
+                                        const popup = layer.getPopup();
+                                        const newMarker = L.marker(latlng).addTo(fullMap);
+                                        if (popup) newMarker.bindPopup(popup.getContent());
+                                    } else if (layer instanceof L.Polyline) {
+                                        L.polyline(layer.getLatLngs(), { color: '#2a7f6e', weight:4 }).addTo(fullMap);
+                                    }
+                                });
+                            }
+                        <\/script>
+                    </body>
+                    </html>
+                `);
+                doc.close();
+            });
+        });
+
+        // Make mapInstances globally accessible for expand windows
+        window.mapInstances = mapInstances;
+        
+        setTimeout(() => {
+            Object.keys(mapInstances).forEach(id => {
+                mapInstances[id]?.invalidateSize();
+            });
+        }, 150);
+    })();
+</script>
+<style>
+    .leaflet-container { background: #d4e7ed; font-family: 'Inter', sans-serif; }
+    .custom-marker { border: none; background: transparent; }
+    .leaflet-popup-content { font-family: 'Inter'; font-weight: 500; }
+    .leaflet-control-zoom { border: none; box-shadow: 0 4px 8px rgba(0,20,20,0.1); }
+    .leaflet-control-zoom a { color: #1b5f72; }
+</style>
+</body>
+</html>
