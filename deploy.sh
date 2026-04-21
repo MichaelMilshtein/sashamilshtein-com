@@ -22,18 +22,20 @@ echo "=== Deploying to sashamilshtein.com ==="
     remote="${filepath#$DIST/}"
     echo "put \"$filepath\" -o \"$remote\""
   done
-  # Deploy static pages (visa, etc.)
+  # Deploy static pages (visa, greece2026, etc.)
+  # Already in public_html — just cd into each subfolder directly
   for page_dir in static-pages/*/; do
     page=$(basename "$page_dir")
     [ -d "$page_dir" ] && [ -n "$(ls -A "$page_dir")" ] || continue
-    echo "cd .."
-    echo "cd domains/sashamilshtein.com/public_html/$page"
+    echo "mkdir -p $page"
+    echo "cd $page"
     find "$page_dir" -type f | sort | while read filepath; do
       remote="${filepath#$page_dir}"
       dir=$(dirname "$remote")
       [ "$dir" != "." ] && echo "mkdir -p $dir"
       echo "put \"$filepath\" -o \"$remote\""
     done
+    echo "cd .."
   done
   echo "bye"
 } | lftp
