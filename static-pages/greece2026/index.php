@@ -690,7 +690,7 @@ $isPhpUnlocked = isset($_SESSION['greek_sailing_auth']) && $_SESSION['greek_sail
                             <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;">
                                 <div class="leg-icon"><i class="fas fa-sailboat"></i><i class="fas fa-fish"></i></div>
                                 <div>
-                                    <div class="leg-route">⛵️🐬🐳🧜‍♀️ Ionian & Aegean sailing</div>
+                                    <div class="leg-route">⛵️🐬 Ionian & Aegean sailing 🐳🧜‍♀️</div>
                                     <div class="host-note"><i class="fab fa-facebook"></i> <a href="https://www.facebook.com/elena.len.376043" target="_blank" class="link-style">Elena Len</a></div>
                                     <div style="margin-top:14px;background:#ffffffb0;border-radius:20px;padding:10px 16px;"><i class="fas fa-water"></i> <strong>Sailing adventure:</strong> 7 nights exploring hidden coves, turquoise waters.</div>
                                     <div style="margin-top:10px;background:#ffffffb0;border-radius:20px;padding:10px 16px;"><i class="fas fa-scroll"></i> <a href="https://docs.google.com/document/d/1dD4jpXbIiCNq_qGWm0krpAozjTMcnwZQNeriYo-d47o/edit?usp=sharing" target="_blank" class="link-style">Rules of Conduct on the Yacht</a></div>
