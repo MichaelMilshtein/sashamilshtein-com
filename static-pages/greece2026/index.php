@@ -562,12 +562,123 @@ $isPhpUnlocked = isset($_SESSION['greek_sailing_auth']) && $_SESSION['greek_sail
             .logout-btn { bottom: 82px; left: 12px; }
             .day-block { scroll-margin-top: 12px; }
         }
+        /* Rules of Conduct modal */
+        #rulesModal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(5, 54, 80, 0.55);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        #rulesModal.open { display: flex; }
+        #rulesModalBox {
+            background: var(--glass-bg-strong);
+            border-radius: 24px;
+            box-shadow: var(--shadow-elegant);
+            width: 100%;
+            max-width: 780px;
+            max-height: 88vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        #rulesModalHeader {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(7,155,194,0.15);
+            flex-shrink: 0;
+        }
+        #rulesModalHeader span {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        #rulesModalActions { display: flex; gap: 10px; align-items: center; }
+        #rulesModalActions a {
+            font-size: 0.8rem;
+            color: var(--text-soft);
+            text-decoration: none;
+            padding: 5px 12px;
+            border: 1px solid rgba(7,155,194,0.3);
+            border-radius: 20px;
+            white-space: nowrap;
+            transition: all 150ms ease;
+        }
+        #rulesModalActions a:hover { background: rgba(7,155,194,0.1); color: var(--ocean-deep); }
+        #rulesModalClose {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-soft);
+            font-size: 1.3rem;
+            line-height: 1;
+            padding: 4px 8px;
+            border-radius: 8px;
+            transition: background 150ms;
+        }
+        #rulesModalClose:hover { background: rgba(7,155,194,0.12); }
+        #rulesModalFrame {
+            flex: 1;
+            border: none;
+            min-height: 0;
+        }
     </style>
 </head>
 <body>
 <div id="app"></div>
 
+<!-- Rules of Conduct modal (desktop only — mobile opens new tab) -->
+<div id="rulesModal" role="dialog" aria-modal="true" aria-label="Rules of Conduct on the Yacht" onclick="if(event.target===this)closeRulesModal()">
+    <div id="rulesModalBox">
+        <div id="rulesModalHeader">
+            <span><i class="fas fa-scroll"></i> Rules of Conduct on the Yacht</span>
+            <div id="rulesModalActions">
+                <a href="https://docs.google.com/document/d/1dD4jpXbIiCNq_qGWm0krpAozjTMcnwZQNeriYo-d47o/edit?usp=sharing" target="_blank"><i class="fas fa-external-link-alt"></i> Open in new tab</a>
+                <button id="rulesModalClose" onclick="closeRulesModal()" aria-label="Close">&times;</button>
+            </div>
+        </div>
+        <iframe id="rulesModalFrame"
+            src=""
+            data-src="https://docs.google.com/document/d/1dD4jpXbIiCNq_qGWm0krpAozjTMcnwZQNeriYo-d47o/preview"
+            allow="autoplay"
+            title="Rules of Conduct on the Yacht">
+        </iframe>
+    </div>
+</div>
+
 <script>
+    const RULES_DOC_URL = 'https://docs.google.com/document/d/1dD4jpXbIiCNq_qGWm0krpAozjTMcnwZQNeriYo-d47o/edit?usp=sharing';
+    const RULES_EMBED_URL = 'https://docs.google.com/document/d/1dD4jpXbIiCNq_qGWm0krpAozjTMcnwZQNeriYo-d47o/preview';
+
+    function openRulesModal(e) {
+        const isMobile = window.innerWidth < 768 || ('ontouchstart' in window && window.innerWidth < 1024);
+        if (isMobile) return; // let default href/_blank take over on mobile
+        e.preventDefault();
+        const modal = document.getElementById('rulesModal');
+        const frame = document.getElementById('rulesModalFrame');
+        if (!frame.src || frame.src === window.location.href) {
+            frame.src = frame.dataset.src; // lazy-load iframe only when opened
+        }
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeRulesModal() {
+        document.getElementById('rulesModal').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeRulesModal();
+    });
+
     (function() {
         const app = document.getElementById('app');
         const isUnlocked = <?php echo $isPhpUnlocked ? 'true' : 'false'; ?>;
@@ -676,7 +787,6 @@ $isPhpUnlocked = isset($_SESSION['greek_sailing_auth']) && $_SESSION['greek_sail
                             <div class="leg-details">
                                 <div class="leg-route">Nidri · Lefkada — board the yacht</div>
                                 <div class="leg-airline"><i class="fas fa-clock"></i> around noon</div>
-                                <div class="leg-meta"><span><i class="fas fa-map-marked-alt"></i> <a href="https://www.google.com/maps?q=38.8367500,20.7120833&entry=gps&lucs=,94259551,94284463,47071704,94218641,94286869&g_ep=CAISDTYuMTM4LjIuOTAyNDAYACCenQoqLSw5NDI1OTU1MSw5NDI4NDQ2Myw0NzA3MTcwNCw5NDIxODY0MSw5NDI4Njg2OUICVVM%3D&skid=c26e4a28-a20a-42ca-98a3-fc70932a9686&g_st=i" target="_blank" class="link-style">View boarding location</a></span></div>
                             </div>
                             <div class="map-wrapper">
                                 <div id="mapBoarding" class="map-container"></div>
@@ -694,6 +804,7 @@ $isPhpUnlocked = isset($_SESSION['greek_sailing_auth']) && $_SESSION['greek_sail
                                     <div class="leg-route">⛵️🐬🐳🧜‍♀️ Ionian & Aegean sailing</div>
                                     <div class="host-note"><i class="fab fa-facebook"></i> <a href="https://www.facebook.com/elena.len.376043" target="_blank" class="link-style">Elena Len</a></div>
                                     <div style="margin-top:14px;background:#ffffffb0;border-radius:20px;padding:10px 16px;"><i class="fas fa-water"></i> <strong>Sailing adventure:</strong> 7 nights exploring hidden coves, turquoise waters.</div>
+                                    <div style="margin-top:10px;background:#ffffffb0;border-radius:20px;padding:10px 16px;"><i class="fas fa-scroll"></i> <a href="https://docs.google.com/document/d/1dD4jpXbIiCNq_qGWm0krpAozjTMcnwZQNeriYo-d47o/edit?usp=sharing" target="_blank" class="link-style" onclick="openRulesModal(event)">Rules of Conduct on the Yacht</a></div>
                                 </div>
                             </div>
                             <div class="map-wrapper" style="margin-top:20px;">
