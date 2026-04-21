@@ -627,8 +627,8 @@ $isPhpUnlocked = isset($_SESSION['greek_sailing_auth']) && $_SESSION['greek_sail
                             <div class="leg-details">
                                 <div class="leg-route">San Francisco ✈︎ Copenhagen</div>
                                 <div class="leg-airline"><i class="fas fa-tag"></i> SAS · flight 16:45 · 10h</div>
-                                <div class="leg-meta"><span><i class="fas fa-clock"></i> Arrive Copenhagen May 28, 12:00</span><span class="booking-ref"><i class="fas fa-hashtag"></i> CR7WNH</span></div>
-                                <div style="margin-top:8px;"><i class="fas fa-link"></i> <a href="https://www.flysas.com/" target="_blank" class="link-style">flysas.com</a> / SAS app · CR7WNH</div>
+                                <div class="leg-meta"><span><i class="fas fa-clock"></i> Arrive Copenhagen May 28, 12:00</span></div>
+                                <div style="margin-top:8px;"><i class="fas fa-link"></i> <a href="https://www.flysas.com/" target="_blank" class="link-style">flysas.com</a> / SAS app</div>
                             </div>
                             <div class="map-wrapper">
                                 <div id="mapSanFranciscoCopenhagen" class="map-container"></div>
@@ -641,8 +641,8 @@ $isPhpUnlocked = isset($_SESSION['greek_sailing_auth']) && $_SESSION['greek_sail
                             <div class="leg-details">
                                 <div class="leg-route">Copenhagen ✈︎ Athens</div>
                                 <div class="leg-airline"><i class="fas fa-tag"></i> SAS · 14:20 · 3h20m</div>
-                                <div class="leg-meta"><span><i class="fas fa-clock"></i> May 28 · Arrive Athens 18:40</span><span class="booking-ref"><i class="fas fa-hashtag"></i> Y2P4GZ</span></div>
-                                <div><i class="fas fa-link"></i> <a href="https://www.flysas.com/" target="_blank" class="link-style">flysas.com</a> · Y2P4GZ</div>
+                                <div class="leg-meta"><span><i class="fas fa-clock"></i> May 28 · Arrive Athens 18:40</span></div>
+                                <div><i class="fas fa-link"></i> <a href="https://www.flysas.com/" target="_blank" class="link-style">flysas.com</a></div>
                             </div>
                             <div class="map-wrapper">
                                 <div id="mapCopenhagenAthens" class="map-container"></div>
@@ -665,6 +665,22 @@ $isPhpUnlocked = isset($_SESSION['greek_sailing_auth']) && $_SESSION['greek_sail
                             <div class="map-wrapper">
                                 <div id="mapAthensLefkada" class="map-container"></div>
                                 <a href="https://www.google.com/maps/dir/?api=1&origin=37.9364,23.9445&destination=Lefkada,Greece" target="_blank" class="map-expand-btn"><i class="fas fa-external-link-alt"></i> View on Google Maps</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="day-block" id="boarding">
+                        <div class="day-header"><span class="day-title"><i class="fas fa-anchor"></i> Boarding the Yacht</span><span class="day-date">May 29, 2026</span></div>
+                        <div class="leg-card">
+                            <div class="leg-icon"><i class="fas fa-ship"></i></div>
+                            <div class="leg-details">
+                                <div class="leg-route">Nidri · Lefkada — board the yacht</div>
+                                <div class="leg-airline"><i class="fas fa-clock"></i> around noon</div>
+                                <div class="leg-meta"><span><i class="fas fa-map-marked-alt"></i> <a href="https://www.google.com/maps?q=38.8367500,20.7120833&entry=gps&lucs=,94259551,94284463,47071704,94218641,94286869&g_ep=CAISDTYuMTM4LjIuOTAyNDAYACCenQoqLSw5NDI1OTU1MSw5NDI4NDQ2Myw0NzA3MTcwNCw5NDIxODY0MSw5NDI4Njg2OUICVVM%3D&skid=c26e4a28-a20a-42ca-98a3-fc70932a9686&g_st=i" target="_blank" class="link-style">View boarding location</a></span></div>
+                            </div>
+                            <div class="map-wrapper">
+                                <div id="mapBoarding" class="map-container"></div>
+                                <a href="https://www.google.com/maps?q=38.8367500,20.7120833&entry=gps&lucs=,94259551,94284463,47071704,94218641,94286869&g_ep=CAISDTYuMTM4LjIuOTAyNDAYACCenQoqLSw5NDI1OTU1MSw5NDI4NDQ2Myw0NzA3MTcwNCw5NDIxODY0MSw5NDI4Njg2OUICVVM%3D&skid=c26e4a28-a20a-42ca-98a3-fc70932a9686&g_st=i" target="_blank" class="map-expand-btn"><i class="fas fa-external-link-alt"></i> View on Google Maps</a>
                             </div>
                         </div>
                     </div>
@@ -726,8 +742,8 @@ $isPhpUnlocked = isset($_SESSION['greek_sailing_auth']) && $_SESSION['greek_sail
                             <div class="leg-details">
                                 <div class="leg-route">Athens ✈︎ Copenhagen</div>
                                 <div class="leg-airline"><i class="fas fa-tag"></i> Aegean · 07:55 · 3h20m</div>
-                                <div class="leg-meta"><span><i class="fas fa-clock"></i> arrive Copenhagen 10:05</span><span class="booking-ref"><i class="fas fa-hashtag"></i> Y2PHU2</span></div>
-                                <div><i class="fas fa-link"></i> <a href="https://en.aegeanair.com/" target="_blank" class="link-style">en.aegeanair.com</a> · Y2PHU2</div>
+                                <div class="leg-meta"><span><i class="fas fa-clock"></i> arrive Copenhagen 10:05</span></div>
+                                <div><i class="fas fa-link"></i> <a href="https://en.aegeanair.com/" target="_blank" class="link-style">en.aegeanair.com</a></div>
                             </div>
                             <div class="map-wrapper">
                                 <div id="mapAthensCopenhagen" class="map-container"></div>
@@ -740,8 +756,8 @@ $isPhpUnlocked = isset($_SESSION['greek_sailing_auth']) && $_SESSION['greek_sail
                             <div class="leg-details">
                                 <div class="leg-route">Copenhagen ✈︎ San Francisco</div>
                                 <div class="leg-airline"><i class="fas fa-tag"></i> SAS · 12:45 · 11h</div>
-                                <div class="leg-meta"><span><i class="fas fa-clock"></i> arrive San Francisco 14:40</span><span class="booking-ref"><i class="fas fa-hashtag"></i> CR7WNH</span></div>
-                                <div><i class="fas fa-link"></i> <a href="https://www.flysas.com/" target="_blank" class="link-style">flysas.com</a> · CR7WNH</div>
+                                <div class="leg-meta"><span><i class="fas fa-clock"></i> arrive San Francisco 14:40</span></div>
+                                <div><i class="fas fa-link"></i> <a href="https://www.flysas.com/" target="_blank" class="link-style">flysas.com</a></div>
                             </div>
                             <div class="map-wrapper">
                                 <div id="mapCopenhagenSanFrancisco" class="map-container"></div>
@@ -793,6 +809,7 @@ $isPhpUnlocked = isset($_SESSION['greek_sailing_auth']) && $_SESSION['greek_sail
                 {id:'mapSanFranciscoCopenhagen', coords:[45,-40], zoom:2, markers:[{lat:37.62,lng:-122.38,title:'San Francisco',color:'#1e6f5c',icon:'fa-plane'},{lat:55.62,lng:12.66,title:'Copenhagen',color:'#1e6f5c',icon:'fa-plane'}]},
                 {id:'mapCopenhagenAthens', coords:[48,18], zoom:4, markers:[{lat:55.62,lng:12.66,title:'Copenhagen',color:'#1e6f5c',icon:'fa-plane'},{lat:37.94,lng:23.94,title:'Athens',color:'#1e6f5c',icon:'fa-plane'}]},
                 {id:'mapAthensLefkada', coords:[38.2,22.9], zoom:7, markers:[{lat:37.94,lng:23.94,title:'Athens',color:'#b0895c',icon:'fa-car'},{lat:38.83,lng:20.71,title:'Lefkada',color:'#2a7f6e',icon:'fa-bed'}]},
+                {id:'mapBoarding', coords:[38.8368,20.7121], zoom:14, markers:[{lat:38.8368,lng:20.7121,title:'Boarding — Nidri',color:'#0b5e5e',icon:'fa-ship'}]},
                 {id:'mapSailingRegion', coords:[38.6,20.7], zoom:8, markers:[{lat:38.83,lng:20.71,title:'⛵ Lefkada base',color:'#0b5e5e',icon:'fa-sailboat'}]},
                 {id:'mapLefkadaNight', coords:[38.83,20.71], zoom:10, markers:[{lat:38.83,lng:20.71,title:'Allure Retreat',color:'#1e6f5c',icon:'fa-bed'}]},
                 {id:'mapLefkadaSpata', coords:[38.4,22.5], zoom:7, markers:[{lat:38.83,lng:20.71,title:'Lefkada',color:'#b0895c',icon:'fa-car'},{lat:37.97,lng:23.93,title:'Spata',color:'#1e6f5c',icon:'fa-bed'}]},
