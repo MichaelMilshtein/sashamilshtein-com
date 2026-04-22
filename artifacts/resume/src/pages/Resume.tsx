@@ -750,7 +750,7 @@ export default function Resume() {
                 fontSize: "0.85rem",
                 textTransform: "uppercase",
                 letterSpacing: "0.12em",
-                color: "#a5b0e6",
+                color: "#b8a47c",
                 margin: "0 0 12px",
               }}
             >
@@ -784,7 +784,7 @@ export default function Resume() {
                 fontSize: "0.85rem",
                 textTransform: "uppercase",
                 letterSpacing: "0.12em",
-                color: "#a5b0e6",
+                color: "#b49aa5",
                 margin: "0 0 12px",
               }}
             >

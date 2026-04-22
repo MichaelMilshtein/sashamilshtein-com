@@ -18,14 +18,14 @@ function Divider() {
   );
 }
 
-function SectionLabel({ children }: { children: string }) {
+function SectionLabel({ children, color }: { children: string; color?: string }) {
   return (
     <p style={{
       margin: "0 0 14px",
       fontSize: "0.72rem",
       textTransform: "uppercase",
       letterSpacing: "0.13em",
-      color: c.label,
+      color: color ?? c.label,
       fontWeight: 600,
     }}>
       {children}
@@ -289,7 +289,7 @@ export default function MobileResume({ data }: { data: ResumeData }) {
       </div>
 
       {/* ── Tools & Platforms ── */}
-      <SectionLabel>Tools &amp; Platforms</SectionLabel>
+      <SectionLabel color="#b8a47c">Tools &amp; Platforms</SectionLabel>
       <div style={{ display: "flex", flexWrap: "wrap", gap: "7px" }}>
         {data.tools.map((tool, i) => (
           <span
