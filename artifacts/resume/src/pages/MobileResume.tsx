@@ -297,9 +297,9 @@ export default function MobileResume({ data }: { data: ResumeData }) {
             style={{
               padding: "5px 10px",
               borderRadius: "6px",
-              background: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.07)",
-              color: c.muted,
+              background: "rgba(200,168,100,0.09)",
+              border: "1px solid rgba(200,168,100,0.18)",
+              color: "#b8a47c",
               fontSize: "0.81rem",
               fontWeight: 400,
             }}
