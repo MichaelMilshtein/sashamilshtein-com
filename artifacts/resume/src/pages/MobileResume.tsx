@@ -1,5 +1,6 @@
 import sashaHeadshot from "@/assets/sasha-headshot.jpeg";
 import type { ResumeData } from "@/data/resumeData";
+import type { ReactElement } from "react";
 import { TrendingUp, CalendarCheck, Target, BarChart2, Users, Star, ClipboardList, Timer, Settings } from "lucide-react";
 
 const c = {
@@ -111,7 +112,7 @@ export default function MobileResume({ data }: { data: ResumeData }) {
       {/* ── Key Numbers ── */}
       <SectionLabel>Key Numbers</SectionLabel>
       {(() => {
-        const iconMap: Record<string, JSX.Element> = {
+        const iconMap: Record<string, ReactElement> = {
           h1: <TrendingUp size={14} />,
           h2: <CalendarCheck size={14} />,
           h3: <Target size={14} />,
